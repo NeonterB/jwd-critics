@@ -5,18 +5,18 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 public enum Role implements BaseEntity{
-    ADMIN(1L),
-    HELPER(2L),
-    USER(3L),
-    GUEST(4L);
-    private final Long id;
+    ADMIN(1),
+    HELPER(2),
+    USER(3),
+    GUEST(4);
+    private final Integer id;
 
-    Role(Long id) {
+    Role(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

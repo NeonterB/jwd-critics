@@ -5,17 +5,17 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 public enum Rating implements BaseEntity{
-    LOW(1L),
-    MEDIUM(2L),
-    HIGH(3L);
-    private final Long id;
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3);
+    private final Integer id;
 
-    Rating(Long id) {
+    Rating(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

@@ -5,25 +5,25 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 public enum Genre implements BaseEntity {
-    ACTION(1L),
-    ADVENTURE(2L),
-    CARTOON(3L),
-    COMEDY(4L),
-    CRIME(5L),
-    DOCUMENTARY(6L),
-    DRAMA(7L),
-    FANTASY(8L),
-    HORROR(9L),
-    ROMANCE(10L),
-    THRILLER(11L);
-    private final Long id;
+    ACTION(1),
+    ADVENTURE(2),
+    CARTOON(3),
+    COMEDY(4),
+    CRIME(5),
+    DOCUMENTARY(6),
+    DRAMA(7),
+    FANTASY(8),
+    HORROR(9),
+    ROMANCE(10),
+    THRILLER(11);
+    private final Integer id;
 
-    Genre(Long id) {
+    Genre(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

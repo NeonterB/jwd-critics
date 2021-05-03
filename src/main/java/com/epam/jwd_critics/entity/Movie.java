@@ -8,6 +8,7 @@ public class Movie extends AbstractBaseEntity {
     private String name;
     private String summary;
     private Duration runtime;
+    private Country country;
     private Integer rating;
     private Integer reviewCount;
     private LocalDateTime releaseDate;
@@ -16,7 +17,7 @@ public class Movie extends AbstractBaseEntity {
     private AgeRestriction ageRestriction;
     Map<Celebrity, Position> staff;
 
-    Movie(Long id) {
+    Movie(Integer id) {
         super(id);
     }
 }

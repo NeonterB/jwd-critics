@@ -5,17 +5,17 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 public enum Status implements BaseEntity{
-    BANNED(1L),
-    ACTIVE(2L),
-    INACTIVE(3L);
-    private final Long id;
+    ACTIVE(1),
+    INACTIVE(2),
+    BANNED(3);
+    private final Integer id;
 
-    Status(Long id) {
+    Status(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

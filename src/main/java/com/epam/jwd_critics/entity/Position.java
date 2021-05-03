@@ -5,18 +5,18 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 public enum Position implements BaseEntity{
-    DIRECTOR(1L),
-    ACTOR(2L),
-    WRITER(3L),
-    PRODUCER(4L);
-    private final Long id;
+    DIRECTOR(1),
+    ACTOR(2),
+    WRITER(3),
+    PRODUCER(4);
+    private final Integer id;
 
-    Position(Long id) {
+    Position(Integer id) {
         this.id = id;
     }
 
     @Override
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

@@ -1,13 +1,21 @@
 package com.epam.jwd_critics.entity;
 
 public abstract class AbstractBaseEntity implements BaseEntity {
-    private final Long id;
+    @Column(columnName = "id")
+    protected Integer id;
 
-    AbstractBaseEntity(Long id){
+    public AbstractBaseEntity() {
+    }
+
+    public AbstractBaseEntity(Integer id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
