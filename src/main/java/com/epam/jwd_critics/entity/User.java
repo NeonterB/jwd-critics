@@ -1,5 +1,7 @@
 package com.epam.jwd_critics.entity;
 
+import java.util.Objects;
+
 public class User extends AbstractBaseEntity {
     @Column(columnName = "first_name")
     private String firstName;
@@ -79,6 +81,32 @@ public class User extends AbstractBaseEntity {
         this.rating = rating;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public static UserBuilder newBuilder() {
+        return new User().new UserBuilder();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return login.equals(user.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), login);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -92,18 +120,6 @@ public class User extends AbstractBaseEntity {
                 ", status=" + status +
                 ", role=" + role +
                 '}';
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public static UserBuilder newBuilder() {
-        return new User().new UserBuilder();
     }
 
     public class UserBuilder {
@@ -146,10 +162,12 @@ public class User extends AbstractBaseEntity {
             User.this.rating = rating;
             return this;
         }
+
         public UserBuilder setRole(Integer roleId) {
             User.this.role = Role.resolveRoleById(roleId);
             return this;
         }
+
         public UserBuilder setStatus(Integer statusId) {
             User.this.status = Status.resolveStatusById(statusId);
             return this;
