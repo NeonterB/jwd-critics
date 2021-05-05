@@ -31,7 +31,7 @@ class UserDaoTest {
     @Test
     void get() {
         try {
-            Assertions.assertEquals(userDao.get(1), 2);
+            System.out.println(userDao.get(1).get());
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }
@@ -41,7 +41,7 @@ class UserDaoTest {
     void delete() {
         try{
             int sizeBefore = userDao.findAll().size();
-            userDao.delete(3);
+            userDao.delete(10);
             int sizeAfter = userDao.findAll().size();
             Assertions.assertEquals(sizeAfter, sizeBefore - 1);
             sizeBefore = userDao.findAll().size();

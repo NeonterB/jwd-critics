@@ -17,5 +17,5 @@ public interface UserDao {
 
     User create(User user) throws DaoException;
 
-    void update(User user, Object... params) throws DaoException;
+    void update(User user) throws DaoException;
 }

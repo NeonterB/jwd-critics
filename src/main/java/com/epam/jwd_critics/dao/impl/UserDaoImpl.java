@@ -5,6 +5,7 @@ import com.epam.jwd_critics.dao.UserDao;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
+import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +20,21 @@ import java.util.stream.Collectors;
 public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
+    @Language("SQL")
     private static final String SELECT_ALL_USERS = "SELECT * FROM jwd_critics.user";
-    private static final String SELECT_USER_BY_ID = "SELECT * FROM jwd_critics.user WHERE U.id = ?";
-    private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?;";
-    private static final String DELETE_USER_BY_LOGIN = "DELETE FROM jwd_critics.user U WHERE U.login = ?;";
+    @Language("SQL")
+    private static final String SELECT_USER_BY_ID = "SELECT * FROM jwd_critics.user U WHERE U.id = ?";
+    @Language("SQL")
+    private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
+    @Language("SQL")
+    private static final String DELETE_USER_BY_LOGIN = "DELETE FROM jwd_critics.user U WHERE U.login = ?";
+    @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    @Language("SQL")
+    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
 
     @Override
-    public List<User> findAll() throws DaoException {
+    public List<User> findAll() {
         List<User> list = new LinkedList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS)) {
             ResultSet rs = ps.executeQuery();
@@ -99,8 +107,23 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserD
     }
 
     @Override
-    public void update(User user, Object... params) throws DaoException {
-
+    public void update(User user) throws DaoException {
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
+//            preparedStatement.setString(1, user.getLogin());
+//            preparedStatement.setString(2, user.getEmail());
+//            preparedStatement.setString(3, user.getFirstName());
+//            preparedStatement.setString(4, user.getSecondName());
+//            preparedStatement.setString(5, user.getPicture());
+//            preparedStatement.setInt(6, user.getRole().ordinal());
+//            preparedStatement.setInt(7, user.getState().ordinal());
+//            preparedStatement.setInt(8, user.getRating());
+//            preparedStatement.setInt(9, user.getId());
+//            preparedStatement.executeUpdate();
+//            return user;
+//        } catch (SQLException e) {
+//            logger.error(e);
+//            throw new DaoException(e);
+//        }
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {

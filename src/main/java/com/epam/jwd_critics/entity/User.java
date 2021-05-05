@@ -79,6 +79,21 @@ public class User extends AbstractBaseEntity {
         this.rating = rating;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", rating=" + rating +
+                ", status=" + status +
+                ", role=" + role +
+                '}';
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
