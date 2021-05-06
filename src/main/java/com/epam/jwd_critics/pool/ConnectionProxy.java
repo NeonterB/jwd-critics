@@ -1,5 +1,6 @@
 package com.epam.jwd_critics.pool;
 
+import com.epam.jwd_critics.exception.ConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +60,11 @@ public class ConnectionProxy implements Connection {
 
     @Override
     public void close() throws SQLException {
-        //connection.close();
+        try {
+            ConnectionPool.getInstance().returnConnection(this);
+        } catch (ConnectionException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     public void hardClose() throws SQLException {

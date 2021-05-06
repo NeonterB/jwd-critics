@@ -9,24 +9,15 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public abstract class AbstractBaseDao<K, T extends BaseEntity>{
+public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     private Connection connection;
-    private final ConnectionPool connectionPool;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
 
-    public AbstractBaseDao() {
-        connectionPool = ConnectionPool.getInstance();
-        connection = connectionPool.getConnection();
-    }
-
-    public void returnConnectionInPool() {
-        try {
-            connectionPool.returnConnection(connection);
-        } catch (ConnectionException e) {
-            logger.error(e.getMessage(), e);
+    public void setConnection(Connection connection) {
+        if (this.connection == null){
+            this.connection = connection;
         }
     }
 
