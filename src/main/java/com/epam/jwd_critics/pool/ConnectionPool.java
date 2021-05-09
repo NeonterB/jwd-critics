@@ -1,7 +1,8 @@
 package com.epam.jwd_critics.pool;
 
-import com.epam.jwd_critics.entity.ApplicationProperties;
 import com.epam.jwd_critics.exception.ConnectionException;
+import com.epam.jwd_critics.util.ApplicationProperties;
+import com.epam.jwd_critics.util.PropertiesLoaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +28,8 @@ public class ConnectionPool {
     private final Lock lock = new ReentrantLock();
 
     private ConnectionPool() {
-        availableConnections = new LinkedBlockingQueue<>(ApplicationProperties.getInstance().getMaxPoolSize());
-        unavailableConnections = new ArrayDeque<>(ApplicationProperties.getInstance().getMaxPoolSize());
+        availableConnections = new LinkedBlockingQueue<>(PropertiesLoaderUtil.getApplicationProperties().getMaxPoolSize());
+        unavailableConnections = new ArrayDeque<>(PropertiesLoaderUtil.getApplicationProperties().getMaxPoolSize());
         initPool();
     }
 
@@ -41,7 +42,7 @@ public class ConnectionPool {
     }
 
     private void initPool() {
-        ApplicationProperties properties = ApplicationProperties.getInstance();
+        ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
         for (int i = 0; i < properties.getMinPoolSize(); i++) {
             try (ConnectionProxy connection = new ConnectionProxy(factory.createConnection())) {
                 availableConnections.add(connection);
@@ -56,7 +57,7 @@ public class ConnectionPool {
     public Connection getConnection() {
         lock.lock();
         ConnectionProxy connection = null;
-        ApplicationProperties properties = ApplicationProperties.getInstance();
+        ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
         try {
             if (!availableConnections.isEmpty()) {
                 connection = availableConnections.take();
@@ -75,18 +76,16 @@ public class ConnectionPool {
         return connection;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     public void returnConnection(Connection connection) throws ConnectionException {
         lock.lock();
         try {
-            if (connection instanceof ConnectionProxy) {
-                if (unavailableConnections.contains(connection)) {
-                    availableConnections.offer((ConnectionProxy) connection);
-                    unavailableConnections.remove(connection);
-                }
+            if (unavailableConnections.contains(connection)) {
+                availableConnections.offer((ConnectionProxy) connection);
+                unavailableConnections.remove(connection);
                 logger.info("Connection returned");
             } else {
-                logger.error("Failed to return connection");
-                throw new ConnectionException("Not an instance of ConnectionProxy");
+                throw new ConnectionException();
             }
         } finally {
             lock.unlock();

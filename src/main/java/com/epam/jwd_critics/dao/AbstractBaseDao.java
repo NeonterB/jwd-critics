@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public abstract class AbstractBaseDao<K, T extends BaseEntity> {
+public abstract class AbstractBaseDao<K, T extends BaseEntity> implements BaseDao<K, T> {
     private Connection connection;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);

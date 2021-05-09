@@ -1,6 +1,7 @@
 package com.epam.jwd_critics.pool;
 
-import com.epam.jwd_critics.entity.ApplicationProperties;
+import com.epam.jwd_critics.util.ApplicationProperties;
+import com.epam.jwd_critics.util.PropertiesLoaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ public class ConnectionFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
 
     Connection createConnection() {
-        ApplicationProperties properties = ApplicationProperties.getInstance();
+        ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
         try {
             return DriverManager.getConnection(properties.getUrl() + "/" + properties.getDatabaseName(),
                     properties.getUser(), properties.getPassword());

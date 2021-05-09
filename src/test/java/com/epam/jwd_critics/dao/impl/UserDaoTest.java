@@ -1,23 +1,16 @@
 package com.epam.jwd_critics.dao.impl;
 
-import com.epam.jwd_critics.dao.UserDao;
+import com.epam.jwd_critics.dao.BaseDao;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.util.PropertiesLoaderUtil;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class UserDaoTest {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoTest.class);
-    UserDao userDao = new UserDaoImpl();
-
-    @BeforeAll
-    static void loadProperties() {
-        PropertiesLoaderUtil.loadProperties();
-    }
+    BaseDao userDao = new UserDaoImpl();
 
     @Test
     void findAll() {
@@ -31,7 +24,7 @@ class UserDaoTest {
     @Test
     void get() {
         try {
-            System.out.println(userDao.get(1).get());
+            System.out.println(userDao.getEntityById(1).get());
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }
@@ -39,13 +32,13 @@ class UserDaoTest {
 
     @Test
     void delete() {
-        try{
+        try {
             int sizeBefore = userDao.findAll().size();
-            userDao.delete(10);
+            userDao.deleteEntityById(10);
             int sizeAfter = userDao.findAll().size();
             Assertions.assertEquals(sizeAfter, sizeBefore - 1);
             sizeBefore = userDao.findAll().size();
-            userDao.delete("test");
+            userDao.deleteEntityById("test");
             sizeAfter = userDao.findAll().size();
             Assertions.assertEquals(sizeAfter, sizeBefore - 1);
         } catch (DaoException e) {
@@ -55,7 +48,7 @@ class UserDaoTest {
 
     @Test
     void create() {
-        try{
+        try {
             int sizeBefore = userDao.findAll().size();
             User user = User.newBuilder()
                     .setFirstName("Test")
@@ -72,9 +65,9 @@ class UserDaoTest {
             Assertions.assertEquals(sizeAfter - 1, sizeBefore);
             Assertions.assertEquals(updatedUser.getId(), 4);
             user.setRating(-10);
-            userDao.delete(user.getId());
+            userDao.deleteEntityById(user.getId());
             Assertions.assertThrows(Exception.class, () -> userDao.create(user));
-            userDao.delete(user.getId());
+            userDao.deleteEntityById(user.getId());
             user.setRating(10);
             user.setLogin("neonter");
             Assertions.assertThrows(Exception.class, () -> userDao.create(user));

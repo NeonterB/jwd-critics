@@ -1,7 +1,6 @@
 package com.epam.jwd_critics.dao.impl;
 
 import com.epam.jwd_critics.dao.AbstractBaseDao;
-import com.epam.jwd_critics.dao.UserDao;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
@@ -14,10 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserDao {
+public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @Language("SQL")
@@ -27,15 +30,13 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserD
     @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
-    private static final String DELETE_USER_BY_LOGIN = "DELETE FROM jwd_critics.user U WHERE U.login = ?";
-    @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
 
     @Override
     public List<User> findAll() {
-        List<User> list = new LinkedList<>();
+        List<User> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -48,7 +49,7 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserD
     }
 
     @Override
-    public Optional<User> get(Integer id) throws DaoException {
+    public Optional<User> getEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -61,22 +62,10 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserD
     }
 
     @Override
-    public boolean delete(Integer id) throws DaoException {
+    public void deleteEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_USER_BY_ID)) {
             ps.setInt(1, id);
             ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public boolean delete(String login) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_USER_BY_LOGIN)) {
-            ps.setString(1, login);
-            ps.executeUpdate();
-            return true;
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -106,25 +95,58 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> implements UserD
         }
     }
 
+
     @Override
     public void update(User user) throws DaoException {
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
-//            preparedStatement.setString(1, user.getLogin());
-//            preparedStatement.setString(2, user.getEmail());
-//            preparedStatement.setString(3, user.getFirstName());
-//            preparedStatement.setString(4, user.getSecondName());
-//            preparedStatement.setString(5, user.getPicture());
-//            preparedStatement.setInt(6, user.getRole().ordinal());
-//            preparedStatement.setInt(7, user.getState().ordinal());
-//            preparedStatement.setInt(8, user.getRating());
-//            preparedStatement.setInt(9, user.getId());
-//            preparedStatement.executeUpdate();
-//            return user;
+        try (PreparedStatement preparedStatement = getPreparedStatement(UPDATE_USER)) {
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setString(4, user.getLogin());
+            preparedStatement.setInt(5, user.getRating());
+            preparedStatement.setInt(6, user.getRole().getId());
+            preparedStatement.setInt(7, user.getStatus().getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new DaoException(e);
+        }
+    }
+//    @Override
+//    public int countUsers() throws DaoException {
+//        int usersCount = 0;
+//        try (PreparedStatement ps = getPreparedStatement(COUNT_USERS)) {
+//            try (ResultSet resultSet = ps.executeQuery()) {
+//                if (resultSet.next()) {
+//                    usersCount = resultSet.getInt(1);
+//                }
+//            }
 //        } catch (SQLException e) {
-//            logger.error(e);
+//            logger.error(e.getMessage(), e);
 //            throw new DaoException(e);
 //        }
-    }
+//        return usersCount;
+//    }
+
+//    @Override
+//    public Status detectStatusById(int id) throws DaoException {
+//        Status userStatus = null;
+//        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_USER_STATUS_BY_ID)) {
+//            preparedStatement.setInt(1, id);
+//            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+//                resultSet.next();
+//                userStatus = Status.valueOf(resultSet.getString(
+//                        User.class.getDeclaredField("status").getAnnotation(Column.class).columnName()
+//                ));
+//            }
+//        } catch (SQLException e) {
+//            logger.error(e.getMessage(), e);
+//            throw new DaoException(e);
+//        } catch (NoSuchFieldException e){
+//            logger.error(e.getMessage(), e);
+//        }
+//        return userStatus;
+//    }
 
     private User buildUser(ResultSet resultSet) throws SQLException {
         if (resultSet.wasNull()) {
