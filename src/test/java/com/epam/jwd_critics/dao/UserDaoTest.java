@@ -65,8 +65,5 @@ class UserDaoTest {
     public static void clear() {
         transaction.rollback();
         transaction.end();
-        transaction = null;
-        user = null;
-        userDao = null;
     }
 }

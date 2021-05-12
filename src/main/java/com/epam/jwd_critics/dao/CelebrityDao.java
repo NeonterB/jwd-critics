@@ -56,7 +56,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
                 list.add(buildCelebrity(rs));
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            throw new DaoException(e);
         }
         return list;
     }
@@ -80,7 +80,6 @@ public class CelebrityDao extends AbstractCelebrityDao {
             }
             return crew;
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
@@ -130,7 +129,6 @@ public class CelebrityDao extends AbstractCelebrityDao {
             preparedStatement.setInt(3, celebrity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }

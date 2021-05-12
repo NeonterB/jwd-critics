@@ -64,8 +64,5 @@ class CelebrityDaoTest {
     public static void clear() {
         transaction.rollback();
         transaction.end();
-        transaction = null;
-        celebrity = null;
-        celebrityDao = null;
     }
 }

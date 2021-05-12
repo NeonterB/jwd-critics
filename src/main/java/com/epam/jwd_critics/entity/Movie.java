@@ -115,14 +115,13 @@ public class Movie extends AbstractBaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Movie movie = (Movie) o;
         return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && Objects.equals(genres, movie.genres) && ageRestriction == movie.ageRestriction && Objects.equals(staff, movie.staff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, summary, runtime, country, releaseDate, genres, ageRestriction, staff);
+        return Objects.hash(name, summary, runtime, country, releaseDate, genres, ageRestriction, staff);
     }
 
     @Override

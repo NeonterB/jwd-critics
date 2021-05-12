@@ -97,14 +97,13 @@ public class User extends AbstractBaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         User user = (User) o;
         return rating == user.rating && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && login.equals(user.login) && password.equals(user.password) && status == user.status && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, email, login, password, rating, status, role);
+        return Objects.hash(firstName, lastName, email, login, password, rating, status, role);
     }
 
     @Override

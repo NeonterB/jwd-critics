@@ -42,7 +42,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll() throws DaoException {
         List<User> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS)) {
             ResultSet rs = ps.executeQuery();
@@ -50,7 +50,7 @@ public class UserDao extends AbstractUserDao {
                 list.add(buildUser(rs));
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            throw new DaoException(e);
         }
         return list;
     }
@@ -111,7 +111,6 @@ public class UserDao extends AbstractUserDao {
             preparedStatement.setInt(8, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
