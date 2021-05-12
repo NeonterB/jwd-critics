@@ -5,6 +5,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 
 import java.util.Arrays;
 
+@Column(name = "age_restriction_id")
 public enum AgeRestriction implements BaseEntity{
     G(1),
     PG(2),

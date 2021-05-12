@@ -1,9 +1,11 @@
 package com.epam.jwd_critics.entity;
 
 import com.epam.jwd_critics.exception.UnknownEntityException;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Arrays;
 
+@Column(name = "role_id")
 public enum Role implements BaseEntity{
     ADMIN(1),
     HELPER(2),

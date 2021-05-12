@@ -1,9 +1,5 @@
-package com.epam.jwd_critics.dao.impl;
+package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.dao.AbstractBaseDao;
-import com.epam.jwd_critics.dao.AbstractCelebrityDao;
-import com.epam.jwd_critics.dao.CelebrityDao;
-import com.epam.jwd_critics.dao.EntityTransaction;
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.exception.DaoException;
 import org.junit.jupiter.api.AfterAll;

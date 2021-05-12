@@ -2,6 +2,7 @@ package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Column;
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
@@ -22,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CelebrityDao extends AbstractCelebrityDao {
-    private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(CelebrityDao.class);
 
     @Language("SQL")
     private static final String SELECT_ALL_CELEBRITIES = "SELECT * FROM jwd_critics.celebrity";
@@ -61,16 +62,16 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public Map<Celebrity, List<Position>> findCrewByMovieId(Integer id) throws DaoException {
+    public Map<Celebrity, List<Position>> findCrewByMovieId(Integer movieId) throws DaoException {
         Map<Celebrity, List<Position>> crew = new HashMap<>();
         try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, movieId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Celebrity celebrity = buildCelebrity(resultSet);
                     if (!crew.containsKey(celebrity)) {
                         ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.resolvePositionById(resultSet.getInt(4)));
+                        positions.add(Position.resolvePositionById(resultSet.getInt("position_id")));
                         crew.put(celebrity, positions);
                     } else {
                         crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(4)));
@@ -89,8 +90,10 @@ public class CelebrityDao extends AbstractCelebrityDao {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
-                resultSet.next();
-                return Optional.ofNullable(buildCelebrity(resultSet));
+                if (resultSet.next()) {
+                    return Optional.ofNullable(buildCelebrity(resultSet));
+                }
+                else return Optional.empty();
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -98,9 +101,9 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public void deleteEntityById(Integer id) throws DaoException {
+    public void deleteEntityById(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
-            ps.setInt(1, id);
+            ps.setInt(1, celebrityId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -129,11 +132,11 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public void update(Celebrity user) throws DaoException {
+    public void update(Celebrity celebrity) throws DaoException {
         try (PreparedStatement preparedStatement = getPreparedStatement(UPDATE_CELEBRITY)) {
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setInt(3, user.getId());
+            preparedStatement.setString(1, celebrity.getFirstName());
+            preparedStatement.setString(2, celebrity.getLastName());
+            preparedStatement.setInt(3, celebrity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -145,8 +148,9 @@ public class CelebrityDao extends AbstractCelebrityDao {
         if (resultSet.wasNull()) {
             return null;
         }
-        Map<String, String> columnNames = Arrays.stream(Celebrity.class.getDeclaredFields()).
-                collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
+        Map<String, String> columnNames = Arrays.stream(Celebrity.class.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Column.class))
+                .collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
         Field idField = null;
         try {
             idField = Celebrity.class.getSuperclass().getDeclaredField("id");
@@ -154,7 +158,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
             logger.error(e.getMessage(), e);
         }
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
-        return Celebrity.newBuilder().setId(resultSet.getInt(columnNames.get("id")))
+        return Celebrity.newBuilder()
+                .setId(resultSet.getInt(columnNames.get("id")))
                 .setFirstName(resultSet.getString(columnNames.get("firstName")))
                 .setLastName(resultSet.getString(columnNames.get("lastName")))
                 .build();

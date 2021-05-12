@@ -1,9 +1,11 @@
 package com.epam.jwd_critics.entity;
 
 import com.epam.jwd_critics.exception.UnknownEntityException;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Arrays;
 
+@Column(name = "position_id")
 public enum Position implements BaseEntity{
     DIRECTOR(1),
     ACTOR(2),

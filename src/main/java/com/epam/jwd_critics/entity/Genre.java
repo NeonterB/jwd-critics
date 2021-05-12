@@ -4,6 +4,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 
 import java.util.Arrays;
 
+@Column(name = "genre_id")
 public enum Genre implements BaseEntity {
     ACTION(1),
     ADVENTURE(2),

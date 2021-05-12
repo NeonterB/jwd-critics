@@ -60,8 +60,10 @@ public class UserDao extends AbstractUserDao {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
-                resultSet.next();
-                return Optional.ofNullable(buildUser(resultSet));
+                if (resultSet.next()) {
+                    return Optional.ofNullable(buildUser(resultSet));
+                }
+                else return Optional.empty();
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -163,8 +165,9 @@ public class UserDao extends AbstractUserDao {
         if (resultSet.wasNull()) {
             return null;
         }
-        Map<String, String> columnNames = Arrays.stream(User.class.getDeclaredFields()).
-                collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
+        Map<String, String> columnNames = Arrays.stream(User.class.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Column.class))
+                .collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
         Field idField = null;
         try {
             idField = User.class.getSuperclass().getDeclaredField("id");

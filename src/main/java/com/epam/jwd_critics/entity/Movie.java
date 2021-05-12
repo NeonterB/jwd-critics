@@ -1,21 +1,30 @@
 package com.epam.jwd_critics.entity;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class Movie extends AbstractBaseEntity {
+    @Column(name = "name")
     private String name;
+    @Column(name = "summary")
     private String summary;
+    @Column(name = "runtime")
     private Duration runtime;
+    @Column(name = "country_id")
     private Country country;
+    @Column(name = "rating")
     private Integer rating;
+    @Column(name = "review_count")
     private Integer reviewCount;
-    private LocalDateTime releaseDate;
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
     private List<Genre> genres;
+    @Column(name = "age_restriction_id")
     private AgeRestriction ageRestriction;
     Map<Celebrity, Position> staff;
 
@@ -71,11 +80,11 @@ public class Movie extends AbstractBaseEntity {
         this.reviewCount = reviewCount;
     }
 
-    public LocalDateTime getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDateTime releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -109,12 +118,12 @@ public class Movie extends AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Movie movie = (Movie) o;
-        return name.equals(movie.name) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && genres == movie.genres && Objects.equals(staff, movie.staff);
+        return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && Objects.equals(genres, movie.genres) && ageRestriction == movie.ageRestriction && Objects.equals(staff, movie.staff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, runtime, country, releaseDate, genres, staff);
+        return Objects.hash(super.hashCode(), name, summary, runtime, country, releaseDate, genres, ageRestriction, staff);
     }
 
     @Override
@@ -123,7 +132,7 @@ public class Movie extends AbstractBaseEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", summary='" + summary + '\'' +
-                ", runtime=" + runtime +
+                ", runtime=" + runtime.toString() +
                 ", country=" + country +
                 ", rating=" + rating +
                 ", reviewCount=" + reviewCount +
@@ -179,7 +188,7 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setReleaseDate(LocalDateTime releaseDate) {
+        public MovieBuilder setReleaseDate(LocalDate releaseDate) {
             Movie.this.releaseDate = releaseDate;
             return this;
         }

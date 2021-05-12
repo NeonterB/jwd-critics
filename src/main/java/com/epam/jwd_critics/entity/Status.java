@@ -4,6 +4,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 
 import java.util.Arrays;
 
+@Column(name = "status_id")
 public enum Status implements BaseEntity{
     ACTIVE(1),
     INACTIVE(2),
