@@ -115,16 +115,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
         try (PreparedStatement ps = getPreparedStatement(INSERT_CELEBRITY, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, celebrity.getFirstName());
             ps.setString(2, celebrity.getLastName());
-            int updatedRowCount = ps.executeUpdate();
-            if (updatedRowCount == 1) {
-                ResultSet resultSet = ps.getGeneratedKeys();
-                if (resultSet.next()) {
-                    int generatedId = resultSet.getInt(1);
-                    celebrity.setId(generatedId);
-                }
-            } else {
-                throw new DaoException("Failed to insert " + celebrity);
-            }
+            celebrity.setId(executeQueryAndGetGeneratesKeys(ps));
             return celebrity;
         } catch (SQLException e) {
             throw new DaoException(e);

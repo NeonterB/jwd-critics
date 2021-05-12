@@ -1,19 +1,19 @@
 package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.BaseEntity;
-import com.epam.jwd_critics.exception.ConnectionException;
+import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.pool.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractBaseDao<K, T extends BaseEntity>{
+public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     private Connection connection;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
@@ -26,10 +26,10 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity>{
 
     public abstract T create(T t) throws DaoException;
 
-    public abstract void update(T t)  throws DaoException;
+    public abstract void update(T t) throws DaoException;
 
     public void setConnection(Connection connection) {
-        if (this.connection == null){
+        if (this.connection == null) {
             this.connection = connection;
         }
     }
@@ -52,5 +52,23 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity>{
             logger.error(e.getMessage(), e);
         }
         return ps;
+    }
+
+    protected int executeQueryAndGetGeneratesKeys(PreparedStatement ps) throws DaoException {
+        int generatedKey = 0;
+        try {
+            int updatedRowCount = ps.executeUpdate();
+            if (updatedRowCount == 1) {
+                ResultSet resultSet = ps.getGeneratedKeys();
+                if (resultSet.next()) {
+                    generatedKey = resultSet.getInt(1);
+                }
+            } else {
+                throw new DaoException("Statement " + ps + " haven't altered any rows");
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+        }
+        return generatedKey;
     }
 }

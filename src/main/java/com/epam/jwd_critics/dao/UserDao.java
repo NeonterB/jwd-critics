@@ -62,8 +62,7 @@ public class UserDao extends AbstractUserDao {
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildUser(resultSet));
-                }
-                else return Optional.empty();
+                } else return Optional.empty();
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -91,16 +90,7 @@ public class UserDao extends AbstractUserDao {
             ps.setInt(6, user.getRating());
             ps.setInt(7, user.getRole().getId());
             ps.setInt(8, user.getStatus().getId());
-            int updatedRowCount = ps.executeUpdate();
-            if (updatedRowCount == 1) {
-                ResultSet resultSet = ps.getGeneratedKeys();
-                if (resultSet.next()) {
-                    int generatedId = resultSet.getInt(1);
-                    user.setId(generatedId);
-                }
-            } else {
-                throw new DaoException("Failed to insert " + user);
-            }
+            user.setId(executeQueryAndGetGeneratesKeys(ps));
             return user;
         } catch (SQLException e) {
             throw new DaoException(e);

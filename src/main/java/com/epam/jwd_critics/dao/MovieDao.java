@@ -3,6 +3,7 @@ package com.epam.jwd_critics.dao;
 import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.Country;
+import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
@@ -30,6 +31,8 @@ public class MovieDao extends AbstractMovieDao {
 
     @Language("SQL")
     private static final String SELECT_ALL_MOVIES = "SELECT * FROM jwd_critics.movie";
+    @Language("SQL")
+    private static final String SELECT_GENRES_BY_MOVIE_ID = "SELECT genre_id from jwd_critics.movie_genre where movie_id = ?";
     @Language("SQL")
     private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.*, MS.position_id from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.movie M on MS.movie_id = M.id where celebrity_id = ?";
     @Language("SQL")
@@ -79,6 +82,22 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
+    public List<Genre> getMovieGenresById(Integer movieId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_GENRES_BY_MOVIE_ID)) {
+            ps.setInt(1, movieId);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                List<Genre> genres = new ArrayList<>();
+                while (resultSet.next()) {
+                    genres.add(Genre.resolveGenreById(resultSet.getInt(1)));
+                }
+                return genres;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public void deleteEntityById(Integer movieId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
             ps.setInt(1, movieId);
@@ -97,16 +116,7 @@ public class MovieDao extends AbstractMovieDao {
             ps.setInt(4, movie.getAgeRestriction().getId());
             ps.setInt(5, movie.getCountry().getId());
             ps.setString(6, movie.getReleaseDate().toString());
-            int updatedRowCount = ps.executeUpdate();
-            if (updatedRowCount == 1) {
-                ResultSet resultSet = ps.getGeneratedKeys();
-                if (resultSet.next()) {
-                    int generatedId = resultSet.getInt(1);
-                    movie.setId(generatedId);
-                }
-            } else {
-                throw new DaoException("Failed to insert " + movie);
-            }
+            movie.setId(executeQueryAndGetGeneratesKeys(ps));
             return movie;
         } catch (SQLException e) {
             throw new DaoException(e);

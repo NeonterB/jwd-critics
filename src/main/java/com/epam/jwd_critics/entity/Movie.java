@@ -2,7 +2,6 @@ package com.epam.jwd_critics.entity;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +25,7 @@ public class Movie extends AbstractBaseEntity {
     private List<Genre> genres;
     @Column(name = "age_restriction_id")
     private AgeRestriction ageRestriction;
-    Map<Celebrity, Position> staff;
+    Map<Celebrity, List<Position>> staff;
 
     private Movie() {
 
@@ -104,11 +103,11 @@ public class Movie extends AbstractBaseEntity {
         this.ageRestriction = ageRestriction;
     }
 
-    public Map<Celebrity, Position> getStaff() {
+    public Map<Celebrity, List<Position>> getStaff() {
         return staff;
     }
 
-    public void setStaff(Map<Celebrity, Position> staff) {
+    public void setStaff(Map<Celebrity, List<Position>> staff) {
         this.staff = staff;
     }
 
@@ -203,7 +202,7 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setStaff(Map<Celebrity, Position> staff) {
+        public MovieBuilder setStaff(Map<Celebrity, List<Position>> staff) {
             Movie.this.staff = staff;
             return this;
         }

@@ -1,7 +1,6 @@
 package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.AgeRestriction;
-import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Country;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.exception.DaoException;
@@ -16,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MovieDaoTest {
     private static final Logger logger = LoggerFactory.getLogger(MovieDaoTest.class);
@@ -61,7 +60,7 @@ class MovieDaoTest {
     }
 
     @Test
-    public void testFindMoviesByCelebrityId() throws DaoException{
+    public void testFindMoviesByCelebrityId() throws DaoException {
         //System.out.println(movieDao.findMoviesByCelebrityId(6));
     }
 
