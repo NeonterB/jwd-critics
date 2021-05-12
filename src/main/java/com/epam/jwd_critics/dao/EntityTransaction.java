@@ -12,7 +12,7 @@ public class EntityTransaction {
     private Connection connection;
     private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class.getName());
 
-    public void initTransaction(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
+    public void init(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
         try {
             if (connection == null) {
                 connection = ConnectionPool.getInstance().getConnection();
@@ -24,18 +24,6 @@ public class EntityTransaction {
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }
-    }
-
-    public void endTransaction() {
-        try {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        }
-        connection = null;
     }
 
     public void commit() {
@@ -54,20 +42,14 @@ public class EntityTransaction {
         }
     }
 
-    public void init(AbstractBaseDao<?, ? extends BaseEntity> dao) {
-        if (connection == null) {
-            connection = ConnectionPool.getInstance().getConnection();
-        }
-        dao.setConnection(connection);
-    }
-
     public void end() {
-        if (connection != null) {
-            try {
+        try {
+            if (connection != null) {
+                connection.setAutoCommit(true);
                 connection.close();
-            } catch (SQLException e) {
-                logger.error(e.getMessage(), e);
             }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
         }
         connection = null;
     }

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
@@ -33,23 +32,20 @@ public class ConnectionPool {
         initPool();
     }
 
-    private static class ConnectionPoolSingleton {
-        private static final ConnectionPool INSTANCE = new ConnectionPool();
-    }
-
     public static ConnectionPool getInstance() {
         return ConnectionPoolSingleton.INSTANCE;
+    }
+
+    private static class ConnectionPoolSingleton {
+        private static final ConnectionPool INSTANCE = new ConnectionPool();
     }
 
     private void initPool() {
         ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
         for (int i = 0; i < properties.getMinPoolSize(); i++) {
-            try (ConnectionProxy connection = new ConnectionProxy(factory.createConnection())) {
-                availableConnections.add(connection);
-                poolSize.incrementAndGet();
-            } catch (SQLException e) {
-                logger.error(e.getMessage(), e);
-            }
+            ConnectionProxy connection = new ConnectionProxy(factory.createConnection());
+            availableConnections.add(connection);
+            poolSize.incrementAndGet();
         }
         logger.info("Connection pool initialized");
     }

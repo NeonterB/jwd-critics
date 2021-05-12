@@ -3,7 +3,7 @@ package com.epam.jwd_critics.entity;
 import java.util.Objects;
 
 public abstract class AbstractBaseEntity implements BaseEntity {
-    @Column(columnName = "id")
+    @Column(name = "id")
     protected Integer id;
 
     public AbstractBaseEntity() {

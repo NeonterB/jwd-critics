@@ -1,83 +1,76 @@
 package com.epam.jwd_critics.dao.impl;
 
-import com.epam.jwd_critics.dao.BaseDao;
+import com.epam.jwd_critics.dao.AbstractBaseDao;
+import com.epam.jwd_critics.dao.AbstractUserDao;
+import com.epam.jwd_critics.dao.EntityTransaction;
+import com.epam.jwd_critics.dao.UserDao;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class UserDaoTest {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoTest.class);
-    BaseDao userDao = new UserDaoImpl();
+    private static AbstractUserDao userDao;
+    private static EntityTransaction transaction;
+    private static User user;
 
-    @Test
-    void findAll() {
-        try {
-            Assertions.assertEquals(userDao.findAll().size(), 2);
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+    @BeforeAll
+    public static void initialize() {
+        userDao = UserDao.getInstance();
+        transaction = new EntityTransaction();
+        transaction.init(userDao);
+        user = User.newBuilder()
+                .setFirstName("Test")
+                .setLastName("Testovich")
+                .setEmail("test@email.com")
+                .setLogin("test")
+                .setPassword("test")
+                .setRating(0)
+                .setStatus(1)
+                .setRole(1)
+                .build();
+    }
+
+    @BeforeEach
+    public void initializeTest() throws DaoException {
+        user = userDao.create(user);
     }
 
     @Test
-    void get() {
-        try {
-            System.out.println(userDao.getEntityById(1).get());
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+    public void testFindEntityById() throws DaoException {
+        User actualResult = userDao.findEntityById(user.getId()).get();
+        assertEquals(user, actualResult);
     }
 
     @Test
-    void delete() {
-        try {
-            int sizeBefore = userDao.findAll().size();
-            userDao.deleteEntityById(10);
-            int sizeAfter = userDao.findAll().size();
-            Assertions.assertEquals(sizeAfter, sizeBefore - 1);
-            sizeBefore = userDao.findAll().size();
-            userDao.deleteEntityById("test");
-            sizeAfter = userDao.findAll().size();
-            Assertions.assertEquals(sizeAfter, sizeBefore - 1);
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+    public void testUpdate() throws DaoException {
+        String oldEmail = user.getEmail();
+        user.setEmail("testemail");
+        userDao.update(user);
+        User actualResult = userDao.findEntityById(user.getId()).get();
+        assertEquals(user, actualResult);
+        user.setEmail(oldEmail);
     }
 
-    @Test
-    void create() {
-        try {
-            int sizeBefore = userDao.findAll().size();
-            User user = User.newBuilder()
-                    .setFirstName("Test")
-                    .setLastName("Testovich")
-                    .setEmail("test@email.com")
-                    .setLogin("test")
-                    .setPassword("test")
-                    .setRating(0)
-                    .setStatus(1)
-                    .setRole(1)
-                    .build();
-            User updatedUser = userDao.create(user);
-            int sizeAfter = userDao.findAll().size();
-            Assertions.assertEquals(sizeAfter - 1, sizeBefore);
-            Assertions.assertEquals(updatedUser.getId(), 4);
-            user.setRating(-10);
-            userDao.deleteEntityById(user.getId());
-            Assertions.assertThrows(Exception.class, () -> userDao.create(user));
-            userDao.deleteEntityById(user.getId());
-            user.setRating(10);
-            user.setLogin("neonter");
-            Assertions.assertThrows(Exception.class, () -> userDao.create(user));
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+    @AfterEach
+    public void endTest() throws DaoException {
+        userDao.deleteEntityById(user.getId());
     }
 
-    @Test
-    void update() {
-
+    @AfterAll
+    public static void clear() {
+        transaction.rollback();
+        transaction.end();
+        transaction = null;
+        user = null;
+        userDao = null;
     }
 }

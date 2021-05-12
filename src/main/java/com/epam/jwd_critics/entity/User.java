@@ -3,22 +3,22 @@ package com.epam.jwd_critics.entity;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
-    @Column(columnName = "first_name")
+    @Column(name = "first_name")
     private String firstName;
-    @Column(columnName = "last_name")
+    @Column(name = "last_name")
     private String lastName;
-    @Column(columnName = "email")
+    @Column(name = "email")
     private String email;
-    @Column(columnName = "login")
+    @Column(name = "login")
     private String login;
-    @Column(columnName = "password")
+    @Column(name = "password")
     private String password;
-    @Column(columnName = "rating")
+    @Column(name = "rating")
     private int rating;
 
-    @Column(columnName = "status_id")
+    @Column(name = "status_id")
     private Status status;
-    @Column(columnName = "role_id")
+    @Column(name = "role_id")
     private Role role;
 
     private User() {
@@ -99,12 +99,12 @@ public class User extends AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return login.equals(user.login);
+        return rating == user.rating && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && login.equals(user.login) && password.equals(user.password) && status == user.status && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), login);
+        return Objects.hash(super.hashCode(), firstName, lastName, email, login, password, rating, status, role);
     }
 
     @Override

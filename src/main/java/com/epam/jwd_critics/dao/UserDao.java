@@ -1,6 +1,5 @@
-package com.epam.jwd_critics.dao.impl;
+package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.dao.AbstractBaseDao;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
@@ -20,8 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
-    private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+public class UserDao extends AbstractUserDao {
+    private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
 
     @Language("SQL")
     private static final String SELECT_ALL_USERS = "SELECT * FROM jwd_critics.user";
@@ -33,6 +32,14 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
+
+    private static class UserDaoSingleton {
+        private static final UserDao INSTANCE = new UserDao();
+    }
+
+    public static UserDao getInstance() {
+        return UserDaoSingleton.INSTANCE;
+    }
 
     @Override
     public List<User> findAll() {
@@ -49,7 +56,7 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
     }
 
     @Override
-    public Optional<User> getEntityById(Integer id) throws DaoException {
+    public Optional<User> findEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -84,8 +91,11 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
             ps.setInt(8, user.getStatus().getId());
             int updatedRowCount = ps.executeUpdate();
             if (updatedRowCount == 1) {
-                int generatedId = ps.getGeneratedKeys().getInt(1);
-                user.setId(generatedId);
+                ResultSet resultSet = ps.getGeneratedKeys();
+                if (resultSet.next()) {
+                    int generatedId = resultSet.getInt(1);
+                    user.setId(generatedId);
+                }
             } else {
                 throw new DaoException("Failed to insert " + user);
             }
@@ -106,6 +116,7 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
             preparedStatement.setInt(5, user.getRating());
             preparedStatement.setInt(6, user.getRole().getId());
             preparedStatement.setInt(7, user.getStatus().getId());
+            preparedStatement.setInt(8, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -153,14 +164,14 @@ public class UserDaoImpl extends AbstractBaseDao<Integer, User> {
             return null;
         }
         Map<String, String> columnNames = Arrays.stream(User.class.getDeclaredFields()).
-                collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).columnName()));
+                collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
         Field idField = null;
         try {
             idField = User.class.getSuperclass().getDeclaredField("id");
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
         }
-        columnNames.put(idField.getName(), idField.getAnnotation(Column.class).columnName());
+        columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
         return User.newBuilder().setId(resultSet.getInt(columnNames.get("id")))
                 .setFirstName(resultSet.getString(columnNames.get("firstName")))
                 .setLastName(resultSet.getString(columnNames.get("lastName")))

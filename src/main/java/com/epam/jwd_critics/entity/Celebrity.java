@@ -2,20 +2,29 @@ package com.epam.jwd_critics.entity;
 
 import java.util.Objects;
 
-public class Celebrity extends AbstractBaseEntity{
-    private String name;
+public class Celebrity extends AbstractBaseEntity {
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    Celebrity(Integer id, String name) {
-        super(id);
-        this.name = name;
+    private Celebrity() {
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -24,19 +33,53 @@ public class Celebrity extends AbstractBaseEntity{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Celebrity celebrity = (Celebrity) o;
-        return name.equals(celebrity.name);
+        return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name);
+        return Objects.hash(super.hashCode(), firstName, lastName);
     }
 
     @Override
     public String toString() {
         return "Celebrity{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    public static CelebrityBuilder newBuilder() {
+        return new Celebrity().new CelebrityBuilder();
+    }
+
+    public class CelebrityBuilder {
+        private CelebrityBuilder() {
+
+        }
+
+        public CelebrityBuilder setId(Integer id) {
+            Celebrity.this.setId(id);
+            return this;
+        }
+
+        public CelebrityBuilder setFirstName(String firstName) {
+            Celebrity.this.setFirstName(firstName);
+            return this;
+        }
+
+        public CelebrityBuilder setLastName(String lastName) {
+            Celebrity.this.setLastName(lastName);
+            return this;
+        }
+
+        public Celebrity build() {
+            Celebrity celebrity = new Celebrity();
+            celebrity.setId(Celebrity.this.id);
+            celebrity.setFirstName(Celebrity.this.firstName);
+            celebrity.setLastName(Celebrity.this.lastName);
+            return celebrity;
+        }
     }
 }

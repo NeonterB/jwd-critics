@@ -2,6 +2,7 @@ package com.epam.jwd_critics.entity;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class Movie extends AbstractBaseEntity {
     private Integer reviewCount;
     private LocalDateTime releaseDate;
 
-    private Genre genre;
+    private List<Genre> genres;
     private AgeRestriction ageRestriction;
     Map<Celebrity, Position> staff;
 
@@ -78,12 +79,12 @@ public class Movie extends AbstractBaseEntity {
         this.releaseDate = releaseDate;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public List<Genre> getGenres() {
+        return genres;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public AgeRestriction getAgeRestriction() {
@@ -108,12 +109,12 @@ public class Movie extends AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Movie movie = (Movie) o;
-        return name.equals(movie.name) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && genre == movie.genre && Objects.equals(staff, movie.staff);
+        return name.equals(movie.name) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && genres == movie.genres && Objects.equals(staff, movie.staff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, runtime, country, releaseDate, genre, staff);
+        return Objects.hash(super.hashCode(), name, runtime, country, releaseDate, genres, staff);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class Movie extends AbstractBaseEntity {
                 ", rating=" + rating +
                 ", reviewCount=" + reviewCount +
                 ", releaseDate=" + releaseDate +
-                ", genre=" + genre +
+                ", genres=" + genres +
                 ", ageRestriction=" + ageRestriction +
                 ", staff=" + staff +
                 '}';
@@ -183,8 +184,8 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setGenre(Genre genre) {
-            Movie.this.genre = genre;
+        public MovieBuilder setGenres(List<Genre> genres) {
+            Movie.this.genres = genres;
             return this;
         }
 
@@ -208,7 +209,7 @@ public class Movie extends AbstractBaseEntity {
             movie.rating = Movie.this.rating;
             movie.reviewCount = Movie.this.reviewCount;
             movie.releaseDate = Movie.this.releaseDate;
-            movie.genre = Movie.this.genre;
+            movie.genres = Movie.this.genres;
             movie.ageRestriction = Movie.this.ageRestriction;
             movie.staff = Movie.this.staff;
             return movie;
