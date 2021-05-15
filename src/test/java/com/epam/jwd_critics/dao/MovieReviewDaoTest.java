@@ -41,8 +41,7 @@ class MovieReviewDaoTest {
         movieReviewDao = MovieReviewDao.getInstance();
         movieDao = MovieDao.getInstance();
         userDao = UserDao.getInstance();
-        transaction = new EntityTransaction();
-        transaction.init(movieReviewDao, movieDao, userDao);
+        transaction = new EntityTransaction(movieReviewDao, movieDao, userDao);
         movie1 = Movie.newBuilder()
                 .setName("Test Movie 1")
                 .setSummary("Just a test movie")
@@ -145,6 +144,6 @@ class MovieReviewDaoTest {
     @AfterAll
     public static void clear() {
         transaction.rollback();
-        transaction.end();
+        transaction.close();
     }
 }

@@ -26,8 +26,7 @@ class MovieDaoTest {
     @BeforeAll
     public static void initialize() {
         movieDao = MovieDao.getInstance();
-        transaction = new EntityTransaction();
-        transaction.init(movieDao);
+        transaction = new EntityTransaction(movieDao);
         movie = Movie.newBuilder()
                 .setName("Test Movie")
                 .setSummary("Just a test movie")
@@ -72,6 +71,6 @@ class MovieDaoTest {
     @AfterAll
     public static void clear() {
         transaction.rollback();
-        transaction.end();
+        transaction.close();
     }
 }

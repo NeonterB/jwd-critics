@@ -21,8 +21,7 @@ class UserDaoTest {
     @BeforeAll
     public static void initialize() {
         userDao = UserDao.getInstance();
-        transaction = new EntityTransaction();
-        transaction.init(userDao);
+        transaction = new EntityTransaction(userDao);
         user = User.newBuilder()
                 .setFirstName("Test")
                 .setLastName("Testovich")
@@ -64,6 +63,6 @@ class UserDaoTest {
     @AfterAll
     public static void clear() {
         transaction.rollback();
-        transaction.end();
+        transaction.close();
     }
 }

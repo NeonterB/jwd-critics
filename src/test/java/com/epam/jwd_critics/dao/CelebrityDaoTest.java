@@ -21,8 +21,7 @@ class CelebrityDaoTest {
     @BeforeAll
     public static void initialize() {
         celebrityDao = CelebrityDao.getInstance();
-        transaction = new EntityTransaction();
-        transaction.init(celebrityDao);
+        transaction = new EntityTransaction(celebrityDao);
         celebrity = Celebrity.newBuilder()
                 .setFirstName("testFirstName")
                 .setLastName("testLastName")
@@ -63,6 +62,6 @@ class CelebrityDaoTest {
     @AfterAll
     public static void clear() {
         transaction.rollback();
-        transaction.end();
+        transaction.close();
     }
 }

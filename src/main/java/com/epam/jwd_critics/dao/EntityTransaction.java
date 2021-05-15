@@ -8,15 +8,16 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class EntityTransaction {
+public class EntityTransaction implements AutoCloseable {
     private Connection connection;
+    private final AbstractBaseDao<?, ? extends BaseEntity>[] daos;
     private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class.getName());
 
-    public void init(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
+    @SafeVarargs
+    public EntityTransaction(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
+        this.daos = daos;
         try {
-            if (connection == null) {
-                connection = ConnectionPool.getInstance().getConnection();
-            }
+            connection = ConnectionPool.getInstance().getConnection();
             connection.setAutoCommit(false);
             for (AbstractBaseDao<?, ? extends BaseEntity> dao : daos) {
                 dao.setConnection(connection);
@@ -42,12 +43,13 @@ public class EntityTransaction {
         }
     }
 
-    public void end() {
+    public void close() {
         try {
-            if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
+            for (AbstractBaseDao<?, ? extends BaseEntity> dao : daos) {
+                dao.setConnection(null);
             }
+            connection.setAutoCommit(true);
+            connection.close();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }
