@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class EntityTransaction implements AutoCloseable {
+public class EntityTransaction{
     private Connection connection;
     private final AbstractBaseDao<?, ? extends BaseEntity>[] daos;
     private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class.getName());

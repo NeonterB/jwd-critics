@@ -27,11 +27,15 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String SELECT_USER_BY_ID = "SELECT * FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
+    private static final String SELECT_USER_BY_LOGIN = "SELECT * FROM jwd_critics.user U WHERE U.login = ?";
+    @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
+    @Language("SQL")
+    private static final String SQL_LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd-critics.user WHERE login = ?)";
 
     private static class UserDaoSingleton {
         private static final UserDao INSTANCE = new UserDao();
@@ -59,6 +63,20 @@ public class UserDao extends AbstractUserDao {
     public Optional<User> findEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, id);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.ofNullable(buildUser(resultSet));
+                } else return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Optional<User> findEntityByLogin(String login) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_LOGIN)) {
+            ps.setString(1, login);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildUser(resultSet));
@@ -114,7 +132,24 @@ public class UserDao extends AbstractUserDao {
             throw new DaoException(e);
         }
     }
-//    @Override
+
+    @Override
+    public boolean loginExists(String login) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement preparedStatement = getPreparedStatement(SQL_LOGIN_EXISTS)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
+    }
+
+    //    @Override
 //    public int countUsers() throws DaoException {
 //        int usersCount = 0;
 //        try (PreparedStatement ps = getPreparedStatement(COUNT_USERS)) {

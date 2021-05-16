@@ -1,5 +1,6 @@
 package com.epam.jwd_critics.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
@@ -20,6 +21,8 @@ public class User extends AbstractBaseEntity {
     private Status status;
     @Column(name = "role_id")
     private Role role;
+
+    private List<MovieReview> reviews;
 
     private User() {
 
@@ -57,6 +60,10 @@ public class User extends AbstractBaseEntity {
         return role;
     }
 
+    public List<MovieReview> getReviews() {
+        return reviews;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -87,6 +94,10 @@ public class User extends AbstractBaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setReviews(List<MovieReview> reviews) {
+        this.reviews = reviews;
     }
 
     public static UserBuilder newBuilder() {
@@ -120,8 +131,8 @@ public class User extends AbstractBaseEntity {
                 ", role=" + role +
                 '}';
     }
-
     public class UserBuilder {
+
 
         private UserBuilder() {
             // private constructor
