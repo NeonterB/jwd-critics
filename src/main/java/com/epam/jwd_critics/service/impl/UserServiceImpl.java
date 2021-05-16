@@ -10,8 +10,9 @@ import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.UserServiceException;
 import com.epam.jwd_critics.service.UserService;
-import com.epam.jwd_critics.service.responses.UserServiceCode;
+import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,27 +43,36 @@ public class UserServiceImpl implements UserService {
         private static final UserServiceImpl INSTANCE = new UserServiceImpl();
     }
 
+    private String encryptPassword(String password) {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            return Arrays.toString(hash);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
-    public UserServiceCode login(String login, String password) throws ServiceException {
+    public User login(String login, String password) throws UserServiceException, ServiceException {
         EntityTransaction transaction = new EntityTransaction(reviewDao, userDao);
+        User user = null;
         try {
             if (!userDao.loginExists(login)) {
-                return UserServiceCode.LOGIN_DOES_NOT_EXIST;
+                throw new UserServiceException(UserServiceCode.LOGIN_DOES_NOT_EXIST);
             } else {
-                SecureRandom random = new SecureRandom();
-                byte[] salt = new byte[16];
-                random.nextBytes(salt);
-                KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-                SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                byte[] hash = factory.generateSecret(spec).getEncoded();
-                String encryptedPassword = Arrays.toString(hash);
-
-                User user = userDao.findEntityByLogin(login).get();
+                String encryptedPassword = encryptPassword(password);
+                user = userDao.findEntityByLogin(login).get();
                 if (!encryptedPassword.equals(user.getPassword())) {
-                    return UserServiceCode.INCORRECT_PASSWORD;
+                    throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
                 } else {
                     if (user.getStatus().equals(Status.BANNED)) {
-                        return UserServiceCode.USER_IS_BLOCKED;
+                        throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
                     } else {
                         List<MovieReview> reviews = reviewDao.getReviewsByUserId(user.getId());
                         user.setReviews(reviews);
@@ -70,23 +80,42 @@ public class UserServiceImpl implements UserService {
                 }
             }
             transaction.commit();
-        } catch (DaoException | InvalidKeySpecException | NoSuchAlgorithmException e) {
-            logger.error(e.getMessage(), e);
+        } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
         } finally {
             transaction.close();
         }
-        return UserServiceCode.SUCCESS;
+        return user;
+    }
+
+    @Override
+    public UserServiceCode register(String firstName, String lastName, String email, String login, String password) throws UserServiceException {
+        EntityTransaction transaction = null;
+        User userToRegister = User.newBuilder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setLogin(login)
+                .build();
+        try {
+            transaction = new EntityTransaction(userDao);
+            if (userDao.loginExists(login)) {
+                return UserServiceCode.LOGIN_EXISTS;
+            } else {
+                String encryptedPassword = encryptPassword(password);
+                registeredUser = Optional.of(userDao.create(userToRegister, encryptedPassword));
+            }
+        } catch (DaoException e) {
+            throw new UserServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return Map.entry(registeredUser, errorMessage);
     }
 
     @Override
     public List<User> findAll() {
-        return null;
-    }
-
-    @Override
-    public UserServiceCode register(String login, String email, String firstName, String secondName, String password) {
         return null;
     }
 
@@ -96,17 +125,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceCode activate(Integer id) throws ServiceException {
+    public UserServiceCode activate(Integer id) throws UserServiceException {
         return null;
     }
 
     @Override
-    public UserServiceCode block(Integer id) throws ServiceException {
+    public UserServiceCode block(Integer id) throws UserServiceException {
         return null;
     }
 
     @Override
-    public UserServiceCode delete(Integer id) throws ServiceException {
+    public UserServiceCode delete(Integer id) throws UserServiceException {
         return null;
     }
 }

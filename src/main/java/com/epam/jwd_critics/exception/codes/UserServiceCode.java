@@ -1,8 +1,8 @@
-package com.epam.jwd_critics.service.responses;
+package com.epam.jwd_critics.exception.codes;
 
 public enum UserServiceCode {
-    SUCCESS,
     LOGIN_DOES_NOT_EXIST,
+    LOGIN_EXISTS,
     INCORRECT_PASSWORD,
-    USER_IS_BLOCKED
+    USER_IS_BANNED
 }
