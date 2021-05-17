@@ -47,36 +47,31 @@ public class UserServiceImpl implements UserService {
     private String encryptPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
+        byte[] hash = new byte[0];
         random.nextBytes(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = factory.generateSecret(spec).getEncoded();
-            return Arrays.toString(hash);
+            hash = factory.generateSecret(spec).getEncoded();
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return null;
+        return Arrays.toString(hash);
     }
 
     @Override
-    public User login(String login, String password) throws UserServiceException, ServiceException {
+    public User login(String login, String password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(reviewDao, userDao);
-        User user = null;
+        User user;
         try {
-            if (!userDao.loginExists(login)) {
-                throw new UserServiceException(UserServiceCode.LOGIN_DOES_NOT_EXIST);
-            } else {
-                String encryptedPassword = encryptPassword(password);
-                user = userDao.findEntityByLogin(login).get();
-                if (!encryptedPassword.equals(user.getPassword())) {
-                    throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
-                } else if (user.getStatus().equals(Status.BANNED)) {
-                    throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
-                } else if (user.getStatus().equals(Status.INACTIVE)) {
-                    throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
-                }
-
+            String encryptedPassword = encryptPassword(password);
+            user = userDao.findEntityByLogin(login).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            if (!encryptedPassword.equals(user.getPassword())) {
+                throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
+            } else if (user.getStatus().equals(Status.BANNED)) {
+                throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
+            } else if (user.getStatus().equals(Status.INACTIVE)) {
+                throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
             transaction.commit();
         } catch (DaoException e) {
@@ -125,11 +120,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void activate(Integer id) throws ServiceException {
+    public User ban(Integer id) throws ServiceException {
+        return updateStatus(id, Status.BANNED);
     }
 
     @Override
-    public void block(Integer id) throws ServiceException {
+    public User activate(Integer id) throws ServiceException {
+        return updateStatus(id, Status.ACTIVE);
     }
 
     @Override
@@ -137,20 +134,17 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = null;
         try {
             transaction = new EntityTransaction(userDao, reviewDao);
-            Optional<User> userToDelete = userDao.findEntityById(id);
-            if (userToDelete.isPresent()) {
-                if (!userToDelete.get().getRole().equals(Role.ADMIN)) {
-                    List<MovieReview> reviews = reviewDao.getReviewsByUserId(id);
-                    for (MovieReview review : reviews) {
-                        reviewDao.deleteEntityById(review.getId());
-                    }
-                    userDao.deleteEntityById(id);
-                } else {
-                    throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
+            User userToDelete = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            if (!userToDelete.getRole().equals(Role.ADMIN)) {
+                List<MovieReview> reviews = reviewDao.getReviewsByUserId(id);
+                for (MovieReview review : reviews) {
+                    reviewDao.deleteEntityById(review.getId());
                 }
+                userDao.deleteEntityById(id);
             } else {
-                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+                throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
             }
+
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -158,5 +152,23 @@ public class UserServiceImpl implements UserService {
         } finally {
             transaction.close();
         }
+    }
+
+    private User updateStatus(Integer id, Status status) throws ServiceException {
+        EntityTransaction transaction = null;
+        User user;
+        try {
+            transaction = new EntityTransaction(userDao);
+            user = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user.setStatus(status);
+            userDao.update(user);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return user;
     }
 }

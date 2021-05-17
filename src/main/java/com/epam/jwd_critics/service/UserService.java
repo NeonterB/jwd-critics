@@ -2,8 +2,6 @@ package com.epam.jwd_critics.service;
 
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.UserServiceException;
-import com.epam.jwd_critics.exception.codes.UserServiceCode;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +15,9 @@ public interface UserService {
 
     Optional<User> findById(Integer id);
 
-    void activate(Integer id) throws ServiceException;
+    User ban(Integer id) throws ServiceException;
 
-    void block(Integer id) throws ServiceException;
+    User activate(Integer id) throws ServiceException;
 
     void delete(Integer id) throws ServiceException;
 }

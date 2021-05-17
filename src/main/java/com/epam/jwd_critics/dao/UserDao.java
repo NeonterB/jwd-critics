@@ -35,7 +35,8 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
     @Language("SQL")
-    private static final String SQL_LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd-critics.user WHERE login = ?)";
+    private static final String SQL_LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
+
 
     private static class UserDaoSingleton {
         private static final UserDao INSTANCE = new UserDao();
