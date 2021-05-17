@@ -12,4 +12,9 @@ public class UserServiceException extends ServiceException{
     public UserServiceCode getCode() {
         return code;
     }
+
+    @Override
+    public String getMessage() {
+        return "UserServiceException occurred! exception code - " + code;
+    }
 }

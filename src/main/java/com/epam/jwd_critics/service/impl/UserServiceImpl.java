@@ -23,7 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return Arrays.toString(hash);
+        return Base64.getEncoder().encodeToString(hash);
     }
 
     @Override
