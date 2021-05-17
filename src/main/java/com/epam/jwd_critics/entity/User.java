@@ -22,8 +22,6 @@ public class User extends AbstractBaseEntity {
     @Column(name = "role_id")
     private Role role;
 
-    private List<MovieReview> reviews;
-
     private User() {
 
     }
@@ -60,10 +58,6 @@ public class User extends AbstractBaseEntity {
         return role;
     }
 
-    public List<MovieReview> getReviews() {
-        return reviews;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -94,10 +88,6 @@ public class User extends AbstractBaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public void setReviews(List<MovieReview> reviews) {
-        this.reviews = reviews;
     }
 
     public static UserBuilder newBuilder() {

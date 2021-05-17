@@ -17,9 +17,9 @@ public interface UserService {
 
     Optional<User> findById(Integer id);
 
-    UserServiceCode activate(Integer id) throws ServiceException;
+    void activate(Integer id) throws ServiceException;
 
-    UserServiceCode block(Integer id) throws ServiceException;
+    void block(Integer id) throws ServiceException;
 
-    UserServiceCode delete(Integer id) throws ServiceException;
+    void delete(Integer id) throws ServiceException;
 }

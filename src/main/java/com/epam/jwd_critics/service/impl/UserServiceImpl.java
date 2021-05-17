@@ -6,13 +6,14 @@ import com.epam.jwd_critics.dao.EntityTransaction;
 import com.epam.jwd_critics.dao.MovieReviewDao;
 import com.epam.jwd_critics.dao.UserDao;
 import com.epam.jwd_critics.entity.MovieReview;
+import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.UserServiceException;
-import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.exception.codes.UserServiceCode;
+import com.epam.jwd_critics.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,14 +71,12 @@ public class UserServiceImpl implements UserService {
                 user = userDao.findEntityByLogin(login).get();
                 if (!encryptedPassword.equals(user.getPassword())) {
                     throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
-                } else {
-                    if (user.getStatus().equals(Status.BANNED)) {
-                        throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
-                    } else {
-                        List<MovieReview> reviews = reviewDao.getReviewsByUserId(user.getId());
-                        user.setReviews(reviews);
-                    }
+                } else if (user.getStatus().equals(Status.BANNED)) {
+                    throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
+                } else if (user.getStatus().equals(Status.INACTIVE)) {
+                    throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
                 }
+
             }
             transaction.commit();
         } catch (DaoException e) {
@@ -126,17 +125,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceCode activate(Integer id) throws UserServiceException {
-        return null;
+    public void activate(Integer id) throws ServiceException {
     }
 
     @Override
-    public UserServiceCode block(Integer id) throws UserServiceException {
-        return null;
+    public void block(Integer id) throws ServiceException {
     }
 
     @Override
-    public UserServiceCode delete(Integer id) throws UserServiceException {
-        return null;
+    public void delete(Integer id) throws ServiceException {
+        EntityTransaction transaction = null;
+        try {
+            transaction = new EntityTransaction(userDao, reviewDao);
+            Optional<User> userToDelete = userDao.findEntityById(id);
+            if (userToDelete.isPresent()) {
+                if (!userToDelete.get().getRole().equals(Role.ADMIN)) {
+                    List<MovieReview> reviews = reviewDao.getReviewsByUserId(id);
+                    for (MovieReview review : reviews) {
+                        reviewDao.deleteEntityById(review.getId());
+                    }
+                    userDao.deleteEntityById(id);
+                } else {
+                    throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
+                }
+            } else {
+                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
     }
 }
