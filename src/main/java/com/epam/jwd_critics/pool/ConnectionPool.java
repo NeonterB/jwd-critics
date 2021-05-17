@@ -63,7 +63,7 @@ public class ConnectionPool {
                 //todo wait
             }
             unavailableConnections.offer(connection);
-            logger.debug("Connection taken");
+            logger.info("Connection taken");
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         } finally {

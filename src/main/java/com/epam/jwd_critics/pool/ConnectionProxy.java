@@ -15,7 +15,7 @@ public class ConnectionProxy implements Connection {
 
     public ConnectionProxy(Connection connection) {
         this.connection = connection;
-        logger.debug("ConnectionProxy created");
+        logger.info("ConnectionProxy created");
     }
 
     @Override

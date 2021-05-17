@@ -14,16 +14,10 @@ import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.UserServiceException;
 import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.service.UserService;
+import com.epam.jwd_critics.util.PasswordAuthenticator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final AbstractMovieReviewDao reviewDao = MovieReviewDao.getInstance();
     private final AbstractUserDao userDao = UserDao.getInstance();
+    private final PasswordAuthenticator passwordAuthenticator = new PasswordAuthenticator();
 
     private UserServiceImpl() {
 
@@ -44,29 +39,13 @@ public class UserServiceImpl implements UserService {
         private static final UserServiceImpl INSTANCE = new UserServiceImpl();
     }
 
-    private String encryptPassword(String password) {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        byte[] hash = new byte[0];
-        random.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            hash = factory.generateSecret(spec).getEncoded();
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return Base64.getEncoder().encodeToString(hash);
-    }
-
     @Override
     public User login(String login, String password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(reviewDao, userDao);
         User user;
         try {
-            String encryptedPassword = encryptPassword(password);
             user = userDao.findEntityByLogin(login).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
-            if (!encryptedPassword.equals(user.getPassword())) {
+            if (!passwordAuthenticator.authenticate(password, user.getPassword())) {
                 throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
             } else if (user.getStatus().equals(Status.BANNED)) {
                 throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
@@ -74,6 +53,8 @@ public class UserServiceImpl implements UserService {
                 throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
             transaction.commit();
+            logger.info("{} logged in", user);
+
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -84,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String email, String login, String password) throws ServiceException {
+    public User register(String firstName, String lastName, String email, String login, char[] password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         User userToRegister = User.newBuilder()
                 .setFirstName(firstName)
@@ -96,11 +77,12 @@ public class UserServiceImpl implements UserService {
             if (userDao.loginExists(login)) {
                 throw new UserServiceException(UserServiceCode.LOGIN_EXISTS);
             } else {
-                String encryptedPassword = encryptPassword(password);
-                userToRegister.setPassword(encryptedPassword);
+                userToRegister.setPassword(passwordAuthenticator.hash(password));
+                setDefaultFields(userToRegister);
                 userToRegister = userDao.create(userToRegister);
             }
             transaction.commit();
+            logger.info("{} registered", userToRegister);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -153,6 +135,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User toAdmin(Integer id) throws ServiceException {
+        return updateRole(id, Role.ADMIN);
+    }
+
+    @Override
+    public User toUser(Integer id) throws ServiceException {
+        return updateRole(id, Role.USER);
+    }
+
+    @Override
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
@@ -166,8 +158,8 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
             }
-
             transaction.commit();
+            logger.info("{} was deleted", userToDelete);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -184,6 +176,7 @@ public class UserServiceImpl implements UserService {
             user.setStatus(status);
             userDao.update(user);
             transaction.commit();
+            logger.info("Status of user with id {} was changed to {}", id, status);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -191,5 +184,29 @@ public class UserServiceImpl implements UserService {
             transaction.close();
         }
         return user;
+    }
+
+    private User updateRole(Integer id, Role role) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        User user;
+        try {
+            user = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user.setRole(role);
+            userDao.update(user);
+            transaction.commit();
+            logger.info("Role of user with id {} was changed to {}", id, role);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return user;
+    }
+
+    private void setDefaultFields(User user) {
+        user.setRating(0);
+        user.setRole(Role.USER);
+        user.setStatus(Status.INACTIVE);
     }
 }

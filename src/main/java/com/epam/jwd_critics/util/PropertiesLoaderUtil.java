@@ -31,10 +31,10 @@ public final class PropertiesLoaderUtil {
                     Integer.parseInt(properties.getProperty("minPoolSize")),
                     Integer.parseInt(properties.getProperty("maxPoolSize"))
             );
+            logger.info("Application properties loaded");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-        logger.debug("Application properties loaded");
     }
 
     public static ApplicationProperties getApplicationProperties() {
