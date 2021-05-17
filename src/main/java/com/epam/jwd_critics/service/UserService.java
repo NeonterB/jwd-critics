@@ -11,9 +11,9 @@ public interface UserService {
 
     User register(String firstName, String lastName, String email, String login, String password) throws ServiceException;
 
-    List<User> findAll();
+    List<User> findAll() throws ServiceException;
 
-    Optional<User> findById(Integer id);
+    Optional<User> findById(Integer id) throws ServiceException;
 
     User ban(Integer id) throws ServiceException;
 
