@@ -2,7 +2,7 @@ package com.epam.jwd_critics.exception;
 
 import com.epam.jwd_critics.exception.codes.UserServiceCode;
 
-public class UserServiceException extends Exception{
+public class UserServiceException extends ServiceException{
     UserServiceCode code;
 
     public UserServiceException(UserServiceCode code) {

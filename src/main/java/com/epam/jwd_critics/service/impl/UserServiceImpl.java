@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceCode register(String firstName, String lastName, String email, String login, String password) throws UserServiceException {
+    public User register(String firstName, String lastName, String email, String login, String password) throws ServiceException {
         EntityTransaction transaction = null;
         User userToRegister = User.newBuilder()
                 .setFirstName(firstName)
@@ -101,17 +101,18 @@ public class UserServiceImpl implements UserService {
         try {
             transaction = new EntityTransaction(userDao);
             if (userDao.loginExists(login)) {
-                return UserServiceCode.LOGIN_EXISTS;
+                throw new UserServiceException(UserServiceCode.LOGIN_EXISTS);
             } else {
                 String encryptedPassword = encryptPassword(password);
-                registeredUser = Optional.of(userDao.create(userToRegister, encryptedPassword));
+                userToRegister.setPassword(encryptedPassword);
+                userToRegister = userDao.create(userToRegister);
             }
         } catch (DaoException e) {
-            throw new UserServiceException(e);
+            throw new ServiceException(e);
         } finally {
             transaction.close();
         }
-        return Map.entry(registeredUser, errorMessage);
+        return userToRegister;
     }
 
     @Override
