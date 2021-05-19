@@ -1,5 +1,9 @@
 package com.epam.jwd_critics.entity;
 
+import javafx.geometry.Pos;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Celebrity extends AbstractBaseEntity {
@@ -7,6 +11,7 @@ public class Celebrity extends AbstractBaseEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    private Map<Movie, List<Position>> jobs;
 
     private Celebrity() {
     }
@@ -27,17 +32,25 @@ public class Celebrity extends AbstractBaseEntity {
         this.lastName = lastName;
     }
 
+    public Map<Movie, List<Position>> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Map<Movie, List<Position>> jobs) {
+        this.jobs = jobs;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Celebrity celebrity = (Celebrity) o;
-        return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName);
+        return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName) && jobs.equals(celebrity.jobs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(firstName, lastName, jobs);
     }
 
     @Override
@@ -46,6 +59,7 @@ public class Celebrity extends AbstractBaseEntity {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", jobs=" + jobs +
                 '}';
     }
 
@@ -59,17 +73,22 @@ public class Celebrity extends AbstractBaseEntity {
         }
 
         public CelebrityBuilder setId(Integer id) {
-            Celebrity.this.setId(id);
+            Celebrity.this.id = id;
             return this;
         }
 
         public CelebrityBuilder setFirstName(String firstName) {
-            Celebrity.this.setFirstName(firstName);
+            Celebrity.this.firstName = firstName;
             return this;
         }
 
         public CelebrityBuilder setLastName(String lastName) {
-            Celebrity.this.setLastName(lastName);
+            Celebrity.this.lastName = lastName;
+            return this;
+        }
+
+        public CelebrityBuilder setJobs(Map<Movie, List<Position>> jobs) {
+            Celebrity.this.jobs = jobs;
             return this;
         }
 

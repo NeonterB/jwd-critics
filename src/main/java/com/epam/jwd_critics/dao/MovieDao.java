@@ -47,6 +47,14 @@ public class MovieDao extends AbstractMovieDao {
     @Language("SQL")
     private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ? WHERE M.id = ?";
     @Language("SQL")
+    private static final String ADD_GENRE = "INSERT INTO jwd_critics.movie_genre (movie_id, genre_id) VALUES (?, ?)";
+    @Language("SQL")
+    private static final String DELETE_GENRE = "DELETE FROM jwd_critics.movie_genre where movie_id = ? and genre_id = ?";
+    @Language("SQL")
+    private static final String ADD_STAFF = "INSERT INTO jwd_critics.movie_staff (movie_id, celebrity_id, position_id) VALUES (?, ?, ?)";
+    @Language("SQL")
+    private static final String DELETE_STAFF = "DELETE FROM jwd_critics.movie_staff where movie_id = ? and celebrity_id = ? and position_id = ?";
+    @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.movie WHERE id = ?)";
 
     private static class MovieDaoSingleton {
@@ -121,9 +129,9 @@ public class MovieDao extends AbstractMovieDao {
     @Override
     public boolean idExists(Integer id) throws DaoException {
         boolean result = false;
-        try (PreparedStatement preparedStatement = getPreparedStatement(ID_EXISTS)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement ps = getPreparedStatement(ID_EXISTS)) {
+            ps.setInt(1, id);
+            try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     result = resultSet.getInt(1) != 0;
                 }
@@ -132,6 +140,52 @@ public class MovieDao extends AbstractMovieDao {
             throw new DaoException(e);
         }
         return result;
+    }
+
+    @Override
+    public boolean addGenre(Integer movieId, Genre genre) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(ADD_GENRE)) {
+            ps.setInt(1, movieId);
+            ps.setInt(2, genre.getId());
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean removeGenre(Integer movieId, Genre genre) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_GENRE)) {
+            ps.setInt(1, movieId);
+            ps.setInt(2, genre.getId());
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean addStaffAndPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(ADD_STAFF)) {
+            ps.setInt(1, movieId);
+            ps.setInt(2, celebrityId);
+            ps.setInt(3, position.getId());
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean removeStaffAndPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_STAFF)) {
+            ps.setInt(1, movieId);
+            ps.setInt(2, celebrityId);
+            ps.setInt(3, position.getId());
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     @Override
@@ -180,9 +234,9 @@ public class MovieDao extends AbstractMovieDao {
     @Override
     public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
         Map<Movie, List<Position>> crew = new HashMap<>();
-        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
-            preparedStatement.setInt(1, celebrityId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
+            ps.setInt(1, celebrityId);
+            try (ResultSet resultSet = ps.executeQuery()) {
                 String positionColumnName = Position.class.getAnnotation(Column.class).name();
                 while (resultSet.next()) {
                     Movie movie = buildMovie(resultSet);

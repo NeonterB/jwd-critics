@@ -11,7 +11,7 @@ public interface CelebrityService {
 
     Optional<Celebrity> getEntityById(Integer id) throws ServiceException;
 
-    Celebrity update(Celebrity celebrity) throws ServiceException;
+    void update(Celebrity celebrity) throws ServiceException;
 
     Celebrity create(Celebrity celebrity) throws ServiceException;
 

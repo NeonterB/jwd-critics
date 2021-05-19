@@ -38,16 +38,15 @@ public class MovieServiceImpl implements MovieService {
         return MovieServiceImpl.MovieServiceImplSingleton.INSTANCE;
     }
 
-    private static class MovieServiceImplSingleton {
-        private static final MovieServiceImpl INSTANCE = new MovieServiceImpl();
-    }
-
     @Override
     public List<Movie> getAll() throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
-        List<Movie> movieList;
+        List<Movie> movies;
         try {
-            movieList = movieDao.getAll();
+            movies = movieDao.getAll();
+            for (Movie movie : movies) {
+                updateInfo(movie);
+            }
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -55,12 +54,12 @@ public class MovieServiceImpl implements MovieService {
         } finally {
             transaction.close();
         }
-        return movieList;
+        return movies;
     }
 
     @Override
     public Optional<Movie> getEntityById(Integer id) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(movieDao, celebrityDao);
+        EntityTransaction transaction = new EntityTransaction(movieDao);
         Optional<Movie> movie;
         try {
             movie = movieDao.getEntityById(id);
@@ -94,6 +93,48 @@ public class MovieServiceImpl implements MovieService {
             transaction.close();
         }
         return movies;
+    }
+
+    @Override
+    public void addGenre(Integer movieId, Genre genre) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieDao);
+        try {
+            if (!movieDao.idExists(movieId))
+                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            movieDao.addGenre(movieId, genre);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    @Override
+    public void removeGenre(Integer movieId, Genre genre) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieDao);
+        try {
+            if (!movieDao.idExists(movieId))
+                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            movieDao.removeGenre(movieId, genre);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    @Override
+    public void addCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
+
+    }
+
+    @Override
+    public void removeCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
+
     }
 
     @Override
@@ -138,11 +179,8 @@ public class MovieServiceImpl implements MovieService {
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao, reviewDao);
         try {
-            Movie movieToDelete = movieDao.getEntityById(id).orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
-            List<MovieReview> reviews = reviewDao.getReviewsByMovieId(id);
-            for (MovieReview review : reviews) {
-                reviewDao.delete(review.getId());
-            }
+            Movie movieToDelete = movieDao.getEntityById(id)
+                    .orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             movieDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", movieToDelete);
@@ -173,5 +211,9 @@ public class MovieServiceImpl implements MovieService {
         } finally {
             transaction.close();
         }
+    }
+
+    private static class MovieServiceImplSingleton {
+        private static final MovieServiceImpl INSTANCE = new MovieServiceImpl();
     }
 }

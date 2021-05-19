@@ -2,10 +2,13 @@ package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Country;
+import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
+import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,6 +74,32 @@ class MovieDaoTest {
             Movie actualResult = movieDao.getEntityById(movie.getId()).get();
             assertEquals(movie, actualResult);
             movie.setSummary(oldSummary);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void testGenres() {
+        try {
+            Assertions.assertTrue(movieDao.addGenre(movie.getId(), Genre.ACTION));
+            Assertions.assertTrue(movieDao.addGenre(movie.getId(), Genre.HORROR));
+            Assertions.assertFalse(movieDao.addGenre(movie.getId(), Genre.HORROR));
+            Assertions.assertTrue(movieDao.removeGenre(movie.getId(), Genre.ACTION));
+            Assertions.assertFalse(movieDao.removeGenre(movie.getId(), Genre.ACTION));
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void testStaff() {
+        try {
+            Assertions.assertTrue(movieDao.addStaffAndPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.addStaffAndPosition(movie.getId(), 1, Position.DIRECTOR));
+            Assertions.assertFalse(movieDao.addStaffAndPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.removeStaffAndPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertFalse(movieDao.removeStaffAndPosition(movie.getId(), 1, Position.ACTOR));
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }

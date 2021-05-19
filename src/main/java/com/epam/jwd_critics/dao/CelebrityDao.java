@@ -37,7 +37,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
     private static final String INSERT_CELEBRITY = "INSERT INTO jwd_critics.celebrity (first_name, last_name) VALUES (?, ?)";
     @Language("SQL")
     private static final String UPDATE_CELEBRITY = "UPDATE jwd_critics.celebrity U SET U.first_name = ?, U.last_name = ? WHERE U.id = ?";
-
+    @Language("SQL")
+    private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.celebrity WHERE id = ?)";
 
     private static class CelebrityDaoSingleton {
         private static final CelebrityDao INSTANCE = new CelebrityDao();
@@ -97,6 +98,22 @@ public class CelebrityDao extends AbstractCelebrityDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public boolean idExists(Integer id) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement preparedStatement = getPreparedStatement(ID_EXISTS)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     @Override

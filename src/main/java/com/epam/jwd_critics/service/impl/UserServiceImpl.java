@@ -5,7 +5,6 @@ import com.epam.jwd_critics.dao.AbstractUserDao;
 import com.epam.jwd_critics.dao.EntityTransaction;
 import com.epam.jwd_critics.dao.MovieReviewDao;
 import com.epam.jwd_critics.dao.UserDao;
-import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -33,10 +32,6 @@ public class UserServiceImpl implements UserService {
 
     public static UserServiceImpl getInstance() {
         return UserServiceImpl.UserServiceImplSingleton.INSTANCE;
-    }
-
-    private static class UserServiceImplSingleton {
-        private static final UserServiceImpl INSTANCE = new UserServiceImpl();
     }
 
     @Override
@@ -155,15 +150,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
             User userToDelete = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
-            if (!userToDelete.getRole().equals(Role.ADMIN)) {
-                List<MovieReview> reviews = reviewDao.getReviewsByUserId(id);
-                for (MovieReview review : reviews) {
-                    reviewDao.delete(review.getId());
-                }
-                userDao.delete(id);
-            } else {
-                throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
-            }
+            userDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", userToDelete);
         } catch (DaoException e) {
@@ -223,5 +210,9 @@ public class UserServiceImpl implements UserService {
         user.setRating(0);
         user.setRole(Role.USER);
         user.setStatus(Status.INACTIVE);
+    }
+
+    private static class UserServiceImplSingleton {
+        private static final UserServiceImpl INSTANCE = new UserServiceImpl();
     }
 }

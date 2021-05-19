@@ -1,9 +1,8 @@
 package com.epam.jwd_critics.exception;
 
 import com.epam.jwd_critics.exception.codes.MovieServiceCode;
-import com.epam.jwd_critics.exception.codes.UserServiceCode;
 
-public class MovieServiceException extends ServiceException{
+public class MovieServiceException extends ServiceException {
     MovieServiceCode code;
 
     public MovieServiceException(MovieServiceCode code) {
