@@ -43,6 +43,8 @@ public class MovieDao extends AbstractMovieDao {
     private static final String INSERT_MOVIE = "INSERT INTO jwd_critics.movie (name, summary, runtime, age_restriction_id, country_id, release_date) VALUES (?, ?, ?, ?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ? WHERE M.id = ?";
+    @Language("SQL")
+    private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.movie WHERE id = ?)";
 
     private static class MovieDaoSingleton {
         private static final MovieDao INSTANCE = new MovieDao();
@@ -95,6 +97,22 @@ public class MovieDao extends AbstractMovieDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public boolean idExists(Integer id) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement preparedStatement = getPreparedStatement(ID_EXISTS)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     @Override

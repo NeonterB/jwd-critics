@@ -58,6 +58,9 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
         } finally {
             transaction.close();
         }
@@ -86,6 +89,9 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
         } finally {
             transaction.close();
         }
@@ -163,6 +169,9 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
         } finally {
             transaction.close();
         }
@@ -180,6 +189,9 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
         } finally {
             transaction.close();
         }
@@ -198,6 +210,9 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
         } finally {
             transaction.close();
         }

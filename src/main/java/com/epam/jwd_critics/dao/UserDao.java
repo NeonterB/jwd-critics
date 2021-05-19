@@ -35,7 +35,7 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
     @Language("SQL")
-    private static final String SQL_LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
+    private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
 
 
     private static class UserDaoSingleton {
@@ -137,7 +137,7 @@ public class UserDao extends AbstractUserDao {
     @Override
     public boolean loginExists(String login) throws DaoException {
         boolean result = false;
-        try (PreparedStatement preparedStatement = getPreparedStatement(SQL_LOGIN_EXISTS)) {
+        try (PreparedStatement preparedStatement = getPreparedStatement(LOGIN_EXISTS)) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
