@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +38,8 @@ public class MovieDao extends AbstractMovieDao {
     private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.*, MS.position_id from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.movie M on MS.movie_id = M.id where celebrity_id = ?";
     @Language("SQL")
     private static final String SELECT_MOVIE_BY_ID = "SELECT * FROM jwd_critics.movie WHERE id = ?";
+    @Language("SQL")
+    private static final String SELECT_MOVIES_BY_NAME = "SELECT * FROM jwd_critics.movie WHERE name = ?";
     @Language("SQL")
     private static final String DELETE_MOVIE_BY_ID = "DELETE FROM jwd_critics.movie WHERE id = ?";
     @Language("SQL")
@@ -81,6 +84,22 @@ public class MovieDao extends AbstractMovieDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public List<Movie> findMoviesByName(String name) throws DaoException {
+        List<Movie> movies = new LinkedList<>();
+        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    movies.add(buildMovie(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return movies;
     }
 
     @Override

@@ -29,34 +29,50 @@ class CelebrityDaoTest {
     }
 
     @BeforeEach
-    public void initializeTest() throws DaoException {
-        celebrity = celebrityDao.create(celebrity);
+    public void initializeTest() {
+        try {
+            celebrity = celebrityDao.create(celebrity);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testFindEntityById() throws DaoException {
-        Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
-        assertEquals(celebrity, actualResult);
+    public void testFindEntityById() {
+        try {
+            Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
+            assertEquals(celebrity, actualResult);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testUpdate() throws DaoException {
-        String oldFirstName = celebrity.getFirstName();
-        celebrity.setFirstName("newTestFirstName");
-        celebrityDao.update(celebrity);
-        Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
-        assertEquals(celebrity, actualResult);
-        celebrity.setFirstName(oldFirstName);
+    public void testUpdate() {
+        try {
+            String oldFirstName = celebrity.getFirstName();
+            celebrity.setFirstName("newTestFirstName");
+            celebrityDao.update(celebrity);
+            Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
+            assertEquals(celebrity, actualResult);
+            celebrity.setFirstName(oldFirstName);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testFindCrewByMovieId() throws DaoException{
+    public void testFindCrewByMovieId() {
         //System.out.println(celebrityDao.findCrewByMovieId(2));
     }
 
     @AfterEach
-    public void endTest() throws DaoException {
-        celebrityDao.deleteEntityById(celebrity.getId());
+    public void endTest() {
+        try {
+            celebrityDao.deleteEntityById(celebrity.getId());
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @AfterAll

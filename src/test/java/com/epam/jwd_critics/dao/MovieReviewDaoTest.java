@@ -93,52 +93,75 @@ class MovieReviewDaoTest {
     }
 
     @BeforeEach
-    public void initializeTest() throws DaoException {
-
-        movieReview1 = movieReviewDao.create(movieReview1);
-        movieReview2 = movieReviewDao.create(movieReview2);
-        movieReview3 = movieReviewDao.create(movieReview3);
-        movieReview4 = movieReviewDao.create(movieReview4);
+    public void initializeTest() {
+        try {
+            movieReview1 = movieReviewDao.create(movieReview1);
+            movieReview2 = movieReviewDao.create(movieReview2);
+            movieReview3 = movieReviewDao.create(movieReview3);
+            movieReview4 = movieReviewDao.create(movieReview4);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testFindEntityById() throws DaoException {
-        MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
-        assertEquals(movieReview1, actualResult);
+    public void testFindEntityById() {
+        try {
+            MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
+            assertEquals(movieReview1, actualResult);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testUpdate() throws DaoException {
-        String oldText = movieReview1.getText();
-        movieReview1.setText("new test text");
-        movieReviewDao.update(movieReview1);
-        MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
-        assertEquals(movieReview1, actualResult);
-        movieReview1.setText(oldText);
+    public void testUpdate() {
+        try {
+            String oldText = movieReview1.getText();
+            movieReview1.setText("new test text");
+            movieReviewDao.update(movieReview1);
+            MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
+            assertEquals(movieReview1, actualResult);
+            movieReview1.setText(oldText);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testGetReviewsByMovieId() throws DaoException {
-        List<MovieReview> reviewsByMovieId = movieReviewDao.getReviewsByMovieId(movie1.getId());
-        assertTrue(reviewsByMovieId.contains(movieReview1));
-        assertTrue(reviewsByMovieId.contains(movieReview3));
-        assertEquals(reviewsByMovieId.size(), 2);
+    public void testGetReviewsByMovieId() {
+        try {
+            List<MovieReview> reviewsByMovieId = movieReviewDao.getReviewsByMovieId(movie1.getId());
+            assertTrue(reviewsByMovieId.contains(movieReview1));
+            assertTrue(reviewsByMovieId.contains(movieReview3));
+            assertEquals(reviewsByMovieId.size(), 2);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @Test
-    public void testGetReviewsByUserId() throws DaoException {
-        List<MovieReview> reviewsByMovieId = movieReviewDao.getReviewsByUserId(user1.getId());
-        assertTrue(reviewsByMovieId.contains(movieReview1));
-        assertTrue(reviewsByMovieId.contains(movieReview2));
-        assertEquals(reviewsByMovieId.size(), 2);
+    public void testGetReviewsByUserId() {
+        try {
+            List<MovieReview> reviewsByMovieId = movieReviewDao.getReviewsByUserId(user1.getId());
+            assertTrue(reviewsByMovieId.contains(movieReview1));
+            assertTrue(reviewsByMovieId.contains(movieReview2));
+            assertEquals(reviewsByMovieId.size(), 2);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @AfterEach
-    public void endTest() throws DaoException {
-        movieReviewDao.deleteEntityById(movieReview1.getId());
-        movieReviewDao.deleteEntityById(movieReview2.getId());
-        movieReviewDao.deleteEntityById(movieReview3.getId());
-        movieReviewDao.deleteEntityById(movieReview4.getId());
+    public void endTest() {
+        try {
+            movieReviewDao.deleteEntityById(movieReview1.getId());
+            movieReviewDao.deleteEntityById(movieReview2.getId());
+            movieReviewDao.deleteEntityById(movieReview3.getId());
+            movieReviewDao.deleteEntityById(movieReview4.getId());
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @AfterAll

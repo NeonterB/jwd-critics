@@ -13,5 +13,7 @@ public abstract class AbstractMovieDao extends AbstractBaseDao<Integer, Movie> {
 
     public abstract List<Genre> getMovieGenresById(Integer movieId) throws DaoException;
 
+    public abstract List<Movie> findMoviesByName(String name) throws DaoException;
+
     public abstract boolean idExists(Integer id) throws DaoException;
 }

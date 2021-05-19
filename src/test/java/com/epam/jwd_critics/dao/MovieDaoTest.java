@@ -37,40 +37,56 @@ class MovieDaoTest {
                 .build();
     }
 
-    @BeforeEach
-    public void initializeTest() throws DaoException {
-        movie = movieDao.create(movie);
-    }
-
-    @Test
-    public void testFindEntityById() throws DaoException {
-        Movie actualResult = movieDao.findEntityById(movie.getId()).get();
-        assertEquals(movie, actualResult);
-    }
-
-    @Test
-    public void testUpdate() throws DaoException {
-        String oldSummary = movie.getSummary();
-        movie.setSummary("new summary");
-        movieDao.update(movie);
-        Movie actualResult = movieDao.findEntityById(movie.getId()).get();
-        assertEquals(movie, actualResult);
-        movie.setSummary(oldSummary);
-    }
-
-    @Test
-    public void testFindMoviesByCelebrityId() throws DaoException {
-        //System.out.println(movieDao.findMoviesByCelebrityId(6));
-    }
-
-    @AfterEach
-    public void endTest() throws DaoException {
-        movieDao.deleteEntityById(movie.getId());
-    }
-
     @AfterAll
     public static void clear() {
         transaction.rollback();
         transaction.close();
+    }
+
+    @BeforeEach
+    public void initializeTest() {
+        try {
+            movie = movieDao.create(movie);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void testFindEntityById() {
+        try {
+            Movie actualResult = movieDao.findEntityById(movie.getId()).get();
+            assertEquals(movie, actualResult);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void testUpdate() {
+        try {
+            String oldSummary = movie.getSummary();
+            movie.setSummary("new summary");
+            movieDao.update(movie);
+            Movie actualResult = movieDao.findEntityById(movie.getId()).get();
+            assertEquals(movie, actualResult);
+            movie.setSummary(oldSummary);
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void testFindMoviesByCelebrityId() {
+        //System.out.println(movieDao.findMoviesByCelebrityId(6));
+    }
+
+    @AfterEach
+    public void endTest() {
+        try {
+            movieDao.deleteEntityById(movie.getId());
+        } catch (DaoException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 }

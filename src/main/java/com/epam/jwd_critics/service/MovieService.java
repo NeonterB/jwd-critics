@@ -11,13 +11,11 @@ public interface MovieService {
 
     Optional<Movie> findById(Integer id) throws ServiceException;
 
-    Optional<Movie> create(Movie movie) throws ServiceException;
+    public List<Movie> findMoviesByName(String name) throws ServiceException;
+
+    Movie create(Movie movie) throws ServiceException;
 
     void update(Movie movie) throws ServiceException;
 
     void delete(Integer id) throws ServiceException;
-
-    Optional<Movie> findByName(String title) throws ServiceException;
-
-
 }

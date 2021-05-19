@@ -21,11 +21,12 @@ public class Movie extends AbstractBaseEntity {
     private Integer reviewCount;
     @Column(name = "release_date")
     private LocalDate releaseDate;
-
-    private List<Genre> genres;
     @Column(name = "age_restriction_id")
     private AgeRestriction ageRestriction;
-    Map<Celebrity, List<Position>> staff;
+
+    private List<MovieReview> reviews;
+    private List<Genre> genres;
+    private Map<Celebrity, List<Position>> staff;
 
     private Movie() {
 
@@ -111,17 +112,25 @@ public class Movie extends AbstractBaseEntity {
         this.staff = staff;
     }
 
+    public List<MovieReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<MovieReview> reviews) {
+        this.reviews = reviews;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(releaseDate, movie.releaseDate) && Objects.equals(genres, movie.genres) && ageRestriction == movie.ageRestriction && Objects.equals(staff, movie.staff);
+        return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(rating, movie.rating) && Objects.equals(reviewCount, movie.reviewCount) && Objects.equals(releaseDate, movie.releaseDate) && ageRestriction == movie.ageRestriction && Objects.equals(reviews, movie.reviews) && Objects.equals(genres, movie.genres) && Objects.equals(staff, movie.staff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, summary, runtime, country, releaseDate, genres, ageRestriction, staff);
+        return Objects.hash(name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction, reviews, genres, staff);
     }
 
     @Override
@@ -130,13 +139,14 @@ public class Movie extends AbstractBaseEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", summary='" + summary + '\'' +
-                ", runtime=" + runtime.toString() +
+                ", runtime=" + runtime +
                 ", country=" + country +
                 ", rating=" + rating +
                 ", reviewCount=" + reviewCount +
                 ", releaseDate=" + releaseDate +
-                ", genres=" + genres +
                 ", ageRestriction=" + ageRestriction +
+                ", reviews=" + reviews +
+                ", genres=" + genres +
                 ", staff=" + staff +
                 '}';
     }
@@ -191,13 +201,18 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setGenres(List<Genre> genres) {
-            Movie.this.genres = genres;
+        public MovieBuilder setAgeRestriction(AgeRestriction ageRestriction) {
+            Movie.this.ageRestriction = ageRestriction;
             return this;
         }
 
-        public MovieBuilder setAgeRestriction(AgeRestriction ageRestriction) {
-            Movie.this.ageRestriction = ageRestriction;
+        public MovieBuilder setReviews(List<MovieReview> reviews) {
+            Movie.this.reviews = reviews;
+            return this;
+        }
+
+        public MovieBuilder setGenres(List<Genre> genres) {
+            Movie.this.genres = genres;
             return this;
         }
 
@@ -216,8 +231,9 @@ public class Movie extends AbstractBaseEntity {
             movie.rating = Movie.this.rating;
             movie.reviewCount = Movie.this.reviewCount;
             movie.releaseDate = Movie.this.releaseDate;
-            movie.genres = Movie.this.genres;
             movie.ageRestriction = Movie.this.ageRestriction;
+            movie.reviews = Movie.this.reviews;
+            movie.genres = Movie.this.genres;
             movie.staff = Movie.this.staff;
             return movie;
         }

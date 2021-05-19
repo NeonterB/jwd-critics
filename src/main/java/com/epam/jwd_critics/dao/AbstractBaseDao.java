@@ -2,6 +2,7 @@ package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.BaseEntity;
 import com.epam.jwd_critics.entity.Genre;
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
