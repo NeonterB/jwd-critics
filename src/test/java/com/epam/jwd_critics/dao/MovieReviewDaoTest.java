@@ -107,7 +107,7 @@ class MovieReviewDaoTest {
     @Test
     public void testFindEntityById() {
         try {
-            MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
+            MovieReview actualResult = movieReviewDao.getEntityById(movieReview1.getId()).get();
             assertEquals(movieReview1, actualResult);
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
@@ -120,7 +120,7 @@ class MovieReviewDaoTest {
             String oldText = movieReview1.getText();
             movieReview1.setText("new test text");
             movieReviewDao.update(movieReview1);
-            MovieReview actualResult = movieReviewDao.findEntityById(movieReview1.getId()).get();
+            MovieReview actualResult = movieReviewDao.getEntityById(movieReview1.getId()).get();
             assertEquals(movieReview1, actualResult);
             movieReview1.setText(oldText);
         } catch (DaoException e) {
@@ -155,10 +155,10 @@ class MovieReviewDaoTest {
     @AfterEach
     public void endTest() {
         try {
-            movieReviewDao.deleteEntityById(movieReview1.getId());
-            movieReviewDao.deleteEntityById(movieReview2.getId());
-            movieReviewDao.deleteEntityById(movieReview3.getId());
-            movieReviewDao.deleteEntityById(movieReview4.getId());
+            movieReviewDao.delete(movieReview1.getId());
+            movieReviewDao.delete(movieReview2.getId());
+            movieReviewDao.delete(movieReview3.getId());
+            movieReviewDao.delete(movieReview4.getId());
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
-    List<Movie> findAll() throws ServiceException;
+    List<Movie> getAll() throws ServiceException;
 
-    Optional<Movie> findById(Integer id) throws ServiceException;
+    Optional<Movie> getEntityById(Integer id) throws ServiceException;
 
-    public List<Movie> findMoviesByName(String name) throws ServiceException;
+    public List<Movie> getMoviesByName(String name) throws ServiceException;
 
     Movie create(Movie movie) throws ServiceException;
 

@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(reviewDao, userDao);
         User user;
         try {
-            user = userDao.findEntityByLogin(login).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user = userDao.getEntityByLogin(login).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             if (!passwordAuthenticator.authenticate(password, user.getPassword())) {
                 throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
             } else if (user.getStatus().equals(Status.BANNED)) {
@@ -99,11 +99,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() throws ServiceException {
+    public List<User> getAll() throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         List<User> userList;
         try {
-            userList = userDao.findAll();
+            userList = userDao.getAll();
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -115,11 +115,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Integer id) throws ServiceException {
+    public Optional<User> getEntityById(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         Optional<User> user;
         try {
-            user = userDao.findEntityById(id);
+            user = userDao.getEntityById(id);
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -154,13 +154,13 @@ public class UserServiceImpl implements UserService {
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
-            User userToDelete = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            User userToDelete = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             if (!userToDelete.getRole().equals(Role.ADMIN)) {
                 List<MovieReview> reviews = reviewDao.getReviewsByUserId(id);
                 for (MovieReview review : reviews) {
-                    reviewDao.deleteEntityById(review.getId());
+                    reviewDao.delete(review.getId());
                 }
-                userDao.deleteEntityById(id);
+                userDao.delete(id);
             } else {
                 throw new UserServiceException(UserServiceCode.CAN_NOT_DELETE_ADMIN);
             }
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(userDao);
         User user;
         try {
-            user = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             user.setStatus(status);
             userDao.update(user);
             transaction.commit();
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(userDao);
         User user;
         try {
-            user = userDao.findEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             user.setRole(role);
             userDao.update(user);
             transaction.commit();

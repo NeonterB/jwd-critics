@@ -48,7 +48,7 @@ class MovieServiceImplTest {
     @Test
     public void testFindEntityById() {
         try {
-            Movie actualResult = movieService.findById(movie.getId()).get();
+            Movie actualResult = movieService.getEntityById(movie.getId()).get();
             assertEquals(movie, actualResult);
         } catch (ServiceException e) {
             logger.error(e.getMessage(), e);
@@ -61,7 +61,7 @@ class MovieServiceImplTest {
             String oldSummary = movie.getSummary();
             movie.setSummary("new summary");
             movieService.update(movie);
-            Movie actualResult = movieService.findById(movie.getId())
+            Movie actualResult = movieService.getEntityById(movie.getId())
                     .orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             assertEquals(movie, actualResult);
             movie.setSummary(oldSummary);

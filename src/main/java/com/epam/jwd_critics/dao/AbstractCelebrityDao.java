@@ -10,5 +10,5 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractCelebrityDao extends AbstractBaseDao<Integer, Celebrity> {
-    public abstract Map<Celebrity, List<Position>> findCrewByMovieId(Integer movieId) throws DaoException;
+    public abstract Map<Celebrity, List<Position>> getStaffByMovieId(Integer movieId) throws DaoException;
 }

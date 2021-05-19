@@ -48,7 +48,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public List<Celebrity> findAll() throws DaoException {
+    public List<Celebrity> getAll() throws DaoException {
         List<Celebrity> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_CELEBRITIES)) {
             ResultSet rs = ps.executeQuery();
@@ -62,7 +62,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public Map<Celebrity, List<Position>> findCrewByMovieId(Integer movieId) throws DaoException {
+    public Map<Celebrity, List<Position>> getStaffByMovieId(Integer movieId) throws DaoException {
         Map<Celebrity, List<Position>> crew = new HashMap<>();
         try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
             preparedStatement.setInt(1, movieId);
@@ -85,7 +85,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public Optional<Celebrity> findEntityById(Integer id) throws DaoException {
+    public Optional<Celebrity> getEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -100,7 +100,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public void deleteEntityById(Integer celebrityId) throws DaoException {
+    public void delete(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
             ps.setInt(1, celebrityId);
             ps.executeUpdate();

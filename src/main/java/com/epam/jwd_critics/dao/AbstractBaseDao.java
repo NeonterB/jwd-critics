@@ -19,11 +19,11 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
 
-    public abstract List<T> findAll() throws DaoException;
+    public abstract List<T> getAll() throws DaoException;
 
-    public abstract Optional<T> findEntityById(K id) throws DaoException;
+    public abstract Optional<T> getEntityById(K id) throws DaoException;
 
-    public abstract void deleteEntityById(K id) throws DaoException;
+    public abstract void delete(K id) throws DaoException;
 
     public abstract T create(T t) throws DaoException;
 

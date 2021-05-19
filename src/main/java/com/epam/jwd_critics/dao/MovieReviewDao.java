@@ -50,7 +50,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     }
 
     @Override
-    public List<MovieReview> findAll() throws DaoException {
+    public List<MovieReview> getAll() throws DaoException {
         List<MovieReview> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_REVIEWS)) {
             ResultSet rs = ps.executeQuery();
@@ -64,7 +64,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     }
 
     @Override
-    public Optional<MovieReview> findEntityById(Integer movieReviewId) throws DaoException {
+    public Optional<MovieReview> getEntityById(Integer movieReviewId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_REVIEW_BY_ID)) {
             ps.setInt(1, movieReviewId);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -79,7 +79,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     }
 
     @Override
-    public void deleteEntityById(Integer movieReviewId) throws DaoException {
+    public void delete(Integer movieReviewId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_REVIEW_BY_ID)) {
             ps.setInt(1, movieReviewId);
             ps.executeUpdate();

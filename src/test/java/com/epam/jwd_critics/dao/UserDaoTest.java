@@ -41,7 +41,7 @@ class UserDaoTest {
 
     @Test
     public void testFindEntityById() throws DaoException {
-        User actualResult = userDao.findEntityById(user.getId()).get();
+        User actualResult = userDao.getEntityById(user.getId()).get();
         assertEquals(user, actualResult);
     }
 
@@ -50,14 +50,14 @@ class UserDaoTest {
         String oldEmail = user.getEmail();
         user.setEmail("testemail");
         userDao.update(user);
-        User actualResult = userDao.findEntityById(user.getId()).get();
+        User actualResult = userDao.getEntityById(user.getId()).get();
         assertEquals(user, actualResult);
         user.setEmail(oldEmail);
     }
 
     @AfterEach
     public void endTest() throws DaoException {
-        userDao.deleteEntityById(user.getId());
+        userDao.delete(user.getId());
     }
 
     @AfterAll

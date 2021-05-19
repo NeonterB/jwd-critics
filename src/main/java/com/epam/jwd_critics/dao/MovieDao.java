@@ -58,7 +58,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public List<Movie> findAll() throws DaoException {
+    public List<Movie> getAll() throws DaoException {
         List<Movie> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_MOVIES)) {
             ResultSet rs = ps.executeQuery();
@@ -72,7 +72,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public Optional<Movie> findEntityById(Integer id) throws DaoException {
+    public Optional<Movie> getEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIE_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -87,7 +87,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public List<Movie> findMoviesByName(String name) throws DaoException {
+    public List<Movie> getMoviesByName(String name) throws DaoException {
         List<Movie> movies = new LinkedList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME)) {
             ps.setString(1, name);
@@ -135,7 +135,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public void deleteEntityById(Integer movieId) throws DaoException {
+    public void delete(Integer movieId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
             ps.setInt(1, movieId);
             ps.executeUpdate();
@@ -178,7 +178,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public Map<Movie, List<Position>> findMoviesByCelebrityId(Integer celebrityId) throws DaoException {
+    public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
         Map<Movie, List<Position>> crew = new HashMap<>();
         try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
             preparedStatement.setInt(1, celebrityId);

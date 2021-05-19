@@ -40,7 +40,7 @@ class CelebrityDaoTest {
     @Test
     public void testFindEntityById() {
         try {
-            Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
+            Celebrity actualResult = celebrityDao.getEntityById(celebrity.getId()).get();
             assertEquals(celebrity, actualResult);
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
@@ -53,7 +53,7 @@ class CelebrityDaoTest {
             String oldFirstName = celebrity.getFirstName();
             celebrity.setFirstName("newTestFirstName");
             celebrityDao.update(celebrity);
-            Celebrity actualResult = celebrityDao.findEntityById(celebrity.getId()).get();
+            Celebrity actualResult = celebrityDao.getEntityById(celebrity.getId()).get();
             assertEquals(celebrity, actualResult);
             celebrity.setFirstName(oldFirstName);
         } catch (DaoException e) {
@@ -69,7 +69,7 @@ class CelebrityDaoTest {
     @AfterEach
     public void endTest() {
         try {
-            celebrityDao.deleteEntityById(celebrity.getId());
+            celebrityDao.delete(celebrity.getId());
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }

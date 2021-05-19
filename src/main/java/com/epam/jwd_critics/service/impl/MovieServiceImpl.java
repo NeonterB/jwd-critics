@@ -43,11 +43,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> findAll() throws ServiceException {
+    public List<Movie> getAll() throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         List<Movie> movieList;
         try {
-            movieList = movieDao.findAll();
+            movieList = movieDao.getAll();
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -59,11 +59,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<Movie> findById(Integer id) throws ServiceException {
+    public Optional<Movie> getEntityById(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao, celebrityDao);
         Optional<Movie> movie;
         try {
-            movie = movieDao.findEntityById(id);
+            movie = movieDao.getEntityById(id);
             if (movie.isPresent()) {
                 updateInfo(movie.get());
             }
@@ -78,11 +78,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> findMoviesByName(String name) throws ServiceException {
+    public List<Movie> getMoviesByName(String name) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         List<Movie> movies;
         try {
-            movies = movieDao.findMoviesByName(name);
+            movies = movieDao.getMoviesByName(name);
             for (Movie movie : movies) {
                 updateInfo(movie);
             }
@@ -138,12 +138,12 @@ public class MovieServiceImpl implements MovieService {
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao, reviewDao);
         try {
-            Movie movieToDelete = movieDao.findEntityById(id).orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
+            Movie movieToDelete = movieDao.getEntityById(id).orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             List<MovieReview> reviews = reviewDao.getReviewsByMovieId(id);
             for (MovieReview review : reviews) {
-                reviewDao.deleteEntityById(review.getId());
+                reviewDao.delete(review.getId());
             }
-            movieDao.deleteEntityById(id);
+            movieDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", movieToDelete);
         } catch (DaoException e) {
@@ -161,7 +161,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(celebrityDao, reviewDao);
         try {
             List<Genre> genres = movieDao.getMovieGenresById(movie.getId());
-            Map<Celebrity, List<Position>> crew = celebrityDao.findCrewByMovieId(movie.getId());
+            Map<Celebrity, List<Position>> crew = celebrityDao.getStaffByMovieId(movie.getId());
             List<MovieReview> reviews = reviewDao.getReviewsByMovieId(movie.getId());
             movie.setGenres(genres);
             movie.setStaff(crew);

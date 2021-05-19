@@ -55,7 +55,7 @@ class MovieDaoTest {
     @Test
     public void testFindEntityById() {
         try {
-            Movie actualResult = movieDao.findEntityById(movie.getId()).get();
+            Movie actualResult = movieDao.getEntityById(movie.getId()).get();
             assertEquals(movie, actualResult);
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
@@ -68,7 +68,7 @@ class MovieDaoTest {
             String oldSummary = movie.getSummary();
             movie.setSummary("new summary");
             movieDao.update(movie);
-            Movie actualResult = movieDao.findEntityById(movie.getId()).get();
+            Movie actualResult = movieDao.getEntityById(movie.getId()).get();
             assertEquals(movie, actualResult);
             movie.setSummary(oldSummary);
         } catch (DaoException e) {
@@ -84,7 +84,7 @@ class MovieDaoTest {
     @AfterEach
     public void endTest() {
         try {
-            movieDao.deleteEntityById(movie.getId());
+            movieDao.delete(movie.getId());
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }

@@ -47,7 +47,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public List<User> findAll() throws DaoException {
+    public List<User> getAll() throws DaoException {
         List<User> list = new ArrayList<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS)) {
             ResultSet rs = ps.executeQuery();
@@ -61,7 +61,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public Optional<User> findEntityById(Integer id) throws DaoException {
+    public Optional<User> getEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -75,7 +75,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public Optional<User> findEntityByLogin(String login) throws DaoException {
+    public Optional<User> getEntityByLogin(String login) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_LOGIN)) {
             ps.setString(1, login);
             try (ResultSet resultSet = ps.executeQuery()) {
@@ -89,7 +89,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public void deleteEntityById(Integer id) throws DaoException {
+    public void delete(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_USER_BY_ID)) {
             ps.setInt(1, id);
             ps.executeUpdate();

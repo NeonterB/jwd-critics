@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractMovieDao extends AbstractBaseDao<Integer, Movie> {
-    public abstract Map<Movie, List<Position>> findMoviesByCelebrityId(Integer celebrityId) throws DaoException;
+    public abstract Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException;
 
     public abstract List<Genre> getMovieGenresById(Integer movieId) throws DaoException;
 
-    public abstract List<Movie> findMoviesByName(String name) throws DaoException;
+    public abstract List<Movie> getMoviesByName(String name) throws DaoException;
 
     public abstract boolean idExists(Integer id) throws DaoException;
 }
