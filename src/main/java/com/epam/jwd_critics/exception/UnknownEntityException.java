@@ -3,8 +3,8 @@ package com.epam.jwd_critics.exception;
 import java.util.Arrays;
 
 public class UnknownEntityException extends RuntimeException{
-    private String entityName;
-    private Object[] args;
+    private final String entityName;
+    private final Object[] args;
 
     public UnknownEntityException(String entityName) {
         super();

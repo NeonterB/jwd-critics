@@ -57,10 +57,6 @@ public class MovieDao extends AbstractMovieDao {
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.movie WHERE id = ?)";
 
-    private static class MovieDaoSingleton {
-        private static final MovieDao INSTANCE = new MovieDao();
-    }
-
     public static MovieDao getInstance() {
         return MovieDao.MovieDaoSingleton.INSTANCE;
     }
@@ -86,9 +82,51 @@ public class MovieDao extends AbstractMovieDao {
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildMovie(resultSet));
-                }
-                else return Optional.empty();
+                } else return Optional.empty();
             }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Movie create(Movie movie) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(INSERT_MOVIE, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, movie.getName());
+            ps.setString(2, movie.getSummary());
+            ps.setString(3, movie.getRuntime().toString());
+            ps.setInt(4, movie.getAgeRestriction().getId());
+            ps.setInt(5, movie.getCountry().getId());
+            ps.setString(6, movie.getReleaseDate().toString());
+            movie.setId(executeQueryAndGetGeneratesKeys(ps));
+            return movie;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void update(Movie movie) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(UPDATE_MOVIE)) {
+            ps.setString(1, movie.getName());
+            ps.setString(2, movie.getSummary());
+            ps.setString(3, movie.getRuntime().toString());
+            ps.setInt(4, movie.getAgeRestriction().getId());
+            ps.setInt(5, movie.getCountry().getId());
+            ps.setString(6, movie.getReleaseDate().toString());
+            ps.setInt(7, movie.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void delete(Integer movieId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
+            ps.setInt(1, movieId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -127,19 +165,8 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public boolean idExists(Integer id) throws DaoException {
-        boolean result = false;
-        try (PreparedStatement ps = getPreparedStatement(ID_EXISTS)) {
-            ps.setInt(1, id);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    result = resultSet.getInt(1) != 0;
-                }
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return result;
+    public boolean idExists(Integer movieID) throws DaoException {
+        return idExists(movieID, ID_EXISTS);
     }
 
     @Override
@@ -189,49 +216,6 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public void delete(Integer movieId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
-            ps.setInt(1, movieId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public Movie create(Movie movie) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(INSERT_MOVIE, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, movie.getName());
-            ps.setString(2, movie.getSummary());
-            ps.setString(3, movie.getRuntime().toString());
-            ps.setInt(4, movie.getAgeRestriction().getId());
-            ps.setInt(5, movie.getCountry().getId());
-            ps.setString(6, movie.getReleaseDate().toString());
-            movie.setId(executeQueryAndGetGeneratesKeys(ps));
-            return movie;
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public void update(Movie movie) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(UPDATE_MOVIE)) {
-            ps.setString(1, movie.getName());
-            ps.setString(2, movie.getSummary());
-            ps.setString(3, movie.getRuntime().toString());
-            ps.setInt(4, movie.getAgeRestriction().getId());
-            ps.setInt(5, movie.getCountry().getId());
-            ps.setString(6, movie.getReleaseDate().toString());
-            ps.setInt(7, movie.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
     public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
         Map<Movie, List<Position>> crew = new HashMap<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
@@ -269,6 +253,7 @@ public class MovieDao extends AbstractMovieDao {
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
         }
+        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
 
         return Movie.newBuilder()
@@ -282,5 +267,9 @@ public class MovieDao extends AbstractMovieDao {
                 .setReleaseDate(LocalDate.parse(resultSet.getString(columnNames.get("releaseDate"))))
                 .setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(resultSet.getInt(columnNames.get("ageRestriction"))))
                 .build();
+    }
+
+    private static class MovieDaoSingleton {
+        private static final MovieDao INSTANCE = new MovieDao();
     }
 }

@@ -3,7 +3,6 @@ package com.epam.jwd_critics.dao;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
-import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,11 +37,8 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     private static final String SELECT_REVIEWS_BY_MOVIE_ID = "SELECT * FROM jwd_critics.review WHERE movie_id = ?";
     @Language("SQL")
     private static final String SELECT_REVIEWS_BY_USER_ID = "SELECT * FROM jwd_critics.review WHERE user_id = ?";
-
-    private static class MovieReviewDaoSingleton {
-
-        private static final MovieReviewDao INSTANCE = new MovieReviewDao();
-    }
+    @Language("SQL")
+    private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.review WHERE id = ?)";
 
     public static MovieReviewDao getInstance() {
         return MovieReviewDao.MovieReviewDaoSingleton.INSTANCE;
@@ -70,19 +65,8 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildMovieReview(resultSet));
-                }
-                else return Optional.empty();
+                } else return Optional.empty();
             }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public void delete(Integer movieReviewId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_REVIEW_BY_ID)) {
-            ps.setInt(1, movieReviewId);
-            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -108,7 +92,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
             ps.setInt(1, movieReview.getMovieId());
             ps.setInt(2, movieReview.getUserId());
             ps.setString(3, movieReview.getText());
-            ps.setInt(4, movieReview.getScore());;
+            ps.setInt(4, movieReview.getScore());
             ps.setInt(5, movieReview.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -117,36 +101,51 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     }
 
     @Override
-    public List<MovieReview> getReviewsByMovieId(Integer movieId) throws DaoException {
-        List<MovieReview> reviews = new ArrayList<>();
-        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_REVIEWS_BY_MOVIE_ID)) {
-            preparedStatement.setInt(1, movieId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    reviews.add(buildMovieReview(resultSet));
-                }
-            }
-            return reviews;
+    public void delete(Integer movieReviewId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_REVIEW_BY_ID)) {
+            ps.setInt(1, movieReviewId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
     @Override
-    public List<MovieReview> getReviewsByUserId(Integer userId) throws DaoException {
+    public List<MovieReview> getMovieReviewsByMovieId(Integer movieId) throws DaoException {
+        try {
+            return getMovieReviewList(movieId, SELECT_REVIEWS_BY_MOVIE_ID);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public List<MovieReview> getMovieReviewsByUserId(Integer userId) throws DaoException {
+        try {
+            return getMovieReviewList(userId, SELECT_REVIEWS_BY_USER_ID);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean idExists(Integer reviewId) throws DaoException {
+        return idExists(reviewId, ID_EXISTS);
+    }
+
+    private List<MovieReview> getMovieReviewList(Integer id, String selectMovieReviewsQuery) throws SQLException{
         List<MovieReview> reviews = new ArrayList<>();
-        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_REVIEWS_BY_USER_ID)) {
-            preparedStatement.setInt(1, userId);
+        try (PreparedStatement preparedStatement = getPreparedStatement(selectMovieReviewsQuery)) {
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     reviews.add(buildMovieReview(resultSet));
                 }
             }
             return reviews;
-        } catch (SQLException e) {
-            throw new DaoException(e);
         }
     }
+
 
     private MovieReview buildMovieReview(ResultSet resultSet) throws SQLException {
         if (resultSet.wasNull()) {
@@ -161,6 +160,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
         }
+        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
 
         return new MovieReview(
@@ -170,5 +170,10 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
                 resultSet.getInt(columnNames.get("userId")),
                 resultSet.getInt(columnNames.get("movieId"))
         );
+    }
+
+    private static class MovieReviewDaoSingleton {
+
+        private static final MovieReviewDao INSTANCE = new MovieReviewDao();
     }
 }

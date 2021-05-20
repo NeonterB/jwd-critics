@@ -2,9 +2,12 @@ package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Column;
+import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
+import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.exception.ServiceException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +43,6 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.celebrity WHERE id = ?)";
 
-    private static class CelebrityDaoSingleton {
-        private static final CelebrityDao INSTANCE = new CelebrityDao();
-    }
-
     public static CelebrityDao getInstance() {
         return CelebrityDaoSingleton.INSTANCE;
     }
@@ -63,64 +62,14 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public Map<Celebrity, List<Position>> getStaffByMovieId(Integer movieId) throws DaoException {
-        Map<Celebrity, List<Position>> crew = new HashMap<>();
-        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
-            preparedStatement.setInt(1, movieId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Celebrity celebrity = buildCelebrity(resultSet);
-                    if (!crew.containsKey(celebrity)) {
-                        ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.resolvePositionById(resultSet.getInt("position_id")));
-                        crew.put(celebrity, positions);
-                    } else {
-                        crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(4)));
-                    }
-                }
-            }
-            return crew;
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public Optional<Celebrity> getEntityById(Integer id) throws DaoException {
+    public Optional<Celebrity> getEntityById(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
-            ps.setInt(1, id);
+            ps.setInt(1, celebrityId);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildCelebrity(resultSet));
-                }
-                else return Optional.empty();
+                } else return Optional.empty();
             }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public boolean idExists(Integer id) throws DaoException {
-        boolean result = false;
-        try (PreparedStatement preparedStatement = getPreparedStatement(ID_EXISTS)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    result = resultSet.getInt(1) != 0;
-                }
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public void delete(Integer celebrityId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
-            ps.setInt(1, celebrityId);
-            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -150,6 +99,44 @@ public class CelebrityDao extends AbstractCelebrityDao {
         }
     }
 
+    @Override
+    public void delete(Integer celebrityId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
+            ps.setInt(1, celebrityId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean idExists(Integer celebrityId) throws DaoException {
+        return idExists(celebrityId, ID_EXISTS);
+    }
+
+    @Override
+    public Map<Celebrity, List<Position>> getStaffByMovieId(Integer movieId) throws DaoException {
+        Map<Celebrity, List<Position>> crew = new HashMap<>();
+        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
+            preparedStatement.setInt(1, movieId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Celebrity celebrity = buildCelebrity(resultSet);
+                    if (!crew.containsKey(celebrity)) {
+                        ArrayList<Position> positions = new ArrayList<>();
+                        positions.add(Position.resolvePositionById(resultSet.getInt("position_id")));
+                        crew.put(celebrity, positions);
+                    } else {
+                        crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(4)));
+                    }
+                }
+            }
+            return crew;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
     private Celebrity buildCelebrity(ResultSet resultSet) throws SQLException {
         if (resultSet.wasNull()) {
             return null;
@@ -163,11 +150,16 @@ public class CelebrityDao extends AbstractCelebrityDao {
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
         }
+        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
         return Celebrity.newBuilder()
                 .setId(resultSet.getInt(columnNames.get("id")))
                 .setFirstName(resultSet.getString(columnNames.get("firstName")))
                 .setLastName(resultSet.getString(columnNames.get("lastName")))
                 .build();
+    }
+
+    private static class CelebrityDaoSingleton {
+        private static final CelebrityDao INSTANCE = new CelebrityDao();
     }
 }

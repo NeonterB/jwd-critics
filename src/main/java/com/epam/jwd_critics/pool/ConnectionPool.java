@@ -18,12 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 
-    private BlockingQueue<ConnectionProxy> availableConnections;
-    private Queue<ConnectionProxy> unavailableConnections;
+    private final BlockingQueue<ConnectionProxy> availableConnections;
+    private final Queue<ConnectionProxy> unavailableConnections;
 
-    private ConnectionFactory factory = new ConnectionFactory();
+    private final ConnectionFactory factory = new ConnectionFactory();
 
-    private AtomicInteger poolSize = new AtomicInteger();
+    private final AtomicInteger poolSize = new AtomicInteger();
     private final Lock lock = new ReentrantLock();
 
     private ConnectionPool() {

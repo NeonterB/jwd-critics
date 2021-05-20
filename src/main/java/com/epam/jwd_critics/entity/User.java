@@ -1,5 +1,7 @@
 package com.epam.jwd_critics.entity;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
@@ -20,6 +22,8 @@ public class User extends AbstractBaseEntity {
     private Status status;
     @Column(name = "role_id")
     private Role role;
+
+    private List<MovieReview> reviews;
 
     private User() {
 
@@ -91,6 +95,14 @@ public class User extends AbstractBaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<MovieReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<MovieReview> reviews) {
+        this.reviews = reviews;
     }
 
     @Override
@@ -184,6 +196,7 @@ public class User extends AbstractBaseEntity {
             user.rating = User.this.rating;
             user.status = User.this.status;
             user.role = User.this.role;
+            user.reviews = Collections.emptyList();
             return user;
         }
     }

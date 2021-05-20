@@ -129,12 +129,34 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void addCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
-
+        EntityTransaction transaction = new EntityTransaction(movieDao);
+        try {
+            if (!movieDao.idExists(movieId))
+                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            movieDao.addStaffAndPosition(movieId, celebrityId, position);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
     }
 
     @Override
     public void removeCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
-
+        EntityTransaction transaction = new EntityTransaction(movieDao);
+        try {
+            if (!movieDao.idExists(movieId))
+                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            movieDao.removeStaffAndPosition(movieId, celebrityId, position);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
     }
 
     @Override
@@ -200,7 +222,7 @@ public class MovieServiceImpl implements MovieService {
         try {
             List<Genre> genres = movieDao.getMovieGenresById(movie.getId());
             Map<Celebrity, List<Position>> crew = celebrityDao.getStaffByMovieId(movie.getId());
-            List<MovieReview> reviews = reviewDao.getReviewsByMovieId(movie.getId());
+            List<MovieReview> reviews = reviewDao.getMovieReviewsByMovieId(movie.getId());
             movie.setGenres(genres);
             movie.setStaff(crew);
             movie.setReviews(reviews);

@@ -1,8 +1,6 @@
 package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.BaseEntity;
-import com.epam.jwd_critics.entity.Genre;
-import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractBaseDao<K, T extends BaseEntity> {
-    private Connection connection;
-
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
+    private Connection connection;
 
     public abstract List<T> getAll() throws DaoException;
 
@@ -28,6 +25,23 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     public abstract T create(T t) throws DaoException;
 
     public abstract void update(T t) throws DaoException;
+
+    public abstract boolean idExists(K id) throws DaoException;
+
+    protected boolean idExists(Integer id, String idExistsQuery) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement preparedStatement = getPreparedStatement(idExistsQuery)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
+    }
 
     public void setConnection(Connection connection) {
         if (this.connection == null) {

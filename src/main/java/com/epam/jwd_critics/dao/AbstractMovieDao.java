@@ -22,6 +22,4 @@ public abstract class AbstractMovieDao extends AbstractBaseDao<Integer, Movie> {
     public abstract boolean removeStaffAndPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException;
 
     public abstract List<Movie> getMoviesByName(String name) throws DaoException;
-
-    public abstract boolean idExists(Integer id) throws DaoException;
 }

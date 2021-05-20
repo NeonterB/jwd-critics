@@ -1,7 +1,5 @@
 package com.epam.jwd_critics.entity;
 
-import java.util.Objects;
-
 public abstract class AbstractBaseEntity implements BaseEntity {
     @Column(name = "id")
     protected Integer id;

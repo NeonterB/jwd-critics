@@ -1,7 +1,5 @@
 package com.epam.jwd_critics.entity;
 
-import javafx.geometry.Pos;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,16 +14,20 @@ public class Celebrity extends AbstractBaseEntity {
     private Celebrity() {
     }
 
+    public static CelebrityBuilder newBuilder() {
+        return new Celebrity().new CelebrityBuilder();
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -45,12 +47,12 @@ public class Celebrity extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Celebrity celebrity = (Celebrity) o;
-        return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName) && jobs.equals(celebrity.jobs);
+        return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, jobs);
+        return Objects.hash(firstName, lastName);
     }
 
     @Override
@@ -61,10 +63,6 @@ public class Celebrity extends AbstractBaseEntity {
                 ", lastName='" + lastName + '\'' +
                 ", jobs=" + jobs +
                 '}';
-    }
-
-    public static CelebrityBuilder newBuilder() {
-        return new Celebrity().new CelebrityBuilder();
     }
 
     public class CelebrityBuilder {

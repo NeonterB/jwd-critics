@@ -36,10 +36,6 @@ public class CelebrityServiceImpl implements CelebrityService {
         return CelebrityServiceImpl.CelebrityServiceImplSingleton.INSTANCE;
     }
 
-    private static class CelebrityServiceImplSingleton {
-        private static final CelebrityServiceImpl INSTANCE = new CelebrityServiceImpl();
-    }
-
     @Override
     public List<Celebrity> getAll() throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
@@ -128,7 +124,7 @@ public class CelebrityServiceImpl implements CelebrityService {
                 movie.getStaff().remove(celebrityToDelete);
                 movieDao.update(movie);
             }
-            movieDao.delete(id);
+            celebrityDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", celebrityToDelete);
         } catch (DaoException e) {
@@ -154,5 +150,9 @@ public class CelebrityServiceImpl implements CelebrityService {
         } finally {
             transaction.close();
         }
+    }
+
+    private static class CelebrityServiceImplSingleton {
+        private static final CelebrityServiceImpl INSTANCE = new CelebrityServiceImpl();
     }
 }

@@ -36,6 +36,8 @@ class MovieDaoTest {
                 .setRuntime(Duration.parse("PT2H22M"))
                 .setCountry(Country.USA)
                 .setReleaseDate(LocalDate.parse("2021-09-20"))
+                .setRating(0)
+                .setReviewCount(0)
                 .setAgeRestriction(AgeRestriction.R)
                 .build();
     }

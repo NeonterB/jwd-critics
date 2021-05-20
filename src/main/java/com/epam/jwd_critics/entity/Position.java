@@ -1,12 +1,11 @@
 package com.epam.jwd_critics.entity;
 
 import com.epam.jwd_critics.exception.UnknownEntityException;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.Arrays;
 
 @Column(name = "position_id")
-public enum Position implements BaseEntity{
+public enum Position implements BaseEntity {
     DIRECTOR(1),
     ACTOR(2),
     WRITER(3),
@@ -17,15 +16,15 @@ public enum Position implements BaseEntity{
         this.id = id;
     }
 
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
     public static Position resolvePositionById(int id) {
         return Arrays.stream(Position.values())
                 .filter(rank -> rank.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
     }
 }

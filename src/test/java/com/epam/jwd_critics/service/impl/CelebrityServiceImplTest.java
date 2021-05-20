@@ -1,17 +1,19 @@
 package com.epam.jwd_critics.service.impl;
 
 import com.epam.jwd_critics.entity.Celebrity;
+import com.epam.jwd_critics.exception.CelebrityServiceException;
 import com.epam.jwd_critics.exception.MovieServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.service.CelebrityService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,7 +53,7 @@ class CelebrityServiceImplTest {
             celebrity.setFirstName("new name");
             celebrityService.update(celebrity);
             Celebrity actualResult = celebrityService.getEntityById(celebrity.getId())
-                    .orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new CelebrityServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
             assertEquals(celebrity, actualResult);
             celebrity.setFirstName(oldFirstName);
         } catch (ServiceException e) {
@@ -59,8 +61,8 @@ class CelebrityServiceImplTest {
         }
     }
 
-    @AfterEach
-    public void endTest() {
+    @AfterAll
+    public static void endTest() {
         try {
             celebrityService.delete(celebrity.getId());
         } catch (ServiceException e) {

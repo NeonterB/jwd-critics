@@ -9,5 +9,4 @@ public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
     public abstract Optional<User> getEntityByLogin(String login) throws DaoException;
 
     public abstract boolean loginExists(String login) throws DaoException;
-
 }

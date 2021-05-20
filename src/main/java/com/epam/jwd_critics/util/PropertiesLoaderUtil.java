@@ -1,6 +1,5 @@
 package com.epam.jwd_critics.util;
 
-import com.epam.jwd_critics.pool.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +19,10 @@ public final class PropertiesLoaderUtil {
         loadProperties();
     }
 
+    public static ApplicationProperties getApplicationProperties() {
+        return PropertiesLoaderUtilSingleton.INSTANCE.appProperties;
+    }
+
     private void loadProperties() {
         try (InputStream input = PropertiesLoaderUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(input);
@@ -35,10 +38,6 @@ public final class PropertiesLoaderUtil {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-    }
-
-    public static ApplicationProperties getApplicationProperties() {
-        return PropertiesLoaderUtilSingleton.INSTANCE.appProperties;
     }
 
     private static class PropertiesLoaderUtilSingleton {

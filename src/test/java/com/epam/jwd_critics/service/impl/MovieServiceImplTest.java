@@ -29,7 +29,6 @@ class MovieServiceImplTest {
             .setCountry(Country.USA)
             .setReviewCount(0)
             .setRating(0)
-            .setReviews(Collections.emptyList())
             .setGenres(Collections.emptyList())
             .setStaff(Collections.emptyMap())
             .setReleaseDate(LocalDate.parse("2021-09-20"))

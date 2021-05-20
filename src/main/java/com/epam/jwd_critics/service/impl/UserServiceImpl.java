@@ -5,6 +5,7 @@ import com.epam.jwd_critics.dao.AbstractUserDao;
 import com.epam.jwd_critics.dao.EntityTransaction;
 import com.epam.jwd_critics.dao.MovieReviewDao;
 import com.epam.jwd_critics.dao.UserDao;
+import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
             } else if (user.getStatus().equals(Status.INACTIVE)) {
                 throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
+            updateInfo(user);
             transaction.commit();
             logger.info("{} logged in", user);
 
@@ -99,6 +101,9 @@ public class UserServiceImpl implements UserService {
         List<User> userList;
         try {
             userList = userDao.getAll();
+            for (User user : userList) {
+                updateInfo(user);
+            }
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -115,6 +120,8 @@ public class UserServiceImpl implements UserService {
         Optional<User> user;
         try {
             user = userDao.getEntityById(id);
+            if (user.isPresent())
+                updateInfo(user.get());
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -204,6 +211,20 @@ public class UserServiceImpl implements UserService {
             transaction.close();
         }
         return user;
+    }
+
+    private void updateInfo(User user) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(reviewDao);
+        try {
+            List<MovieReview> reviews = reviewDao.getMovieReviewsByUserId(user.getId());
+            user.setReviews(reviews);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
     }
 
     private void setDefaultFields(User user) {
