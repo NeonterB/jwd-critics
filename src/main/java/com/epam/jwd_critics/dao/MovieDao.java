@@ -61,6 +61,10 @@ public class MovieDao extends AbstractMovieDao {
         return MovieDao.MovieDaoSingleton.INSTANCE;
     }
 
+    private static class MovieDaoSingleton {
+        private static final MovieDao INSTANCE = new MovieDao();
+    }
+
     @Override
     public List<Movie> getAll() throws DaoException {
         List<Movie> list = new ArrayList<>();
@@ -267,9 +271,5 @@ public class MovieDao extends AbstractMovieDao {
                 .setReleaseDate(LocalDate.parse(resultSet.getString(columnNames.get("releaseDate"))))
                 .setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(resultSet.getInt(columnNames.get("ageRestriction"))))
                 .build();
-    }
-
-    private static class MovieDaoSingleton {
-        private static final MovieDao INSTANCE = new MovieDao();
     }
 }

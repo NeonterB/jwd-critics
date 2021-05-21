@@ -133,7 +133,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
         return idExists(reviewId, ID_EXISTS);
     }
 
-    private List<MovieReview> getMovieReviewList(Integer id, String selectMovieReviewsQuery) throws SQLException{
+    private List<MovieReview> getMovieReviewList(Integer id, String selectMovieReviewsQuery) throws SQLException {
         List<MovieReview> reviews = new ArrayList<>();
         try (PreparedStatement preparedStatement = getPreparedStatement(selectMovieReviewsQuery)) {
             preparedStatement.setInt(1, id);

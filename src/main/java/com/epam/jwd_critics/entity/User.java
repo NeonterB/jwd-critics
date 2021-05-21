@@ -1,26 +1,52 @@
 package com.epam.jwd_critics.entity;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
     @Column(name = "first_name")
+    @NotNull(message = "First name can't be null")
+    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "First name contains illegal characters")
     private String firstName;
+
     @Column(name = "last_name")
+    @NotNull(message = "Last name can't be null")
+    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
     private String lastName;
+
     @Column(name = "email")
+    @Email(message = "Email is invalid")
     private String email;
+
     @Column(name = "login")
+    @NotNull(message = "Login can't be null")
+    @Pattern(regexp = "^[a-zA-Z0-9._-]{3,25}$", message = "Login doesn't meet requirements")
     private String login;
+
     @Column(name = "password")
+    @NotNull(message = "Password can't be null")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
+            message = "Password doesn't meet safety requirements")
     private String password;
+
     @Column(name = "rating")
+    @NotNull(message = "Rating can't be null")
+    @Max(value = 100, message = "Rating can't be greater then 100")
+    @Positive(message = "User rating must be positive")
     private int rating;
 
     @Column(name = "status_id")
+    @NotNull(message = "Status can't be null")
     private Status status;
+
     @Column(name = "role_id")
+    @NotNull(message = "Role can't be null")
     private Role role;
 
     private List<MovieReview> reviews;
@@ -106,16 +132,16 @@ public class User extends AbstractBaseEntity {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, email, login, password, rating, status, role);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return rating == user.rating && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && login.equals(user.login) && password.equals(user.password) && status == user.status && role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, email, login, password, rating, status, role);
     }
 
     @Override

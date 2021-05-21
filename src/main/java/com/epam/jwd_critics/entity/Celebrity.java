@@ -1,14 +1,22 @@
 package com.epam.jwd_critics.entity;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class Celebrity extends AbstractBaseEntity {
     @Column(name = "first_name")
+    @NotNull(message = "First name can't be null")
+    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "First name contains illegal characters")
     private String firstName;
+
     @Column(name = "last_name")
+    @NotNull(message = "Last name can't be null")
+    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
     private String lastName;
+
     private Map<Movie, List<Position>> jobs;
 
     private Celebrity() {

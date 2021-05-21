@@ -2,13 +2,10 @@ package com.epam.jwd_critics.service.impl;
 
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.exception.CelebrityServiceException;
-import com.epam.jwd_critics.exception.MovieServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
-import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.service.CelebrityService;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -36,6 +33,15 @@ class CelebrityServiceImplTest {
         }
     }
 
+    @AfterAll
+    public static void endTest() {
+        try {
+            celebrityService.delete(celebrity.getId());
+        } catch (ServiceException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
     @Test
     public void testFindEntityById() {
         try {
@@ -56,15 +62,6 @@ class CelebrityServiceImplTest {
                     .orElseThrow(() -> new CelebrityServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
             assertEquals(celebrity, actualResult);
             celebrity.setFirstName(oldFirstName);
-        } catch (ServiceException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    @AfterAll
-    public static void endTest() {
-        try {
-            celebrityService.delete(celebrity.getId());
         } catch (ServiceException e) {
             logger.error(e.getMessage(), e);
         }

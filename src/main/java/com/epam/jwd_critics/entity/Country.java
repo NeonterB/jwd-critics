@@ -5,7 +5,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 @Column(name = "country_id")
-public enum Country implements BaseEntity{
+public enum Country implements BaseEntity {
     USA(1),
     RUSSIA(2),
     DENMARK(3),

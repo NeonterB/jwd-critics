@@ -2,7 +2,7 @@ package com.epam.jwd_critics.exception;
 
 import java.util.Arrays;
 
-public class UnknownEntityException extends RuntimeException{
+public class UnknownEntityException extends RuntimeException {
     private final String entityName;
     private final Object[] args;
 

@@ -1,7 +1,8 @@
 package com.epam.jwd_critics.exception;
 
-public class DaoException extends Exception{
-    public DaoException() {}
+public class DaoException extends Exception {
+    public DaoException() {
+    }
 
     public DaoException(String message) {
         super(message);

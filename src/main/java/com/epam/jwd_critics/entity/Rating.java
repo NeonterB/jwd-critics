@@ -5,7 +5,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 import java.util.Arrays;
 
 @Column(name = "rating_id")
-public enum Rating implements BaseEntity{
+public enum Rating implements BaseEntity {
     LOW(1),
     MEDIUM(2),
     HIGH(3);

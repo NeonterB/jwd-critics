@@ -1,5 +1,10 @@
 package com.epam.jwd_critics.entity;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -9,19 +14,33 @@ import java.util.Objects;
 
 public class Movie extends AbstractBaseEntity {
     @Column(name = "name")
+    @NotNull(message = "Movie name can't be null")
+    @Size(max = 150, message = "Movie name is suspiciously long")
     private String name;
+
     @Column(name = "summary")
+    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё0-9\\\\s()\"':?!.,-]{1,10000}$",
+            message = "Movie summary contains illegal characters")
     private String summary;
+
     @Column(name = "runtime")
     private Duration runtime;
+
     @Column(name = "country_id")
     private Country country;
+
     @Column(name = "rating")
+    @Max(value = 100, message = "Movie rating can't be greater than 100")
+    @Positive(message = "Movie rating must be positive")
     private Integer rating;
+
     @Column(name = "review_count")
+    @Positive(message = "Movie review count can't be less than zero")
     private Integer reviewCount;
+
     @Column(name = "release_date")
     private LocalDate releaseDate;
+
     @Column(name = "age_restriction_id")
     private AgeRestriction ageRestriction;
 
@@ -31,6 +50,10 @@ public class Movie extends AbstractBaseEntity {
 
     private Movie() {
 
+    }
+
+    public static MovieBuilder newBuilder() {
+        return new Movie().new MovieBuilder();
     }
 
     public String getName() {
@@ -122,16 +145,16 @@ public class Movie extends AbstractBaseEntity {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
         return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(rating, movie.rating) && Objects.equals(reviewCount, movie.reviewCount) && Objects.equals(releaseDate, movie.releaseDate) && ageRestriction == movie.ageRestriction && Objects.equals(genres, movie.genres) && Objects.equals(staff, movie.staff);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
     }
 
     @Override
@@ -149,10 +172,6 @@ public class Movie extends AbstractBaseEntity {
                 ", genres=" + genres +
                 ", staff=" + staff +
                 '}';
-    }
-
-    public static MovieBuilder newBuilder() {
-        return new Movie().new MovieBuilder();
     }
 
     public class MovieBuilder {

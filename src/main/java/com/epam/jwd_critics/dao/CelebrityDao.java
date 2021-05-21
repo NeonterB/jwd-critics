@@ -2,12 +2,8 @@ package com.epam.jwd_critics.dao;
 
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Column;
-import com.epam.jwd_critics.entity.Genre;
-import com.epam.jwd_critics.entity.Movie;
-import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.ServiceException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +41,10 @@ public class CelebrityDao extends AbstractCelebrityDao {
 
     public static CelebrityDao getInstance() {
         return CelebrityDaoSingleton.INSTANCE;
+    }
+
+    private static class CelebrityDaoSingleton {
+        private static final CelebrityDao INSTANCE = new CelebrityDao();
     }
 
     @Override
@@ -157,9 +157,5 @@ public class CelebrityDao extends AbstractCelebrityDao {
                 .setFirstName(resultSet.getString(columnNames.get("firstName")))
                 .setLastName(resultSet.getString(columnNames.get("lastName")))
                 .build();
-    }
-
-    private static class CelebrityDaoSingleton {
-        private static final CelebrityDao INSTANCE = new CelebrityDao();
     }
 }

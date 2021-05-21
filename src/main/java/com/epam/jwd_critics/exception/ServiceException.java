@@ -1,6 +1,6 @@
 package com.epam.jwd_critics.exception;
 
-public class ServiceException extends Exception{
+public class ServiceException extends Exception {
     public ServiceException() {
     }
 
