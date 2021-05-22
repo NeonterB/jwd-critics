@@ -45,7 +45,7 @@ public class MovieDao extends AbstractMovieDao {
     @Language("SQL")
     private static final String INSERT_MOVIE = "INSERT INTO jwd_critics.movie (name, summary, runtime, age_restriction_id, country_id, release_date) VALUES (?, ?, ?, ?, ?, ?)";
     @Language("SQL")
-    private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ? WHERE M.id = ?";
+    private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ?, M.image_path = ? WHERE M.id = ?";
     @Language("SQL")
     private static final String ADD_GENRE = "INSERT INTO jwd_critics.movie_genre (movie_id, genre_id) VALUES (?, ?)";
     @Language("SQL")
@@ -118,7 +118,8 @@ public class MovieDao extends AbstractMovieDao {
             ps.setInt(4, movie.getAgeRestriction().getId());
             ps.setInt(5, movie.getCountry().getId());
             ps.setString(6, movie.getReleaseDate().toString());
-            ps.setInt(7, movie.getId());
+            ps.setString(7, movie.getImagePath());
+            ps.setInt(8, movie.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -270,6 +271,7 @@ public class MovieDao extends AbstractMovieDao {
                 .setReviewCount(resultSet.getInt(columnNames.get("reviewCount")))
                 .setReleaseDate(LocalDate.parse(resultSet.getString(columnNames.get("releaseDate"))))
                 .setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(resultSet.getInt(columnNames.get("ageRestriction"))))
+                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
     }
 }

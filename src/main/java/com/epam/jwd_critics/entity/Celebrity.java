@@ -17,6 +17,10 @@ public class Celebrity extends AbstractBaseEntity {
     @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
     private String lastName;
 
+    @Column(name = "image_path")
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
+    private String imagePath;
+
     private Map<Movie, List<Position>> jobs;
 
     private Celebrity() {
@@ -48,6 +52,14 @@ public class Celebrity extends AbstractBaseEntity {
 
     public void setJobs(Map<Movie, List<Position>> jobs) {
         this.jobs = jobs;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -98,11 +110,17 @@ public class Celebrity extends AbstractBaseEntity {
             return this;
         }
 
+        public CelebrityBuilder setImagePath(String imagePath) {
+            Celebrity.this.imagePath = imagePath;
+            return this;
+        }
+
         public Celebrity build() {
             Celebrity celebrity = new Celebrity();
             celebrity.setId(Celebrity.this.id);
             celebrity.setFirstName(Celebrity.this.firstName);
             celebrity.setLastName(Celebrity.this.lastName);
+            celebrity.setImagePath(Celebrity.this.imagePath);
             return celebrity;
         }
     }

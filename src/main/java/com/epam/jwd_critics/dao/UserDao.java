@@ -33,7 +33,7 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
-    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.password = ?, U.rating = ?, U.role_id = ?, U.status_id = ? WHERE U.id = ?";
+    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.password = ?, U.rating = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
     @Language("SQL")
     private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
     @Language("SQL")
@@ -119,7 +119,8 @@ public class UserDao extends AbstractUserDao {
             ps.setInt(6, user.getRating());
             ps.setInt(7, user.getRole().getId());
             ps.setInt(8, user.getStatus().getId());
-            ps.setInt(9, user.getId());
+            ps.setString(9, user.getImagePath());
+            ps.setInt(10, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -181,6 +182,7 @@ public class UserDao extends AbstractUserDao {
                 .setRating(resultSet.getInt(columnNames.get("rating")))
                 .setStatus(resultSet.getInt(columnNames.get("status")))
                 .setRole(resultSet.getInt(columnNames.get("role")))
+                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
     }
 }

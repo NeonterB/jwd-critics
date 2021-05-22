@@ -35,7 +35,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String INSERT_CELEBRITY = "INSERT INTO jwd_critics.celebrity (first_name, last_name) VALUES (?, ?)";
     @Language("SQL")
-    private static final String UPDATE_CELEBRITY = "UPDATE jwd_critics.celebrity U SET U.first_name = ?, U.last_name = ? WHERE U.id = ?";
+    private static final String UPDATE_CELEBRITY = "UPDATE jwd_critics.celebrity U SET U.first_name = ?, U.last_name = ?, U.image_path = ? WHERE U.id = ?";
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.celebrity WHERE id = ?)";
 
@@ -92,7 +92,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
         try (PreparedStatement preparedStatement = getPreparedStatement(UPDATE_CELEBRITY)) {
             preparedStatement.setString(1, celebrity.getFirstName());
             preparedStatement.setString(2, celebrity.getLastName());
-            preparedStatement.setInt(3, celebrity.getId());
+            preparedStatement.setString(3, celebrity.getImagePath());
+            preparedStatement.setInt(4, celebrity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -156,6 +157,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
                 .setId(resultSet.getInt(columnNames.get("id")))
                 .setFirstName(resultSet.getString(columnNames.get("firstName")))
                 .setLastName(resultSet.getString(columnNames.get("lastName")))
+                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
     }
 }

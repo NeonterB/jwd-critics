@@ -49,6 +49,10 @@ public class User extends AbstractBaseEntity {
     @NotNull(message = "Role can't be null")
     private Role role;
 
+    @Column(name = "image_path")
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
+    private String imagePath;
+
     private List<MovieReview> reviews;
 
     private User() {
@@ -131,6 +135,14 @@ public class User extends AbstractBaseEntity {
         this.reviews = reviews;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, email, login, password, rating, status, role);
@@ -211,6 +223,11 @@ public class User extends AbstractBaseEntity {
             return this;
         }
 
+        public UserBuilder setImagePath(String imagePath) {
+            User.this.imagePath = imagePath;
+            return this;
+        }
+
         public User build() {
             User user = new User();
             user.id = User.this.id;
@@ -223,6 +240,7 @@ public class User extends AbstractBaseEntity {
             user.status = User.this.status;
             user.role = User.this.role;
             user.reviews = Collections.emptyList();
+            user.imagePath = User.this.imagePath;
             return user;
         }
     }

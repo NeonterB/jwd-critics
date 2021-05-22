@@ -29,6 +29,10 @@ public class Movie extends AbstractBaseEntity {
     @Column(name = "country_id")
     private Country country;
 
+    @Column(name = "image_path")
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
+    private String imagePath;
+
     @Column(name = "rating")
     @Max(value = 100, message = "Movie rating can't be greater than 100")
     @Positive(message = "Movie rating must be positive")
@@ -43,6 +47,7 @@ public class Movie extends AbstractBaseEntity {
 
     @Column(name = "age_restriction_id")
     private AgeRestriction ageRestriction;
+
 
     private List<MovieReview> reviews;
     private List<Genre> genres;
@@ -144,6 +149,14 @@ public class Movie extends AbstractBaseEntity {
         this.reviews = reviews;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
@@ -235,6 +248,11 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
+        public MovieBuilder setImagePath(String imagePath) {
+            Movie.this.imagePath = imagePath;
+            return this;
+        }
+
         public Movie build() {
             Movie movie = new Movie();
             movie.id = Movie.this.id;
@@ -249,6 +267,7 @@ public class Movie extends AbstractBaseEntity {
             movie.reviews = Collections.emptyList();
             movie.genres = Movie.this.genres;
             movie.staff = Movie.this.staff;
+            movie.imagePath = Movie.this.imagePath;
             return movie;
         }
     }
