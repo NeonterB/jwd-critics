@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,6 +26,7 @@ public class ConnectionPool {
 
     private final AtomicInteger poolSize = new AtomicInteger();
     private final Lock lock = new ReentrantLock();
+    private final Condition lockCondition = lock.newCondition();
 
     private ConnectionPool() {
         availableConnections = new LinkedBlockingQueue<>(PropertiesLoaderUtil.getApplicationProperties().getMaxPoolSize());
@@ -60,7 +62,9 @@ public class ConnectionPool {
             } else if (poolSize.get() < properties.getMaxPoolSize()) {
                 connection = new ConnectionProxy(factory.createConnection());
             } else {
-                //todo wait
+                while (availableConnections.isEmpty() && poolSize.get() < properties.getMaxPoolSize()) {
+                    lockCondition.await();
+                }
             }
             unavailableConnections.offer(connection);
             logger.info("Connection taken");
@@ -79,6 +83,7 @@ public class ConnectionPool {
             if (unavailableConnections.contains(connection)) {
                 availableConnections.offer((ConnectionProxy) connection);
                 unavailableConnections.remove(connection);
+                lockCondition.signal();
                 logger.info("Connection returned");
             } else {
                 throw new ConnectionException();
