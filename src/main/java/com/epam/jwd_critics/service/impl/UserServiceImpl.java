@@ -133,23 +133,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User ban(Integer id) throws ServiceException {
-        return updateStatus(id, Status.BANNED);
-    }
-
-    @Override
-    public User activate(Integer id) throws ServiceException {
-        return updateStatus(id, Status.ACTIVE);
-    }
-
-    @Override
-    public User toAdmin(Integer id) throws ServiceException {
-        return updateRole(id, Role.ADMIN);
-    }
-
-    @Override
-    public User toUser(Integer id) throws ServiceException {
-        return updateRole(id, Role.USER);
+    public void update(User user) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.idExists(user.getId())) {
+                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            userDao.update(user);
+            transaction.commit();
+            logger.info("User with id {} was updated", user.getId());
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            transaction.close();
+        }
     }
 
     @Override
@@ -169,48 +170,6 @@ public class UserServiceImpl implements UserService {
         } finally {
             transaction.close();
         }
-    }
-
-    private User updateStatus(Integer id, Status status) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(userDao);
-        User user;
-        try {
-            user = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
-            user.setStatus(status);
-            userDao.update(user);
-            transaction.commit();
-            logger.info("Status of user with id {} was changed to {}", id, status);
-        } catch (DaoException e) {
-            transaction.rollback();
-            throw new ServiceException(e);
-        } catch (UserServiceException e) {
-            transaction.rollback();
-            throw e;
-        } finally {
-            transaction.close();
-        }
-        return user;
-    }
-
-    private User updateRole(Integer id, Role role) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(userDao);
-        User user;
-        try {
-            user = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
-            user.setRole(role);
-            userDao.update(user);
-            transaction.commit();
-            logger.info("Role of user with id {} was changed to {}", id, role);
-        } catch (DaoException e) {
-            transaction.rollback();
-            throw new ServiceException(e);
-        } catch (UserServiceException e) {
-            transaction.rollback();
-            throw e;
-        } finally {
-            transaction.close();
-        }
-        return user;
     }
 
     private void updateInfo(User user) throws ServiceException {

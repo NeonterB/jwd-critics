@@ -15,13 +15,7 @@ public interface UserService {
 
     Optional<User> getEntityById(Integer id) throws ServiceException;
 
-    User ban(Integer id) throws ServiceException;
-
-    User activate(Integer id) throws ServiceException;
-
-    User toAdmin(Integer id) throws ServiceException;
-
-    User toUser(Integer id) throws ServiceException;
+    void update(User user) throws ServiceException;
 
     void delete(Integer id) throws ServiceException;
 }
