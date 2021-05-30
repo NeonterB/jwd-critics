@@ -76,4 +76,15 @@ public class MovieReview extends AbstractBaseEntity {
         MovieReview that = (MovieReview) o;
         return text.equals(that.text) && score.equals(that.score) && userId.equals(that.userId) && movieId.equals(that.movieId);
     }
+
+    @Override
+    public String toString() {
+        return "MovieReview{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", movieId=" + movieId +
+                ", text='" + text + '\'' +
+                ", score=" + score +
+                '}';
+    }
 }
