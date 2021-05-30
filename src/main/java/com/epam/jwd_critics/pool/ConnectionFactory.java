@@ -12,6 +12,14 @@ import java.sql.SQLException;
 public class ConnectionFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
 
+    public ConnectionFactory() {
+        try {
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
     Connection createConnection() {
         ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
         try {
