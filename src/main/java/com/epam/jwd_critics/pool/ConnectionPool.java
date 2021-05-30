@@ -83,7 +83,7 @@ public class ConnectionPool {
             if (unavailableConnections.contains(connection)) {
                 availableConnections.offer((ConnectionProxy) connection);
                 unavailableConnections.remove(connection);
-                lockCondition.signal();
+                lockCondition.signalAll();
                 logger.info("Connection returned");
             } else {
                 throw new ConnectionException();
