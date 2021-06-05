@@ -1,16 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: barka
-  Date: 5/30/2021
-  Time: 8:19 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>index</title>
 </head>
 <body>
-main page
+<jsp:forward page="/controller"/>
 </body>
 </html>

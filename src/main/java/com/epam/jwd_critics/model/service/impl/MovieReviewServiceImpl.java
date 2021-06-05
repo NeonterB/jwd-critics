@@ -29,7 +29,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     public static MovieReviewServiceImpl getInstance() {
-        return MovieReviewServiceImpl.MovieReviewServiceImplSingleton.INSTANCE;
+        return MovieReviewServiceImplSingleton.INSTANCE;
     }
 
     @Override

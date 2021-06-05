@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+    overflow: hidden;
+    padding: 2.5vh 2vh;
+    background: #FF416C;
+    background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    height: 10vh;
+}
+
+.header a {
+    margin: 0;
+    float: left;
+    color: white;
+    height: 68px;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 28px;
+    border-radius: 4px;
+    transition-duration: 0.1s;
+    display: inline-block;
+}
+
+.header a.logo {
+    padding: 0;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header a.logo:hover {
+    transform: scale(1.2);
+    transition-duration: 0.1s;
+}
+
+.header a.outlined {
+    border: 1px solid white;
+    border-radius: 10px;
+    transition-duration: 0.1s;
+}
+
+.header a.outlined:hover {
+    border-radius: 20px;
+    transition-duration: 0.1s;
+}
+
+.header span {
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 18px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.header-right {
+    float: right;
+}
+
+@media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .header-right {
+        float: none;
+    }
+}

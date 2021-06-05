@@ -11,14 +11,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/*")
+@WebServlet("/controller")
 public class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final String commandName = req.getParameter("command");
         Command command = Command.of(commandName);
-        if (command != null){
-            //command.execute(n)
+        if (command != null) {
+            CommandResponse response = command.execute(null);
+            switch (response.getTransferType()) {
+                case FORWARD:
+                    req.getRequestDispatcher(response.getDestination().getPath()).forward(req, resp);
+                    break;
+                case REDIRECT:
+                    resp.sendRedirect(response.getDestination().getPath());
+                    break;
+            }
         }
     }
 }

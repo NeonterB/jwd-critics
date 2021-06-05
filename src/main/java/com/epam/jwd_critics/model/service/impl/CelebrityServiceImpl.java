@@ -33,7 +33,7 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     public static CelebrityServiceImpl getInstance() {
-        return CelebrityServiceImpl.CelebrityServiceImplSingleton.INSTANCE;
+        return CelebrityServiceImplSingleton.INSTANCE;
     }
 
     @Override

@@ -58,7 +58,7 @@ public class MovieDao extends AbstractMovieDao {
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.movie WHERE id = ?)";
 
     public static MovieDao getInstance() {
-        return MovieDao.MovieDaoSingleton.INSTANCE;
+        return MovieDaoSingleton.INSTANCE;
     }
 
     private static class MovieDaoSingleton {

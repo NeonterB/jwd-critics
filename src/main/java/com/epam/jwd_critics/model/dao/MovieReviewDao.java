@@ -41,7 +41,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.review WHERE id = ?)";
 
     public static MovieReviewDao getInstance() {
-        return MovieReviewDao.MovieReviewDaoSingleton.INSTANCE;
+        return MovieReviewDaoSingleton.INSTANCE;
     }
 
     @Override

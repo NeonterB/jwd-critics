@@ -35,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     public static MovieServiceImpl getInstance() {
-        return MovieServiceImpl.MovieServiceImplSingleton.INSTANCE;
+        return MovieServiceImplSingleton.INSTANCE;
     }
 
     @Override
