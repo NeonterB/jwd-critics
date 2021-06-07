@@ -17,5 +17,7 @@ public interface UserService {
 
     void update(User user) throws ServiceException;
 
+    void updatePassword(Integer id, char[] password) throws ServiceException;
+
     void delete(Integer id) throws ServiceException;
 }

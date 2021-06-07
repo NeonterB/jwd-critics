@@ -153,6 +153,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void updatePassword(Integer id, char[] password) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.idExists(id)) {
+                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            userDao.updatePassword(id, passwordAuthenticator.hash(password));
+            transaction.commit();
+            logger.info("User with id {} updated password to ", password);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } catch (UserServiceException e) {
+            transaction.rollback();
+            throw e;
+        } finally {
+            transaction.close();
+        }
+    }
+
     @Override
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);

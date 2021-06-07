@@ -33,7 +33,9 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
-    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.password = ?, U.rating = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
+    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
+    @Language("SQL")
+    private static final String UPDATE_PASSWORD = "UPDATE jwd_critics.user U SET U.password = ? WHERE U.id = ?";
     @Language("SQL")
     private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
     @Language("SQL")
@@ -115,12 +117,22 @@ public class UserDao extends AbstractUserDao {
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getLogin());
-            ps.setString(5, user.getPassword());
-            ps.setInt(6, user.getRating());
-            ps.setInt(7, user.getRole().getId());
-            ps.setInt(8, user.getStatus().getId());
-            ps.setString(9, user.getImagePath());
-            ps.setInt(10, user.getId());
+            ps.setInt(5, user.getRating());
+            ps.setInt(6, user.getRole().getId());
+            ps.setInt(7, user.getStatus().getId());
+            ps.setString(8, user.getImagePath());
+            ps.setInt(9, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void updatePassword(Integer id, String password) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
+            ps.setString(1, password);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

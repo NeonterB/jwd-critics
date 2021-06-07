@@ -18,6 +18,13 @@ class UserServiceImplTest {
     private static final UserService userService = UserServiceImpl.getInstance();
     private static User user;
 
+//    public static void main(String[] args) throws ServiceException {
+//
+//        userService.updatePassword(1, "75315962mM*".toCharArray());
+//        userService.updatePassword(2, "75315962sS*".toCharArray());
+//        userService.updatePassword(3, "75315962dD*".toCharArray());
+//    }
+
     @BeforeAll
     public static void register() {
         Assertions.assertDoesNotThrow(() -> {

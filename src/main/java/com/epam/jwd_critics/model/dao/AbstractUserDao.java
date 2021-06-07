@@ -8,5 +8,7 @@ import java.util.Optional;
 public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
     public abstract Optional<User> getEntityByLogin(String login) throws DaoException;
 
+    public abstract void updatePassword(Integer id, String password) throws DaoException;
+
     public abstract boolean loginExists(String login) throws DaoException;
 }
