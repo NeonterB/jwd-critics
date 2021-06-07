@@ -1,16 +1,15 @@
 package com.epam.jwd_critics.controller.command;
 
 public enum Attribute {
-    LOGIN("login"),
-    EMAIL("email"),
-    PASSWORD("password");
-    private final String parameterName;
+    USER_ID("userId"),
+    USER_ROLE("userRole");
+    private final String name;
 
-    Attribute(String parameterName) {
-        this.parameterName = parameterName;
+    Attribute(String name) {
+        this.name = name;
     }
 
-    public String getParameterName() {
-        return parameterName;
+    public String getName() {
+        return name;
     }
 }

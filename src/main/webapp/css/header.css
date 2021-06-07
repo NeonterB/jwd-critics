@@ -11,11 +11,11 @@ body {
 
 .header {
     overflow: hidden;
-    padding: 2.5vh 2vh;
+    padding: 23px;
     background: #FF416C;
     background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
     background: linear-gradient(to right, #FF4B2B, #FF416C);
-    height: 10vh;
+    height: 114px;
 }
 
 .header a {
