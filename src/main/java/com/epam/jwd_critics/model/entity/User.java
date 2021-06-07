@@ -13,46 +13,30 @@ public class User extends AbstractBaseEntity {
     private static final String DEFAULT_PROFILE_IMAGE = "c:\\Multimedia\\Programming\\Idea\\jwd-critics\\src\\main\\resources\\assets\\default_profile.jpg";
 
     @Column(name = "first_name")
-    @NotNull(message = "First name can't be null")
-    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "First name contains illegal characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull(message = "Last name can't be null")
-    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
     private String lastName;
 
     @Column(name = "email")
-    @Email(message = "Email is invalid")
     private String email;
 
     @Column(name = "login")
-    @NotNull(message = "Login can't be null")
-    @Pattern(regexp = "^[a-zA-Z0-9._-]{3,25}$", message = "Login doesn't meet requirements")
     private String login;
 
     @Column(name = "password")
-    @NotNull(message = "Password can't be null")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
-            message = "Password doesn't meet safety requirements")
     private String password;
 
     @Column(name = "rating")
-    @NotNull(message = "Rating can't be null")
-    @Max(value = 100, message = "Rating can't be greater then 100")
-    @Positive(message = "User rating must be positive")
     private int rating;
 
     @Column(name = "status_id")
-    @NotNull(message = "Status can't be null")
     private Status status;
 
     @Column(name = "role_id")
-    @NotNull(message = "Role can't be null")
     private Role role;
 
     @Column(name = "image_path")
-    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
     private String imagePath;
 
     private List<MovieReview> reviews;
