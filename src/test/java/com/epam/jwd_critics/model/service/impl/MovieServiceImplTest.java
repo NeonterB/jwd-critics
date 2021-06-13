@@ -1,6 +1,5 @@
 package com.epam.jwd_critics.model.service.impl;
 
-import com.epam.jwd_critics.exception.MovieServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.model.entity.AgeRestriction;
@@ -61,7 +60,7 @@ class MovieServiceImplTest {
             movie.setSummary("new summary");
             movieService.update(movie);
             Movie actualResult = movieService.getEntityById(movie.getId())
-                    .orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             assertEquals(movie, actualResult);
             movie.setSummary(oldSummary);
         } catch (ServiceException e) {

@@ -1,6 +1,5 @@
 package com.epam.jwd_critics.model.service.impl;
 
-import com.epam.jwd_critics.exception.CelebrityServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.model.entity.Celebrity;
@@ -59,7 +58,7 @@ class CelebrityServiceImplTest {
             celebrity.setFirstName("new name");
             celebrityService.update(celebrity);
             Celebrity actualResult = celebrityService.getEntityById(celebrity.getId())
-                    .orElseThrow(() -> new CelebrityServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
             assertEquals(celebrity, actualResult);
             celebrity.setFirstName(oldFirstName);
         } catch (ServiceException e) {

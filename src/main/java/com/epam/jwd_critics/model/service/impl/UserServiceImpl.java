@@ -2,7 +2,6 @@ package com.epam.jwd_critics.model.service.impl;
 
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.UserServiceException;
 import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.model.dao.AbstractMovieReviewDao;
 import com.epam.jwd_critics.model.dao.AbstractUserDao;
@@ -40,13 +39,13 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(reviewDao, userDao);
         User user;
         try {
-            user = userDao.getEntityByLogin(login).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            user = userDao.getEntityByLogin(login).orElseThrow(() -> new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             if (!passwordAuthenticator.authenticate(password, user.getPassword())) {
-                throw new UserServiceException(UserServiceCode.INCORRECT_PASSWORD);
+                throw new ServiceException(UserServiceCode.INCORRECT_PASSWORD);
             } else if (user.getStatus().equals(Status.BANNED)) {
-                throw new UserServiceException(UserServiceCode.USER_IS_BANNED);
+                throw new ServiceException(UserServiceCode.USER_IS_BANNED);
             } else if (user.getStatus().equals(Status.INACTIVE)) {
-                throw new UserServiceException(UserServiceCode.USER_IS_INACTIVE);
+                throw new ServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
             updateInfo(user);
             transaction.commit();
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
                 .build();
         try {
             if (userDao.loginExists(login)) {
-                throw new UserServiceException(UserServiceCode.LOGIN_EXISTS);
+                throw new ServiceException(UserServiceCode.LOGIN_EXISTS);
             } else {
                 userToRegister.setPassword(passwordAuthenticator.hash(password));
                 setDefaultFields(userToRegister);
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
             if (!userDao.idExists(user.getId())) {
-                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
             userDao.update(user);
             transaction.commit();
@@ -145,7 +144,7 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
             if (!userDao.idExists(id)) {
-                throw new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
             userDao.updatePassword(id, passwordAuthenticator.hash(password));
             transaction.commit();
@@ -165,7 +164,7 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -177,14 +176,14 @@ public class UserServiceImpl implements UserService {
     public void delete(Integer id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
-            User userToDelete = userDao.getEntityById(id).orElseThrow(() -> new UserServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            User userToDelete = userDao.getEntityById(id).orElseThrow(() -> new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
             userDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", userToDelete);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {

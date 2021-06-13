@@ -1,7 +1,6 @@
 package com.epam.jwd_critics.model.service.impl;
 
 import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.MovieServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.model.dao.AbstractCelebrityDao;
@@ -100,7 +99,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
-                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.addGenre(movieId, genre);
             transaction.commit();
         } catch (DaoException e) {
@@ -116,7 +115,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
-                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.removeGenre(movieId, genre);
             transaction.commit();
         } catch (DaoException e) {
@@ -132,7 +131,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
-                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.addStaffAndPosition(movieId, celebrityId, position);
             transaction.commit();
         } catch (DaoException e) {
@@ -148,7 +147,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
-                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.removeStaffAndPosition(movieId, celebrityId, position);
             transaction.commit();
         } catch (DaoException e) {
@@ -181,7 +180,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movie.getId())) {
-                throw new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             }
             movieDao.update(movie);
             transaction.commit();
@@ -189,7 +188,7 @@ public class MovieServiceImpl implements MovieService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (MovieServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -202,14 +201,14 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(movieDao, reviewDao);
         try {
             Movie movieToDelete = movieDao.getEntityById(id)
-                    .orElseThrow(() -> new MovieServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             movieDao.delete(id);
             transaction.commit();
             logger.info("{} was deleted", movieToDelete);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (MovieServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {

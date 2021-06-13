@@ -1,16 +1,11 @@
 package com.epam.jwd_critics.model.service.impl;
 
 import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.MovieReviewServiceException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.MovieReviewServiceCode;
-import com.epam.jwd_critics.model.dao.AbstractMovieDao;
 import com.epam.jwd_critics.model.dao.AbstractMovieReviewDao;
-import com.epam.jwd_critics.model.dao.AbstractUserDao;
 import com.epam.jwd_critics.model.dao.EntityTransaction;
-import com.epam.jwd_critics.model.dao.MovieDao;
 import com.epam.jwd_critics.model.dao.MovieReviewDao;
-import com.epam.jwd_critics.model.dao.UserDao;
 import com.epam.jwd_critics.model.entity.MovieReview;
 import com.epam.jwd_critics.model.service.MovieReviewService;
 import org.slf4j.Logger;
@@ -21,8 +16,6 @@ import java.util.Optional;
 public class MovieReviewServiceImpl implements MovieReviewService {
     private static final Logger logger = LoggerFactory.getLogger(MovieReviewServiceImpl.class);
     private final AbstractMovieReviewDao movieReviewDao = MovieReviewDao.getInstance();
-    private final AbstractMovieDao movieDao = MovieDao.getInstance();
-    private final AbstractUserDao userDao = UserDao.getInstance();
 
     private MovieReviewServiceImpl() {
 
@@ -70,7 +63,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         try {
             if (!movieReviewDao.idExists(review.getId())) {
-                throw new MovieReviewServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST);
+                throw new ServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST);
             }
             movieReviewDao.update(review);
             transaction.commit();
@@ -78,7 +71,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (MovieReviewServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -91,14 +84,14 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         try {
             MovieReview reviewToDelete = movieReviewDao.getEntityById(reviewId)
-                    .orElseThrow(() -> new MovieReviewServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new ServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST));
             movieReviewDao.delete(reviewId);
             transaction.commit();
             logger.info("{} was deleted", reviewToDelete);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (MovieReviewServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {

@@ -1,16 +1,13 @@
 package com.epam.jwd_critics.model.service.impl;
 
-import com.epam.jwd_critics.exception.CelebrityServiceException;
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.model.dao.AbstractCelebrityDao;
 import com.epam.jwd_critics.model.dao.AbstractMovieDao;
-import com.epam.jwd_critics.model.dao.AbstractMovieReviewDao;
 import com.epam.jwd_critics.model.dao.CelebrityDao;
 import com.epam.jwd_critics.model.dao.EntityTransaction;
 import com.epam.jwd_critics.model.dao.MovieDao;
-import com.epam.jwd_critics.model.dao.MovieReviewDao;
 import com.epam.jwd_critics.model.entity.Celebrity;
 import com.epam.jwd_critics.model.entity.Movie;
 import com.epam.jwd_critics.model.entity.Position;
@@ -24,7 +21,6 @@ import java.util.Optional;
 
 public class CelebrityServiceImpl implements CelebrityService {
     private static final Logger logger = LoggerFactory.getLogger(CelebrityServiceImpl.class);
-    private final AbstractMovieReviewDao reviewDao = MovieReviewDao.getInstance();
     private final AbstractMovieDao movieDao = MovieDao.getInstance();
     private final AbstractCelebrityDao celebrityDao = CelebrityDao.getInstance();
 
@@ -79,7 +75,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
         try {
             if (!celebrityDao.idExists(celebrity.getId())) {
-                throw new CelebrityServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
+                throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
             }
             celebrityDao.update(celebrity);
             transaction.commit();
@@ -87,7 +83,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (CelebrityServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {
@@ -118,7 +114,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         EntityTransaction transaction = new EntityTransaction(celebrityDao, movieDao);
         try {
             Celebrity celebrityToDelete = celebrityDao.getEntityById(id)
-                    .orElseThrow(() -> new CelebrityServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
+                    .orElseThrow(() -> new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
             updateInfo(celebrityToDelete);
             for (Movie movie : celebrityToDelete.getJobs().keySet()) {
                 movie.getStaff().remove(celebrityToDelete);
@@ -130,7 +126,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (CelebrityServiceException e) {
+        } catch (ServiceException e) {
             transaction.rollback();
             throw e;
         } finally {

@@ -1,7 +1,6 @@
 package com.epam.jwd_critics.model.service.impl;
 
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.UserServiceException;
 import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.model.entity.Status;
 import com.epam.jwd_critics.model.entity.User;
@@ -38,7 +37,7 @@ class UserServiceImplTest {
             userService.update(user);
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            Assertions.assertEquals(((UserServiceException) e).getCode(), UserServiceCode.LOGIN_EXISTS);
+            Assertions.assertEquals(e.getCode(), UserServiceCode.LOGIN_EXISTS);
         }
     }
 
@@ -51,13 +50,13 @@ class UserServiceImplTest {
             user = userService.login("fakeTestLogin", "753159");
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            Assertions.assertEquals(((UserServiceException) e).getCode(), UserServiceCode.USER_DOES_NOT_EXIST);
+            Assertions.assertEquals(e.getCode(), UserServiceCode.USER_DOES_NOT_EXIST);
         }
         try {
             user = userService.login("testLogin", "111111");
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            Assertions.assertEquals(((UserServiceException) e).getCode(), UserServiceCode.INCORRECT_PASSWORD);
+            Assertions.assertEquals(e.getCode(), UserServiceCode.INCORRECT_PASSWORD);
         }
     }
 
