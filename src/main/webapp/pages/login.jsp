@@ -1,35 +1,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: barka
-  Date: 6/5/2021
-  Time: 2:36 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Log in</title>
     <link rel="stylesheet" href="../css/login.css">
+
 </head>
 <body>
 <c:import url="componets/header.jsp"/>
+<c:import url="componets/message.jsp"/>
 <div class="content">
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form name="registerForm" method="POST" action="<c:url value="/controller?command=register"/>">
                 <h1>Create Account</h1>
-                <input type="text" pattern="^[A-Z][a-z]{1,14}"
+                <input type="text"
+                       name="firstName"
+                       pattern="^[A-Z][a-z]{1,14}"
                        title="Must contain letters only, must start with an uppercase letter"
                        required placeholder="First name"/>
-                <input type="text" pattern="^[A-Z][a-z]{1,14}"
+                <input type="text"
+                       name="lastName"
+                       pattern="^[A-Z][a-z]{1,14}"
                        title="Must contain letters only, must start with an uppercase letter"
                        required placeholder="Last name"/>
-                <input type="email" required placeholder="Email"/>
-                <input type="text" pattern="^[a-zA-Z0-9._-]{3,25}$"
+                <input type="email"
+                       name="email"
+                       required placeholder="Email"/>
+                <input type="text"
+                       name="login"
+                       pattern="^[a-zA-Z0-9._-]{3,25}$"
                        title="Minimum 3 and maximum 25 characters, can contain letters, numbers, and characters &quot;._-&quot;"
                        required placeholder="Login"/>
                 <input type="password"
+                       name="password"
                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$"
                        title="Minimum 8 and maximum 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character &quot;@$!%*&?&quot;"
                        required placeholder="Password"/>
@@ -73,3 +77,5 @@
 </body>
 </html>
 <script type="text/javascript" src="../scripts/login.js"></script>
+<c:remove var="serviceError"/>
+<c:remove var="validationErrors"/>
