@@ -18,17 +18,17 @@ import javax.servlet.http.HttpSession;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class LogInCommand implements Command {
+public class SignInCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) {
-        CommandResponse response = new CommandResponse(ServletDestination.LOGIN_PAGE, TransferType.REDIRECT);
+        CommandResponse response = new CommandResponse(ServletDestination.SIGN_IN_PAGE, TransferType.REDIRECT);
 
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
         if (login == null || password == null) {
-            req.getSession(true).setAttribute(Attribute.VALIDATION_ERRORS.getName(), "Login and password can't be empty");
+            req.getSession(true).setAttribute(Attribute.VALIDATION_ERRORS.getName(), "Sign in fields can't be empty");
         } else {
             UserValidator userValidator = new UserValidator();
             Set<ConstraintViolation> violations = userValidator.validateLogInData(login, password);

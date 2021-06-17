@@ -41,7 +41,7 @@
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form name="loginForm" method="POST" action="<c:url value="/controller?command=log_in"/>">
+            <form name="signInForm" method="POST" action="<c:url value="/controller?command=sign_in"/>">
                 <h1>Sign in</h1>
                 <input type="text"
                        name="login"

@@ -5,11 +5,11 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.TransferType;
 
-import static com.epam.jwd_critics.controller.command.ServletDestination.LOGIN_PAGE;
+import static com.epam.jwd_critics.controller.command.ServletDestination.SIGN_IN_PAGE;
 
-public class ShowLoginPageCommand implements Command {
+public class ShowSignInPageCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
-        return new CommandResponse(LOGIN_PAGE, TransferType.FORWARD);
+        return new CommandResponse(SIGN_IN_PAGE, TransferType.FORWARD);
     }
 }
