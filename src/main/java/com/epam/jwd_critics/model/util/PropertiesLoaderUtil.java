@@ -24,7 +24,7 @@ public final class PropertiesLoaderUtil {
     }
 
     private void loadProperties() {
-        try (InputStream input = PropertiesLoaderUtil.class.getClassLoader().getResourceAsStream("properties/application.properties")) {
+        try (InputStream input = PropertiesLoaderUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(input);
             appProperties = new ApplicationProperties(
                     properties.getProperty("url"),
