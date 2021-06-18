@@ -39,7 +39,7 @@ public class SignInCommand implements Command {
                     reqSession.setAttribute(Attribute.USER_ID.getName(), user.getId());
                     reqSession.setAttribute(Attribute.USER_ROLE.getName(), user.getRole());
                     response.setDestination(ServletDestination.MAIN_PAGE);
-                    response.setTransferType(TransferType.FORWARD);
+                    response.setTransferType(TransferType.REDIRECT);
                 } catch (ServiceException e) {
                     req.getSession(true).setAttribute(Attribute.SERVICE_ERROR.getName(), e.getMessage());
                     return response;
