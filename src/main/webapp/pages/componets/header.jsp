@@ -5,43 +5,54 @@
 <fmt:setBundle basename="properties/content"/>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div class="header">
-    <a href="${pageContext.request.contextPath}/controller" class="logo"><img src="../../assets/camera-icon.svg"
-                                                                              width="68" height="68"></a>
-    <form action="<c:url value="/controller"/>" method="POST" class="input-line">
-        <input type="hidden" name="command" value="find_movies_by_title"/>
-        <input type="text" class="text-input" name="movieToFind"
-               placeholder="<fmt:message key="label.search"/>">
-        <button class="find-btn"><i class="fa fa-search"></i></button>
-    </form>
-
-<%--    <form name="langForm" method="POST" action="<c:url value="/controller"/>">--%>
-<%--        <input type="hidden" name="command" value="change_language">--%>
-<%--        <input type="hidden" name="page" value="${ sessionScope.page }">--%>
-<%--        <select name="lang" onchange="submit()">--%>
-<%--            <option value="" <c:if test="${empty lang}">selected</c:if>>English</option>--%>
-<%--            <option value="ru" <c:if test="${lang eq 'ru'}">selected</c:if>>Русский</option>--%>
-<%--        </select>--%>
-<%--    </form>--%>
-
-    <div class="header-right">
-        <c:choose>
-            <c:when test="${empty sessionScope.userRole}">
-                <a class="outlined"
-                   href="${pageContext.request.contextPath}/controller?command=open_sign_in"><span><fmt:message
-                        key="label.signIn"/></span></a>
-            </c:when>
-            <c:otherwise>
-                <a class="outlined"
-                   href="${pageContext.request.contextPath}/controller?command=sign_out"><span><fmt:message
-                        key="label.signOut"/></span></a>
-            </c:otherwise>
-        </c:choose>
+<div class="wrapper">
+    <div class="navbar">
+        <div class="menu">
+            <ul>
+                <li><a href="${pageContext.request.contextPath}/controller"><fmt:message key="button.home"/></a></li>
+                <li><a href="#"><fmt:message key="button.celebrities"/></a></li>
+                <li><a href="#"><fmt:message key="button.movies"/></a></li>
+                <li><a href="#"><fmt:message key="button.profile"/></a></li>
+                <li>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.userRole}">
+                            <a href="${pageContext.request.contextPath}/controller?command=open_sign_in"><fmt:message
+                                    key="button.signIn"/></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/controller?command=sign_out"><fmt:message
+                                    key="button.signOut"/></a>
+                        </c:otherwise>
+                    </c:choose>
+                </li>
+                <li>
+                    <form class="langForm" name="langForm" method="POST" action="<c:url value="/controller"/>">
+                        <input type="hidden" name="command" value="change_language">
+                        <input type="hidden" name="page" value="${ sessionScope.page }">
+                        <select name="lang" onchange="submit()">
+                            <option value="" <c:if test="${empty lang}">selected</c:if>>ENGLISH</option>
+                            <option value="ru" <c:if test="${lang eq 'ru'}">selected</c:if>>РУССКИЙ</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="searchbar">
+            <form action="<c:url value="/controller"/>" method="POST">
+                <input type="hidden" name="command" value="find_movies_by_title"/>
+                <input type="text" placeholder="<fmt:message key="label.search"/>">
+                <div class="icon" id="icon">
+                    <i class="fas fa-search" id="searchBtn"></i>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
 </html>
+<script type="text/javascript" src="../../scripts/header.js"></script>
