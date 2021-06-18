@@ -6,7 +6,7 @@ public enum Attribute {
     LANG("lang"),
     VALIDATION_ERRORS("validationErrors"),
     SERVICE_ERROR("serviceError"),
-    ACCESS_ERROR("accessError");
+    GLOBAL_ERROR("globalError");
     private final String name;
 
     Attribute(String name) {
