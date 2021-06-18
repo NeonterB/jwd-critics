@@ -33,11 +33,11 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public List<Celebrity> getAll() throws ServiceException {
+    public List<Celebrity> getAllBetween(int begin, int end) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
         List<Celebrity> celebrities;
         try {
-            celebrities = celebrityDao.getAll();
+            celebrities = celebrityDao.getAllBetween(begin, end);
             for (Celebrity celebrity : celebrities) {
                 updateInfo(celebrity);
             }
@@ -49,6 +49,22 @@ public class CelebrityServiceImpl implements CelebrityService {
             transaction.close();
         }
         return celebrities;
+    }
+
+    @Override
+    public int getCount() throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(celebrityDao);
+        int count;
+        try {
+            count = celebrityDao.getCount();
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return count;
     }
 
     @Override

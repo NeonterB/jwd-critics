@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CelebrityService {
-    List<Celebrity> getAll() throws ServiceException;
+    List<Celebrity> getAllBetween(int begin, int end) throws ServiceException;
+
+    int getCount() throws ServiceException;
 
     Optional<Celebrity> getEntityById(Integer id) throws ServiceException;
 

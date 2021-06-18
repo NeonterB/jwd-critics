@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface MovieReviewService {
     Optional<MovieReview> getEntityById(Integer reviewId) throws ServiceException;
 
+    int getCount() throws ServiceException;
+
     MovieReview create(MovieReview review) throws ServiceException;
 
     void update(MovieReview review) throws ServiceException;

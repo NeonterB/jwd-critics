@@ -11,7 +11,9 @@ public interface UserService {
 
     User register(String firstName, String lastName, String email, String login, char[] password) throws ServiceException;
 
-    List<User> getAll() throws ServiceException;
+    List<User> getAllBetween(int begin, int end) throws ServiceException;
+
+    int getCount() throws ServiceException;
 
     Optional<User> getEntityById(Integer id) throws ServiceException;
 

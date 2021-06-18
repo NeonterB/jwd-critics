@@ -25,7 +25,9 @@ public class CelebrityDao extends AbstractCelebrityDao {
     private static final Logger logger = LoggerFactory.getLogger(CelebrityDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_CELEBRITIES = "SELECT * FROM jwd_critics.celebrity";
+    private static final String SELECT_ALL_CELEBRITIES_BETWEEN = "SELECT * FROM jwd_critics.celebrity order by celebrity.last_name, celebrity.first_name limit ?, ?";
+    @Language("SQL")
+    private static final String COUNT_CELEBRITIES = "SELECT COUNT(*) FROM celebrity;";
     @Language("SQL")
     private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, MS.position_id from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id where movie_id = ?";
     @Language("SQL")
@@ -43,14 +45,12 @@ public class CelebrityDao extends AbstractCelebrityDao {
         return CelebrityDaoSingleton.INSTANCE;
     }
 
-    private static class CelebrityDaoSingleton {
-        private static final CelebrityDao INSTANCE = new CelebrityDao();
-    }
-
     @Override
-    public List<Celebrity> getAll() throws DaoException {
+    public List<Celebrity> getAllBetween(int begin, int end) throws DaoException {
         List<Celebrity> list = new ArrayList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_CELEBRITIES)) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_CELEBRITIES_BETWEEN)) {
+            ps.setInt(1, begin);
+            ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(buildCelebrity(rs));
@@ -62,6 +62,11 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
+    public int getCount() throws DaoException {
+        return getCount(COUNT_CELEBRITIES);
+    }
+
+    @Override
     public Optional<Celebrity> getEntityById(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
             ps.setInt(1, celebrityId);
@@ -70,6 +75,16 @@ public class CelebrityDao extends AbstractCelebrityDao {
                     return Optional.ofNullable(buildCelebrity(resultSet));
                 } else return Optional.empty();
             }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void delete(Integer celebrityId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
+            ps.setInt(1, celebrityId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -95,16 +110,6 @@ public class CelebrityDao extends AbstractCelebrityDao {
             preparedStatement.setString(3, celebrity.getImagePath());
             preparedStatement.setInt(4, celebrity.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public void delete(Integer celebrityId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_CELEBRITY_BY_ID)) {
-            ps.setInt(1, celebrityId);
-            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -159,5 +164,9 @@ public class CelebrityDao extends AbstractCelebrityDao {
                 .setLastName(resultSet.getString(columnNames.get("lastName")))
                 .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
+    }
+
+    private static class CelebrityDaoSingleton {
+        private static final CelebrityDao INSTANCE = new CelebrityDao();
     }
 }

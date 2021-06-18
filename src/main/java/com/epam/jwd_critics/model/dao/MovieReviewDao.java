@@ -24,7 +24,9 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     private static final Logger logger = LoggerFactory.getLogger(MovieReviewDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_REVIEWS = "SELECT * FROM jwd_critics.review";
+    private static final String SELECT_ALL_REVIEWS_BETWEEN = "SELECT * FROM jwd_critics.review limit ?, ?";
+    @Language("SQL")
+    private static final String COUNT_REVIEWS = "SELECT COUNT(*) FROM review";
     @Language("SQL")
     private static final String SELECT_REVIEW_BY_ID = "SELECT * FROM jwd_critics.review WHERE id = ?";
     @Language("SQL")
@@ -45,9 +47,11 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     }
 
     @Override
-    public List<MovieReview> getAll() throws DaoException {
+    public List<MovieReview> getAllBetween(int begin, int end) throws DaoException {
         List<MovieReview> list = new ArrayList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_REVIEWS)) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_REVIEWS_BETWEEN)) {
+            ps.setInt(1, begin);
+            ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(buildMovieReview(rs));
@@ -56,6 +60,11 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
             throw new DaoException(e);
         }
         return list;
+    }
+
+    @Override
+    public int getCount() throws DaoException {
+        return getCount(COUNT_REVIEWS);
     }
 
     @Override

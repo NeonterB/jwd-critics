@@ -23,7 +23,9 @@ public class UserDao extends AbstractUserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_USERS = "SELECT * FROM jwd_critics.user";
+    private static final String SELECT_ALL_USERS_BETWEEN = "SELECT * FROM jwd_critics.user order by user.role_id, user.last_name, user.first_name limit ?, ?";
+    @Language("SQL")
+    private static final String COUNT_USERS = "SELECT COUNT(*) FROM celebrity";
     @Language("SQL")
     private static final String SELECT_USER_BY_ID = "SELECT * FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
@@ -51,9 +53,11 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public List<User> getAll() throws DaoException {
+    public List<User> getAllBetween(int begin, int end) throws DaoException {
         List<User> list = new ArrayList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS)) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_USERS_BETWEEN)) {
+            ps.setInt(1, begin);
+            ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(buildUser(rs));
@@ -62,6 +66,11 @@ public class UserDao extends AbstractUserDao {
             throw new DaoException(e);
         }
         return list;
+    }
+
+    @Override
+    public int getCount() throws DaoException {
+        return getCount(COUNT_USERS);
     }
 
     @Override

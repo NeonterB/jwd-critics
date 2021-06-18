@@ -31,7 +31,9 @@ public class MovieDao extends AbstractMovieDao {
     private static final Logger logger = LoggerFactory.getLogger(MovieDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_MOVIES = "SELECT * FROM jwd_critics.movie";
+    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT * FROM jwd_critics.movie order by movie.name limit ?, ?";
+    @Language("SQL")
+    private static final String COUNT_MOVIES = "SELECT COUNT(*) FROM movie;";
     @Language("SQL")
     private static final String SELECT_GENRES_BY_MOVIE_ID = "SELECT genre_id from jwd_critics.movie_genre where movie_id = ?";
     @Language("SQL")
@@ -66,9 +68,11 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public List<Movie> getAll() throws DaoException {
+    public List<Movie> getAllBetween(int begin, int end) throws DaoException {
         List<Movie> list = new ArrayList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_MOVIES)) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_ALL_MOVIES_BETWEEN)) {
+            ps.setInt(1, begin);
+            ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(buildMovie(rs));
@@ -77,6 +81,11 @@ public class MovieDao extends AbstractMovieDao {
             logger.error(e.getMessage(), e);
         }
         return list;
+    }
+
+    @Override
+    public int getCount() throws DaoException {
+        return getCount(COUNT_MOVIES);
     }
 
     @Override

@@ -38,11 +38,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getAll() throws ServiceException {
+    public List<Movie> getAllBetween(int begin, int end) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         List<Movie> movies;
         try {
-            movies = movieDao.getAll();
+            movies = movieDao.getAllBetween(begin, end);
             for (Movie movie : movies) {
                 updateInfo(movie);
             }
@@ -54,6 +54,22 @@ public class MovieServiceImpl implements MovieService {
             transaction.close();
         }
         return movies;
+    }
+
+    @Override
+    public int getCount() throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieDao);
+        int count;
+        try {
+            count = movieDao.getCount();
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return count;
     }
 
     @Override

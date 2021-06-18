@@ -95,11 +95,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() throws ServiceException {
+    public List<User> getAllBetween(int begin, int end) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         List<User> userList;
         try {
-            userList = userDao.getAll();
+            userList = userDao.getAllBetween(begin, end);
             for (User user : userList) {
                 updateInfo(user);
             }
@@ -111,6 +111,22 @@ public class UserServiceImpl implements UserService {
             transaction.close();
         }
         return userList;
+    }
+
+    @Override
+    public int getCount() throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        int count;
+        try {
+            count = userDao.getCount();
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return count;
     }
 
     @Override

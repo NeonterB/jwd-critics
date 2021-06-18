@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
-    List<Movie> getAll() throws ServiceException;
+    List<Movie> getAllBetween(int begin, int end) throws ServiceException;
+
+    int getCount() throws ServiceException;
 
     Optional<Movie> getEntityById(Integer id) throws ServiceException;
 

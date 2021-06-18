@@ -16,7 +16,9 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
     private Connection connection;
 
-    public abstract List<T> getAll() throws DaoException;
+    public abstract List<T> getAllBetween(int begin, int end) throws DaoException;
+
+    public abstract int getCount() throws DaoException;
 
     public abstract Optional<T> getEntityById(K id) throws DaoException;
 
@@ -27,6 +29,19 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     public abstract void update(T t) throws DaoException;
 
     public abstract boolean idExists(K id) throws DaoException;
+
+    protected int getCount(String query) throws DaoException{
+        int count = 0;
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return count;
+    }
 
     protected boolean idExists(Integer id, String idExistsQuery) throws DaoException {
         boolean result = false;
