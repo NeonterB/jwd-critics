@@ -38,3 +38,6 @@
 </c:if>
 </body>
 </html>
+<c:remove var="serviceError"/>
+<c:remove var="validationErrors"/>
+<c:remove var="globalError"/>
