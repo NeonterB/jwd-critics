@@ -2,6 +2,8 @@ package com.epam.jwd_critics.controller.command;
 
 public enum Parameter {
     COMMAND("command"),
+    CURRENT_PAGE("page"),
+    LANG("lang"),
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
     EMAIL("email"),

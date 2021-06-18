@@ -1,9 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="page" value="/pages/signIn.jsp" scope="session"/>
 <html>
 <head>
     <title>Log in</title>
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/signIn.css">
 
 </head>
 <body>
