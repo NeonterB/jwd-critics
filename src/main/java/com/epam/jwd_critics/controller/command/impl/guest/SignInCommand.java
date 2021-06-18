@@ -1,4 +1,4 @@
-package com.epam.jwd_critics.controller.command.impl;
+package com.epam.jwd_critics.controller.command.impl.guest;
 
 import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;
@@ -18,29 +18,23 @@ import javax.servlet.http.HttpSession;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RegisterCommand implements Command {
+public class SignInCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) {
         CommandResponse response = new CommandResponse(ServletDestination.SIGN_IN_PAGE, TransferType.REDIRECT);
-        String firstName = req.getParameter(Parameter.FIRST_NAME);
-        String lastName = req.getParameter(Parameter.LAST_NAME);
-        String email = req.getParameter(Parameter.EMAIL);
+
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
-        if (firstName == null ||
-                lastName == null ||
-                email == null ||
-                login == null ||
-                password == null) {
-            req.getSession(true).setAttribute(Attribute.VALIDATION_ERRORS.getName(), "Registration fields can't be empty");
+        if (login == null || password == null) {
+            req.getSession(true).setAttribute(Attribute.VALIDATION_ERRORS.getName(), "Sign in fields can't be empty");
         } else {
             UserValidator userValidator = new UserValidator();
-            Set<ConstraintViolation> violations = userValidator.validateRegistrationData(firstName, lastName, email, login, password);
+            Set<ConstraintViolation> violations = userValidator.validateLogInData(login, password);
             if (violations.isEmpty()) {
                 try {
-                    User user = userService.register(firstName, lastName, email, login, password.toCharArray());
+                    User user = userService.login(login, password);
                     HttpSession reqSession = req.getSession(true);
                     reqSession.setAttribute(Attribute.USER_ID.getName(), user.getId());
                     reqSession.setAttribute(Attribute.USER_ROLE.getName(), user.getRole());

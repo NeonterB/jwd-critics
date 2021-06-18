@@ -1,4 +1,4 @@
-package com.epam.jwd_critics.controller.command.impl;
+package com.epam.jwd_critics.controller.command.impl.common;
 
 import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;

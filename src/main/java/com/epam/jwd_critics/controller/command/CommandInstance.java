@@ -1,11 +1,11 @@
 package com.epam.jwd_critics.controller.command;
 
-import com.epam.jwd_critics.controller.command.impl.ChangeLocaleCommand;
-import com.epam.jwd_critics.controller.command.impl.SignInCommand;
-import com.epam.jwd_critics.controller.command.impl.RegisterCommand;
-import com.epam.jwd_critics.controller.command.impl.OpenSignInPageCommand;
-import com.epam.jwd_critics.controller.command.impl.OpenMainPageCommand;
-import com.epam.jwd_critics.controller.command.impl.SignOutCommand;
+import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
+import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
+import com.epam.jwd_critics.controller.command.impl.guest.RegisterCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenSignInPageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
+import com.epam.jwd_critics.controller.command.impl.user.SignOutCommand;
 import com.epam.jwd_critics.model.entity.Role;
 
 import java.util.Arrays;
