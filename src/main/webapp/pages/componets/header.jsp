@@ -32,7 +32,7 @@
         <c:choose>
             <c:when test="${empty sessionScope.userRole}">
                 <a class="outlined"
-                   href="${pageContext.request.contextPath}/controller?command=show_login"><span><fmt:message
+                   href="${pageContext.request.contextPath}/controller?command=open_sign_in"><span><fmt:message
                         key="label.signIn"/></span></a>
             </c:when>
             <c:otherwise>

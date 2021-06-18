@@ -15,8 +15,15 @@
         fontSize: "14px",
         position: "right-bottom",
         closeButton: true,
-        borderRadius: "20px",
+        borderRadius: "5px",
         failure: {background: "#FF416C",},
+    });
+
+    Notiflix.Report.Init({
+        fontFamily: "Quicksand",
+        useGoogleFont: true,
+        backgroundColor: "#ffffff",
+        failure: {svgColor: "#FF416C", titleColor: "#FF416C", messageColor: "#FF416C", buttonBackground: "#FF416C",},
     });
 </script>
 <body>
@@ -25,6 +32,9 @@
 </c:forEach>
 <c:if test="${not empty sessionScope.serviceError}">
     <script>Notiflix.Notify.Failure('${sessionScope.serviceError}')</script>
+</c:if>
+<c:if test="${not empty sessionScope.globalError}">
+    <script>Notiflix.Report.Failure('${sessionScope.globalError}')</script>
 </c:if>
 </body>
 </html>

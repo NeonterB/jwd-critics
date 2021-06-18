@@ -7,5 +7,6 @@
 </head>
 <body>
 <c:import url="componets/header.jsp"/>
+<c:import url="componets/message.jsp"/>
 </body>
 </html>
