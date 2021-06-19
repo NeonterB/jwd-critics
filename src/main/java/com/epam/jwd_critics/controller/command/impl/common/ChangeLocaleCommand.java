@@ -12,7 +12,7 @@ public class ChangeLocaleCommand implements Command {
     public CommandResponse execute(CommandRequest req) {
         String page = req.getParameter(Parameter.CURRENT_PAGE);
         String lang = req.getParameter(Parameter.LANG);
-        req.getSession(true).setAttribute(Attribute.LANG.getName(), lang);
+        req.setSessionAttribute(Attribute.LANG, lang);
         return new CommandResponse(() -> page, TransferType.FORWARD);
     }
 }

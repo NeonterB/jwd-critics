@@ -27,14 +27,14 @@
     });
 </script>
 <body>
-<c:forEach var="validationError" items="${sessionScope.validationErrors}">
+<c:forEach var="validationError" items="${validationErrors}">
     <script>Notiflix.Notify.Failure('${validationError}')</script>
 </c:forEach>
-<c:if test="${not empty sessionScope.serviceError}">
-    <script>Notiflix.Notify.Failure('${sessionScope.serviceError}')</script>
+<c:if test="${not empty serviceError}">
+    <script>Notiflix.Notify.Failure('${serviceError}')</script>
 </c:if>
-<c:if test="${not empty sessionScope.globalError}">
-    <script>Notiflix.Report.Failure('${sessionScope.globalError}')</script>
+<c:if test="${not empty globalError}">
+    <script>Notiflix.Report.Failure('${globalError}')</script>
 </c:if>
 </body>
 </html>

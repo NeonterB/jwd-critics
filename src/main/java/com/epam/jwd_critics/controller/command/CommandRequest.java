@@ -5,7 +5,13 @@ import javax.servlet.http.HttpSession;
 public interface CommandRequest {
     Object getAttribute(Attribute attribute);
 
+    void setAttribute(Attribute attribute, Object value);
+
     String getParameter(Parameter parameter);
 
-    HttpSession getSession(boolean flag);
+    Object getSessionAttribute(Attribute attribute);
+
+    void setSessionAttribute(Attribute attribute, Object value);
+
+    void removeSessionAttribute(Attribute attribute);
 }
