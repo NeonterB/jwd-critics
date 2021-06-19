@@ -126,14 +126,15 @@ public class CelebrityDao extends AbstractCelebrityDao {
         try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
             preparedStatement.setInt(1, movieId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                String positionColumnName = Position.class.getAnnotation(Column.class).name();
                 while (resultSet.next()) {
                     Celebrity celebrity = buildCelebrity(resultSet);
                     if (!crew.containsKey(celebrity)) {
                         ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.resolvePositionById(resultSet.getInt("position_id")));
+                        positions.add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
                         crew.put(celebrity, positions);
                     } else {
-                        crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(4)));
+                        crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
                     }
                 }
             }
