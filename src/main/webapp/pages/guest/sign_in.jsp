@@ -11,8 +11,8 @@
 
 </head>
 <body>
-<c:import url="../componets/header.jsp"/>
-<c:import url="../componets/message.jsp"/>
+<c:import url="/pages/componets/header.jsp"/>
+<c:import url="/pages/componets/message.jsp"/>
 <div class="content">
     <div class="container" id="container">
         <div class="form-container sign-up-container">
