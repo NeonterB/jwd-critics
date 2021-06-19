@@ -27,7 +27,7 @@
                     <a class="nav-link text-white" href="#"><fmt:message key="button.celebrities"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><fmt:message key="button.movies"/></a>
+                    <a class="nav-link text-white" href="<c:url value="/controller?command=open_all_movies"/>"><fmt:message key="button.movies"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="#"><fmt:message key="button.profile"/></a>

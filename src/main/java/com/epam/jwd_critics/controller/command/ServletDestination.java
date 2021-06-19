@@ -1,8 +1,9 @@
 package com.epam.jwd_critics.controller.command;
 
 public enum ServletDestination implements Destination {
-    MAIN_PAGE("/pages/common/main.jsp"),
-    SIGN_IN_PAGE("/pages/guest/signIn.jsp"),
+    MAIN("/pages/common/main.jsp"),
+    SIGN_IN("/pages/guest/sign_in.jsp"),
+    ALL_MOVIES("/pages/common/all_movies.jsp"),
     ERROR_404("/pages/error/404.jsp");
     private final String path;
 

@@ -4,6 +4,7 @@ public enum Parameter {
     COMMAND("command"),
     CURRENT_PAGE("page"),
     LANG("lang"),
+    PICTURE("picture"),
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
     EMAIL("email"),
