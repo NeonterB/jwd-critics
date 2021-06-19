@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
-    private static final String DEFAULT_PROFILE_IMAGE = "c:\\Multimedia\\Programming\\Idea\\jwd-critics\\src\\main\\resources\\assets\\default_profile.jpg";
+    private static final String DEFAULT_PROFILE_IMAGE = "/assets/user-icons/default_profile.jpg";
 
     @Column(name = "first_name")
     private String firstName;

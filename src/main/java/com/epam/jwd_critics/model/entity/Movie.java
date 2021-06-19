@@ -53,7 +53,7 @@ public class Movie extends AbstractBaseEntity {
     private List<Genre> genres;
     private Map<Celebrity, List<Position>> staff;
 
-    private static final String DEFAULT_MOVIE_IMAGE = "c:\\Multimedia\\Programming\\Idea\\jwd-critics\\src\\main\\resources\\assets\\default_movie.jpg";
+    private static final String DEFAULT_MOVIE_IMAGE = "/assets/movie-posters/default_movie.png";
 
     private Movie() {
 
