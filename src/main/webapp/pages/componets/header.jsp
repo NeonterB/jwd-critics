@@ -61,7 +61,8 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" type="search" placeholder="<fmt:message key="label.search"/> "
+                       aria-label="Search">
                 <button class="btn search-btn" type="submit"><i class="fa fa-search"></i></button>
             </form>
         </div>
