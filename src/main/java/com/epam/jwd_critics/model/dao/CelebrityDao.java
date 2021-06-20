@@ -4,6 +4,7 @@ import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.model.entity.Celebrity;
 import com.epam.jwd_critics.model.entity.Column;
 import com.epam.jwd_critics.model.entity.Position;
+import javafx.geometry.Pos;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +31,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String COUNT_CELEBRITIES = "SELECT COUNT(*) FROM celebrity";
     @Language("SQL")
-    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, P.position from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.position P on MS.position_id = P.id where movie_id = ?";
+    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, P.position from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.position P on MS.position_id = P.id where movie_id = ? order by P.id";
     @Language("SQL")
     private static final String SELECT_CELEBRITY_BY_ID = "SELECT * FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")
@@ -121,20 +123,21 @@ public class CelebrityDao extends AbstractCelebrityDao {
     }
 
     @Override
-    public Map<Celebrity, List<Position>> getStaffByMovieId(Integer movieId) throws DaoException {
-        Map<Celebrity, List<Position>> crew = new HashMap<>();
+    public Map<Position, List<Celebrity>> getStaffByMovieId(Integer movieId) throws DaoException {
+        Map<Position, List<Celebrity>> crew = new LinkedHashMap<>();
         try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
             preparedStatement.setInt(1, movieId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 String positionColumnName = Position.class.getAnnotation(Column.class).name();
                 while (resultSet.next()) {
                     Celebrity celebrity = buildCelebrity(resultSet);
-                    if (!crew.containsKey(celebrity)) {
-                        ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.valueOf(resultSet.getString(positionColumnName.toUpperCase())));
-                        crew.put(celebrity, positions);
+                    Position position = Position.valueOf(resultSet.getString(positionColumnName).toUpperCase());
+                    if (!crew.containsKey(position)) {
+                        ArrayList<Celebrity> celebrities = new ArrayList<>();
+                        celebrities.add(celebrity);
+                        crew.put(position, celebrities);
                     } else {
-                        crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
+                        crew.get(position).add(celebrity);
                     }
                 }
             }

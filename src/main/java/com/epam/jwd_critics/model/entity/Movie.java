@@ -1,5 +1,7 @@
 package com.epam.jwd_critics.model.entity;
 
+import javafx.geometry.Pos;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -50,7 +52,7 @@ public class Movie extends AbstractBaseEntity {
 
 
     private List<Genre> genres;
-    private Map<Celebrity, List<Position>> staff;
+    private Map<Position, List<Celebrity>> staff;
 
     private static final String DEFAULT_MOVIE_IMAGE = "/assets/movie-posters/default_movie.png";
 
@@ -134,11 +136,11 @@ public class Movie extends AbstractBaseEntity {
         this.ageRestriction = ageRestriction;
     }
 
-    public Map<Celebrity, List<Position>> getStaff() {
+    public Map<Position, List<Celebrity>> getStaff() {
         return staff;
     }
 
-    public void setStaff(Map<Celebrity, List<Position>> staff) {
+    public void setStaff(Map<Position, List<Celebrity>> staff) {
         this.staff = staff;
     }
 
@@ -236,7 +238,7 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setStaff(Map<Celebrity, List<Position>> staff) {
+        public MovieBuilder setStaff(Map<Position, List<Celebrity>> staff) {
             Movie.this.staff = staff;
             return this;
         }

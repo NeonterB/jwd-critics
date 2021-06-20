@@ -236,7 +236,7 @@ public class MovieServiceImpl implements MovieService {
         EntityTransaction transaction = new EntityTransaction(celebrityDao, reviewDao);
         try {
             List<Genre> genres = movieDao.getMovieGenresById(movie.getId());
-            Map<Celebrity, List<Position>> crew = celebrityDao.getStaffByMovieId(movie.getId());
+            Map<Position, List<Celebrity>> crew = celebrityDao.getStaffByMovieId(movie.getId());
             movie.setGenres(genres);
             movie.setStaff(crew);
             transaction.commit();

@@ -171,7 +171,7 @@ public class MovieDao extends AbstractMovieDao {
             try (ResultSet resultSet = ps.executeQuery()) {
                 List<Genre> genres = new ArrayList<>();
                 while (resultSet.next()) {
-                    genres.add(Genre.valueOf(resultSet.getString(1)));
+                    genres.add(Genre.valueOf(resultSet.getString(1).toUpperCase()));
                 }
                 return genres;
             }
@@ -242,10 +242,10 @@ public class MovieDao extends AbstractMovieDao {
                     Movie movie = buildMovie(resultSet);
                     if (!crew.containsKey(movie)) {
                         ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.valueOf(resultSet.getString(positionColumnName)));
+                        positions.add(Position.valueOf(resultSet.getString(positionColumnName).toUpperCase()));
                         crew.put(movie, positions);
                     } else {
-                        crew.get(movie).add(Position.valueOf(resultSet.getString(positionColumnName)));
+                        crew.get(movie).add(Position.valueOf(resultSet.getString(positionColumnName).toUpperCase()));
                     }
                 }
             }
