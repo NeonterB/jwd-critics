@@ -3,7 +3,8 @@ package com.epam.jwd_critics.controller.command;
 public enum Parameter {
     COMMAND("command"),
     CURRENT_PAGE("page"),
-    NEW_PAGE("newPage"),
+    NEW_MOVIE_PAGE("newMoviePage"),
+    NEW_REVIEW_PAGE("newReviewPage"),
     LANG("lang"),
     PICTURE("picture"),
     MOVIE_ID("movieId"),
