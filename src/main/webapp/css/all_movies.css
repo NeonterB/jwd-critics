@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+.container p{
+    margin-bottom: 8px;
+}
+
 .page-item button{
     color: #FF416C;
     border: 2px solid #FF416C;
