@@ -4,7 +4,7 @@ import com.epam.jwd_critics.exception.UnknownEntityException;
 
 import java.util.Arrays;
 
-@Column(name = "position_id")
+@Column(name = "position")
 public enum Position implements BaseEntity {
     DIRECTOR(1),
     ACTOR(2),
