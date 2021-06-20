@@ -23,10 +23,4 @@ public enum AgeRestriction implements BaseEntity {
         return id;
     }
 
-    public static AgeRestriction resolveAgeRestrictionById(int id) {
-        return Arrays.stream(AgeRestriction.values())
-                .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
-    }
 }

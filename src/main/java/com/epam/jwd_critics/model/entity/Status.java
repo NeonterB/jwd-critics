@@ -20,10 +20,4 @@ public enum Status implements BaseEntity {
         return id;
     }
 
-    public static Status resolveStatusById(int id) {
-        return Arrays.stream(Status.values())
-                .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
-    }
 }

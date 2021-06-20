@@ -20,10 +20,4 @@ public enum Rating implements BaseEntity {
         return id;
     }
 
-    public static Rating resolveRatingById(int id) {
-        return Arrays.stream(Rating.values())
-                .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
-    }
 }

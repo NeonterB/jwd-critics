@@ -27,10 +27,4 @@ public enum Country implements BaseEntity {
         return id;
     }
 
-    public static Country resolveGenreById(int id) {
-        return Arrays.stream(Country.values())
-                .filter(country -> country.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("Country", id));
-    }
 }

@@ -28,10 +28,4 @@ public enum Genre implements BaseEntity {
         return id;
     }
 
-    public static Genre resolveGenreById(int id) {
-        return Arrays.stream(Genre.values())
-                .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("Rank", id));
-    }
 }

@@ -16,13 +16,6 @@ public enum Role implements BaseEntity {
         this.id = id;
     }
 
-    public static Role resolveRoleById(int id) {
-        return Arrays.stream(Role.values())
-                .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
-    }
-
     @Override
     public Integer getId() {
         return id;
