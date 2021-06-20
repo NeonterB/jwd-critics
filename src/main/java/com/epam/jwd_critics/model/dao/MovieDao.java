@@ -31,23 +31,23 @@ public class MovieDao extends AbstractMovieDao {
     private static final Logger logger = LoggerFactory.getLogger(MovieDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id order by M.name limit ?, ?";
+    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id order by M.name limit ?, ?";
     @Language("SQL")
     private static final String COUNT_MOVIES = "SELECT COUNT(*) FROM movie;";
     @Language("SQL")
     private static final String SELECT_GENRES_BY_MOVIE_ID = "SELECT G.genre from jwd_critics.movie_genre MG inner join jwd_critics.genre G on MG.genre_id = G.id where movie_id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date, P.position from jwd_critics.movie_staff MS inner join jwd_critics.movie M on MS.movie_id = M.id inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id inner join jwd_critics.position P on MS.position_id = P.id where MS.celebrity_id = ?";
+    private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date, P.position from jwd_critics.movie_staff MS inner join jwd_critics.movie M on MS.movie_id = M.id inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id inner join jwd_critics.position P on MS.position_id = P.id where MS.celebrity_id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIE_BY_ID = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.id = ?";
+    private static final String SELECT_MOVIE_BY_ID = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIES_BY_NAME = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.name = ?";
+    private static final String SELECT_MOVIES_BY_NAME = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.name = ?";
     @Language("SQL")
     private static final String DELETE_MOVIE_BY_ID = "DELETE FROM jwd_critics.movie WHERE id = ?";
     @Language("SQL")
-    private static final String INSERT_MOVIE = "INSERT INTO jwd_critics.movie (name, summary, runtime, age_restriction_id, country_id, release_date) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_MOVIE = "INSERT INTO jwd_critics.movie (image_path, name, summary, runtime, age_restriction_id, country_id, release_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
-    private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ?, M.image_path = ? WHERE M.id = ?";
+    private static final String UPDATE_MOVIE = "UPDATE jwd_critics.movie M SET M.image_path = ?, M.name = ?, M.summary = ?, M.runtime = ?, M.age_restriction_id = ?, M.country_id = ?, M.release_date = ?, M.image_path = ? WHERE M.id = ?";
     @Language("SQL")
     private static final String ADD_GENRE = "INSERT INTO jwd_critics.movie_genre (movie_id, genre_id) VALUES (?, ?)";
     @Language("SQL")
@@ -105,12 +105,13 @@ public class MovieDao extends AbstractMovieDao {
     @Override
     public Movie create(Movie movie) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(INSERT_MOVIE, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, movie.getName());
-            ps.setString(2, movie.getSummary());
-            ps.setString(3, movie.getRuntime().toString());
-            ps.setInt(4, movie.getAgeRestriction().getId());
-            ps.setInt(5, movie.getCountry().getId());
-            ps.setString(6, movie.getReleaseDate().toString());
+            ps.setString(1, movie.getImagePath());
+            ps.setString(2, movie.getName());
+            ps.setString(3, movie.getSummary());
+            ps.setString(4, movie.getRuntime().toString());
+            ps.setInt(5, movie.getAgeRestriction().getId());
+            ps.setInt(6, movie.getCountry().getId());
+            ps.setString(7, movie.getReleaseDate().toString());
             movie.setId(executeQueryAndGetGeneratesKeys(ps));
             return movie;
         } catch (SQLException e) {
@@ -121,14 +122,15 @@ public class MovieDao extends AbstractMovieDao {
     @Override
     public void update(Movie movie) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(UPDATE_MOVIE)) {
-            ps.setString(1, movie.getName());
-            ps.setString(2, movie.getSummary());
-            ps.setString(3, movie.getRuntime().toString());
-            ps.setInt(4, movie.getAgeRestriction().getId());
-            ps.setInt(5, movie.getCountry().getId());
-            ps.setString(6, movie.getReleaseDate().toString());
-            ps.setString(7, movie.getImagePath());
-            ps.setInt(8, movie.getId());
+            ps.setString(1, movie.getImagePath());
+            ps.setString(2, movie.getName());
+            ps.setString(3, movie.getSummary());
+            ps.setString(4, movie.getRuntime().toString());
+            ps.setInt(5, movie.getAgeRestriction().getId());
+            ps.setInt(6, movie.getCountry().getId());
+            ps.setString(7, movie.getReleaseDate().toString());
+            ps.setString(8, movie.getImagePath());
+            ps.setInt(9, movie.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
