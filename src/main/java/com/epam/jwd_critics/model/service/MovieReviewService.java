@@ -16,6 +16,8 @@ public interface MovieReviewService {
 
     int getCountByUserId(Integer userId) throws ServiceException;
 
+    Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws ServiceException;
+
     Optional<MovieReview> getEntityById(Integer reviewId) throws ServiceException;
 
     int getCount() throws ServiceException;

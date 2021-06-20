@@ -44,6 +44,22 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
+    public Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieReviewDao);
+        Optional<MovieReview> movieReview;
+        try {
+            movieReview = movieReviewDao.getEntity(userId, movieId);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return movieReview;
+    }
+
+    @Override
     public Optional<MovieReview> getEntityById(Integer reviewId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         Optional<MovieReview> movieReview;

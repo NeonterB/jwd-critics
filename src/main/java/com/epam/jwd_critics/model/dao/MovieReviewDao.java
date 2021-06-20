@@ -30,6 +30,8 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     @Language("SQL")
     private static final String SELECT_REVIEW_BY_ID = "SELECT * FROM jwd_critics.review WHERE id = ?";
     @Language("SQL")
+    private static final String SELECT_REVIEW_BY_USER_ID_AND_MOVIE_ID = "SELECT * FROM jwd_critics.review WHERE user_id = ? and movie_id = ?";
+    @Language("SQL")
     private static final String DELETE_REVIEW_BY_ID = "DELETE FROM jwd_critics.review WHERE id = ?";
     @Language("SQL")
     private static final String INSERT_REVIEW = "INSERT INTO jwd_critics.review (movie_id, user_id, text, score) VALUES (?, ?, ?, ?)";
@@ -75,6 +77,21 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     public Optional<MovieReview> getEntityById(Integer movieReviewId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_REVIEW_BY_ID)) {
             ps.setInt(1, movieReviewId);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.ofNullable(buildMovieReview(resultSet));
+                } else return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_REVIEW_BY_USER_ID_AND_MOVIE_ID)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, movieId);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
                     return Optional.ofNullable(buildMovieReview(resultSet));
