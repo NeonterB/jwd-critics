@@ -36,8 +36,12 @@
 <c:if test="${not empty globalError}">
     <script>Notiflix.Report.Failure('${globalError}')</script>
 </c:if>
+<c:if test="${not empty reportMessage}">
+    <script>Notiflix.Report.Success('${reportMessage}')</script>
+</c:if>
 </body>
 </html>
 <c:remove var="serviceError"/>
 <c:remove var="validationErrors"/>
 <c:remove var="globalError"/>
+<c:remove var="reportMessage"/>

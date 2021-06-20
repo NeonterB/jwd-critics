@@ -8,9 +8,11 @@ public enum Attribute {
     NEW_PAGE("newPage"),
     MOVIES_TO_DISPLAY("allMoviesList"),
     MOVIE_COUNT("movieCount"),
+    MOVIE("movie"),
     VALIDATION_ERRORS("validationErrors"),
     SERVICE_ERROR("serviceError"),
-    GLOBAL_ERROR("globalError");
+    GLOBAL_ERROR("globalError"),
+    REPORT_MESSAGE("reportMessage");
     private final String name;
 
     Attribute(String name) {
