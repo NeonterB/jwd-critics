@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShowAllMoviesTag extends TagSupport {
-    public static final int MOVIES_PER_PAGE_NUMBER = 8;
+    public static final int MOVIES_PER_PAGE = 1;
     public static final int MOVIES_PER_ROW = 4;
 
     @Override
@@ -52,11 +52,17 @@ public class ShowAllMoviesTag extends TagSupport {
             }
         };
         JspWriter writer = pageContext.getOut();
-        writeMovies(writer, req);
-        int movieCount = (int) req.getSessionAttribute(Attribute.MOVIE_COUNT);
-        int pageCount = movieCount % MOVIES_PER_PAGE_NUMBER == 0 ? (movieCount / MOVIES_PER_PAGE_NUMBER) : (movieCount / MOVIES_PER_PAGE_NUMBER + 1);
-        String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
-        TagUtil.paginate(pageContext, pageCount, commandName);
+        try {
+            writer.write("<div class=\"container mt-2\">");
+            writeMovies(writer, req);
+            int movieCount = (int) req.getAttribute(Attribute.MOVIE_COUNT);
+            int pageCount = movieCount % MOVIES_PER_PAGE == 0 ? (movieCount / MOVIES_PER_PAGE) : (movieCount / MOVIES_PER_PAGE + 1);
+            String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
+            TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIE_PAGE);
+            writer.write("</div>");
+        } catch (IOException e) {
+            throw new JspException(e);
+        }
         return SKIP_BODY;
     }
 
@@ -66,18 +72,17 @@ public class ShowAllMoviesTag extends TagSupport {
     }
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
-        List<Movie> movies = (List<Movie>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
+        List<Movie> movies = (List<Movie>) req.getAttribute(Attribute.MOVIES_TO_DISPLAY);
         if (movies != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                writer.write("<div class=\"container mt-2\">");
-                for (int i = 0, j = 0; i < movies.size() && i < MOVIES_PER_PAGE_NUMBER; i++) {
+                for (int i = 0, j = 0; i < movies.size() && i < MOVIES_PER_PAGE; i++) {
+                    Movie movie = movies.get(i);
                     if (j == 0) {
                         writer.write("<div class=\"row\">");
                     }
-                    Movie movie = movies.get(i);
                     writer.write("<div class=\"col-3\">");
-                    writer.write("<a href=\"<c:url value=" + contextPath + "/controller?command=open_movie&movieId=" + movie.getId() + "/>\">");
+                    writer.write("<a href=\"" + contextPath + "/controller?command=open_movie&movieId=" + movie.getId() + "\">");
                     writer.write("<img class=\"img-thumbnail\" src=\"" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + movie.getName() + "</p>");
@@ -90,7 +95,6 @@ public class ShowAllMoviesTag extends TagSupport {
                         j++;
                     }
                 }
-                writer.write("</ul>");
             } catch (IOException e) {
                 throw new JspException(e);
             }
