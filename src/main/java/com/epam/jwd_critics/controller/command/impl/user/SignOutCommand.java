@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 public class SignOutCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
-        CommandResponse response = new CommandResponse(ServletDestination.MAIN, TransferType.FORWARD);
+        CommandResponse response = new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
         req.removeSessionAttribute(Attribute.USER_ROLE);
         req.removeSessionAttribute(Attribute.USER_ID);
         return response;
