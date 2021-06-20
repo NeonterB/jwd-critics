@@ -27,9 +27,9 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String SELECT_ALL_CELEBRITIES_BETWEEN = "SELECT * FROM jwd_critics.celebrity order by celebrity.last_name, celebrity.first_name limit ?, ?";
     @Language("SQL")
-    private static final String COUNT_CELEBRITIES = "SELECT COUNT(*) FROM celebrity;";
+    private static final String COUNT_CELEBRITIES = "SELECT COUNT(*) FROM celebrity";
     @Language("SQL")
-    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, MS.position_id from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id where movie_id = ?";
+    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, P.position from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.position P on MS.position_id = P.id where movie_id = ?";
     @Language("SQL")
     private static final String SELECT_CELEBRITY_BY_ID = "SELECT * FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")
@@ -131,7 +131,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
                     Celebrity celebrity = buildCelebrity(resultSet);
                     if (!crew.containsKey(celebrity)) {
                         ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
+                        positions.add(Position.valueOf(resultSet.getString(positionColumnName.toUpperCase())));
                         crew.put(celebrity, positions);
                     } else {
                         crew.get(celebrity).add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));

@@ -1,6 +1,8 @@
 package com.epam.jwd_critics.model.dao;
 
 import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.model.entity.Status;
 import com.epam.jwd_critics.model.entity.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -29,8 +31,8 @@ class UserDaoTest {
                 .setLogin("test")
                 .setPassword("test")
                 .setRating(0)
-                .setStatus(1)
-                .setRole(1)
+                .setStatus(Status.ACTIVE)
+                .setRole(Role.ADMIN)
                 .build();
     }
 

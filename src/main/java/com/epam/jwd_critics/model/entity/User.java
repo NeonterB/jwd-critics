@@ -30,10 +30,10 @@ public class User extends AbstractBaseEntity {
     @Column(name = "rating")
     private int rating;
 
-    @Column(name = "status_id")
+    @Column(name = "status")
     private Status status;
 
-    @Column(name = "role_id")
+    @Column(name = "role")
     private Role role;
 
     @Column(name = "image_path")
@@ -199,13 +199,13 @@ public class User extends AbstractBaseEntity {
             return this;
         }
 
-        public UserBuilder setRole(Integer roleId) {
-            User.this.role = Role.resolveRoleById(roleId);
+        public UserBuilder setRole(Role role) {
+            User.this.role = role;
             return this;
         }
 
-        public UserBuilder setStatus(Integer statusId) {
-            User.this.status = Status.resolveStatusById(statusId);
+        public UserBuilder setStatus(Status status) {
+            User.this.status = status;
             return this;
         }
 

@@ -5,6 +5,8 @@ import com.epam.jwd_critics.model.entity.AgeRestriction;
 import com.epam.jwd_critics.model.entity.Country;
 import com.epam.jwd_critics.model.entity.Movie;
 import com.epam.jwd_critics.model.entity.MovieReview;
+import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.model.entity.Status;
 import com.epam.jwd_critics.model.entity.User;
 import com.epam.jwd_critics.model.service.MovieReviewService;
 import com.epam.jwd_critics.model.service.MovieService;
@@ -61,8 +63,8 @@ class MovieReviewServiceImplTest {
                 .setLogin("test1")
                 .setPassword("test")
                 .setRating(0)
-                .setStatus(1)
-                .setRole(1)
+                .setStatus(Status.ACTIVE)
+                .setRole(Role.ADMIN)
                 .build();
         user2 = User.newBuilder()
                 .setFirstName("Test")
@@ -71,8 +73,8 @@ class MovieReviewServiceImplTest {
                 .setLogin("test2")
                 .setPassword("test")
                 .setRating(0)
-                .setStatus(1)
-                .setRole(1)
+                .setStatus(Status.ACTIVE)
+                .setRole(Role.ADMIN)
                 .build();
         try {
             user1 = userService.register(user1.getFirstName(),

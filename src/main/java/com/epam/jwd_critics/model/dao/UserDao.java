@@ -2,6 +2,8 @@ package com.epam.jwd_critics.model.dao;
 
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.model.entity.Column;
+import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.model.entity.Status;
 import com.epam.jwd_critics.model.entity.User;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
@@ -23,13 +25,13 @@ public class UserDao extends AbstractUserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_USERS_BETWEEN = "SELECT * FROM jwd_critics.user order by user.role_id, user.last_name, user.first_name limit ?, ?";
+    private static final String SELECT_ALL_USERS_BETWEEN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id order by UR.id, U.last_name, U.first_name limit ?, ?";
     @Language("SQL")
     private static final String COUNT_USERS = "SELECT COUNT(*) FROM celebrity";
     @Language("SQL")
-    private static final String SELECT_USER_BY_ID = "SELECT * FROM jwd_critics.user U WHERE U.id = ?";
+    private static final String SELECT_USER_BY_ID = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.id = ?";
     @Language("SQL")
-    private static final String SELECT_USER_BY_LOGIN = "SELECT * FROM jwd_critics.user U WHERE U.login = ?";
+    private static final String SELECT_USER_BY_LOGIN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.login = ?";
     @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
@@ -42,11 +44,6 @@ public class UserDao extends AbstractUserDao {
     private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.user WHERE id = ?)";
-
-
-    private static class UserDaoSingleton {
-        private static final UserDao INSTANCE = new UserDao();
-    }
 
     public static UserDao getInstance() {
         return UserDaoSingleton.INSTANCE;
@@ -88,14 +85,10 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public Optional<User> getEntityByLogin(String login) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_LOGIN)) {
-            ps.setString(1, login);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.ofNullable(buildUser(resultSet));
-                } else return Optional.empty();
-            }
+    public void delete(Integer userId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_USER_BY_ID)) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -138,20 +131,29 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public void updatePassword(Integer id, String password) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
-            ps.setString(1, password);
-            ps.setInt(2, id);
-            ps.executeUpdate();
+    public boolean idExists(Integer userId) throws DaoException {
+        return idExists(userId, ID_EXISTS);
+    }
+
+    @Override
+    public Optional<User> getEntityByLogin(String login) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_LOGIN)) {
+            ps.setString(1, login);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.ofNullable(buildUser(resultSet));
+                } else return Optional.empty();
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
     @Override
-    public void delete(Integer userId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_USER_BY_ID)) {
-            ps.setInt(1, userId);
+    public void updatePassword(Integer id, String password) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
+            ps.setString(1, password);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -172,11 +174,6 @@ public class UserDao extends AbstractUserDao {
             throw new DaoException(e);
         }
         return result;
-    }
-
-    @Override
-    public boolean idExists(Integer userId) throws DaoException {
-        return idExists(userId, ID_EXISTS);
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {
@@ -201,9 +198,13 @@ public class UserDao extends AbstractUserDao {
                 .setPassword(resultSet.getString(columnNames.get("password")))
                 .setEmail(resultSet.getString(columnNames.get("email")))
                 .setRating(resultSet.getInt(columnNames.get("rating")))
-                .setStatus(resultSet.getInt(columnNames.get("status")))
-                .setRole(resultSet.getInt(columnNames.get("role")))
+                .setStatus(Status.valueOf(resultSet.getString(columnNames.get("status")).toUpperCase()))
+                .setRole(Role.valueOf(resultSet.getString(columnNames.get("role")).toUpperCase()))
                 .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
+    }
+
+    private static class UserDaoSingleton {
+        private static final UserDao INSTANCE = new UserDao();
     }
 }

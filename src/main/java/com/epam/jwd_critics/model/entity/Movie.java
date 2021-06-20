@@ -26,7 +26,7 @@ public class Movie extends AbstractBaseEntity {
     @Column(name = "runtime")
     private Duration runtime;
 
-    @Column(name = "country_id")
+    @Column(name = "country")
     private Country country;
 
     @Column(name = "image_path")
@@ -45,7 +45,7 @@ public class Movie extends AbstractBaseEntity {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
-    @Column(name = "age_restriction_id")
+    @Column(name = "restriction")
     private AgeRestriction ageRestriction;
 
 

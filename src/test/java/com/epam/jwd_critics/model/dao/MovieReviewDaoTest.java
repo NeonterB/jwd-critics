@@ -5,6 +5,8 @@ import com.epam.jwd_critics.model.entity.AgeRestriction;
 import com.epam.jwd_critics.model.entity.Country;
 import com.epam.jwd_critics.model.entity.Movie;
 import com.epam.jwd_critics.model.entity.MovieReview;
+import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.model.entity.Status;
 import com.epam.jwd_critics.model.entity.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -65,8 +67,8 @@ class MovieReviewDaoTest {
                 .setLogin("test1")
                 .setPassword("test")
                 .setRating(0)
-                .setStatus(1)
-                .setRole(1)
+                .setStatus(Status.ACTIVE)
+                .setRole(Role.ADMIN)
                 .build();
         user2 = User.newBuilder()
                 .setFirstName("Test")
@@ -75,8 +77,8 @@ class MovieReviewDaoTest {
                 .setLogin("test2")
                 .setPassword("test")
                 .setRating(0)
-                .setStatus(1)
-                .setRole(1)
+                .setStatus(Status.ACTIVE)
+                .setRole(Role.ADMIN)
                 .build();
         try {
             user1 = userDao.create(user1);

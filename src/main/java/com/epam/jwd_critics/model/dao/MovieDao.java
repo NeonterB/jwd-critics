@@ -31,17 +31,17 @@ public class MovieDao extends AbstractMovieDao {
     private static final Logger logger = LoggerFactory.getLogger(MovieDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT * FROM jwd_critics.movie order by movie.name limit ?, ?";
+    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id order by M.name limit ?, ?";
     @Language("SQL")
     private static final String COUNT_MOVIES = "SELECT COUNT(*) FROM movie;";
     @Language("SQL")
-    private static final String SELECT_GENRES_BY_MOVIE_ID = "SELECT genre_id from jwd_critics.movie_genre where movie_id = ?";
+    private static final String SELECT_GENRES_BY_MOVIE_ID = "SELECT G.genre from jwd_critics.movie_genre MG inner join jwd_critics.genre G on MG.genre_id = G.id where movie_id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.*, MS.position_id from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.movie M on MS.movie_id = M.id where celebrity_id = ?";
+    private static final String SELECT_MOVIES_BY_CELEBRITY_ID = "select M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date, P.position from jwd_critics.movie_staff MS inner join jwd_critics.movie M on MS.movie_id = M.id inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id inner join jwd_critics.position P on MS.position_id = P.id where MS.celebrity_id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIE_BY_ID = "SELECT * FROM jwd_critics.movie WHERE id = ?";
+    private static final String SELECT_MOVIE_BY_ID = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIES_BY_NAME = "SELECT * FROM jwd_critics.movie WHERE name = ?";
+    private static final String SELECT_MOVIES_BY_NAME = "SELECT M.id, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.name = ?";
     @Language("SQL")
     private static final String DELETE_MOVIE_BY_ID = "DELETE FROM jwd_critics.movie WHERE id = ?";
     @Language("SQL")
@@ -169,7 +169,7 @@ public class MovieDao extends AbstractMovieDao {
             try (ResultSet resultSet = ps.executeQuery()) {
                 List<Genre> genres = new ArrayList<>();
                 while (resultSet.next()) {
-                    genres.add(Genre.resolveGenreById(resultSet.getInt(1)));
+                    genres.add(Genre.valueOf(resultSet.getString(1)));
                 }
                 return genres;
             }
@@ -240,10 +240,10 @@ public class MovieDao extends AbstractMovieDao {
                     Movie movie = buildMovie(resultSet);
                     if (!crew.containsKey(movie)) {
                         ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
+                        positions.add(Position.valueOf(resultSet.getString(positionColumnName)));
                         crew.put(movie, positions);
                     } else {
-                        crew.get(movie).add(Position.resolvePositionById(resultSet.getInt(positionColumnName)));
+                        crew.get(movie).add(Position.valueOf(resultSet.getString(positionColumnName)));
                     }
                 }
             }
@@ -275,11 +275,11 @@ public class MovieDao extends AbstractMovieDao {
                 .setName(resultSet.getString(columnNames.get("name")))
                 .setSummary(resultSet.getString(columnNames.get("summary")))
                 .setRuntime(Duration.parse(resultSet.getString(columnNames.get("runtime"))))
-                .setCountry(Country.resolveGenreById(resultSet.getInt(columnNames.get("country"))))
+                .setCountry(Country.valueOf(resultSet.getString(columnNames.get("country")).toUpperCase()))
                 .setRating(resultSet.getInt(columnNames.get("rating")))
                 .setReviewCount(resultSet.getInt(columnNames.get("reviewCount")))
                 .setReleaseDate(LocalDate.parse(resultSet.getString(columnNames.get("releaseDate"))))
-                .setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(resultSet.getInt(columnNames.get("ageRestriction"))))
+                .setAgeRestriction(AgeRestriction.valueOf(resultSet.getString(columnNames.get("ageRestriction")).toUpperCase()))
                 .setImagePath(resultSet.getString(columnNames.get("imagePath")))
                 .build();
     }
