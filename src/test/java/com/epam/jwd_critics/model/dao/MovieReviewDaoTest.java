@@ -94,6 +94,12 @@ class MovieReviewDaoTest {
         movieReview4 = new MovieReview("test text", 50, user2.getId(), movie2.getId());
     }
 
+    @AfterAll
+    public static void clear() {
+        transaction.rollback();
+        transaction.close();
+    }
+
     @BeforeEach
     public void initializeTest() {
         try {
@@ -133,7 +139,8 @@ class MovieReviewDaoTest {
     @Test
     public void testGetReviewsByMovieId() {
         try {
-            List<MovieReview> reviewsByMovieId = movieReviewDao.getMovieReviewsByMovieId(movie1.getId());
+            int reviewCount = movieReviewDao.getCountByMovieId(movie1.getId());
+            List<MovieReview> reviewsByMovieId = movieReviewDao.getMovieReviewsByMovieId(movie1.getId(), 0, reviewCount);
             assertTrue(reviewsByMovieId.contains(movieReview1));
             assertTrue(reviewsByMovieId.contains(movieReview3));
             assertEquals(reviewsByMovieId.size(), 2);
@@ -145,7 +152,8 @@ class MovieReviewDaoTest {
     @Test
     public void testGetReviewsByUserId() {
         try {
-            List<MovieReview> reviewsByMovieId = movieReviewDao.getMovieReviewsByUserId(user1.getId());
+            int reviewCount = movieReviewDao.getCountByUserId(user1.getId());
+            List<MovieReview> reviewsByMovieId = movieReviewDao.getMovieReviewsByUserId(user1.getId(), 0, reviewCount);
             assertTrue(reviewsByMovieId.contains(movieReview1));
             assertTrue(reviewsByMovieId.contains(movieReview2));
             assertEquals(reviewsByMovieId.size(), 2);
@@ -164,11 +172,5 @@ class MovieReviewDaoTest {
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }
-    }
-
-    @AfterAll
-    public static void clear() {
-        transaction.rollback();
-        transaction.close();
     }
 }

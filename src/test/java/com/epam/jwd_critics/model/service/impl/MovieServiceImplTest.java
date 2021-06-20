@@ -6,6 +6,7 @@ import com.epam.jwd_critics.model.entity.AgeRestriction;
 import com.epam.jwd_critics.model.entity.Country;
 import com.epam.jwd_critics.model.entity.Movie;
 import com.epam.jwd_critics.model.service.MovieService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,8 @@ class MovieServiceImplTest {
     @Test
     public void testFindEntityById() {
         try {
-            Movie actualResult = movieService.getEntityById(movie.getId()).get();
+            Movie actualResult = movieService.getEntityById(movie.getId())
+                    .orElseThrow(() -> new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
             assertEquals(movie, actualResult);
         } catch (ServiceException e) {
             logger.error(e.getMessage(), e);
@@ -68,8 +70,8 @@ class MovieServiceImplTest {
         }
     }
 
-    @AfterEach
-    public void endTest() {
+    @AfterAll
+    public static void endTest() {
         try {
             movieService.delete(movie.getId());
         } catch (ServiceException e) {

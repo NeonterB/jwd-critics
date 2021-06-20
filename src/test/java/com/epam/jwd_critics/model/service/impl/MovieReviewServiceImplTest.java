@@ -102,7 +102,6 @@ class MovieReviewServiceImplTest {
             movieReview4 = reviewService.create(movieReview4);
         } catch (ServiceException e) {
             logger.error(e.getMessage(), e);
-
         }
     }
 
@@ -133,7 +132,8 @@ class MovieReviewServiceImplTest {
     @Test
     public void testGetReviewsByMovieId() {
         try {
-            List<MovieReview> reviewsByMovieId = movieService.getEntityById(movie1.getId()).get().getReviews();
+            int countByMovieId = reviewService.getCountByMovieId(movie1.getId());
+            List<MovieReview> reviewsByMovieId = reviewService.getMovieReviewsByMovieId(movie1.getId(), 0, countByMovieId);
             assertTrue(reviewsByMovieId.contains(movieReview1));
             assertTrue(reviewsByMovieId.contains(movieReview3));
             assertEquals(reviewsByMovieId.size(), 2);
@@ -145,7 +145,8 @@ class MovieReviewServiceImplTest {
     @Test
     public void testGetReviewsByUserId() {
         try {
-            List<MovieReview> reviewsByMovieId = userService.getEntityById(user1.getId()).get().getReviews();
+            int countByUserId = reviewService.getCountByUserId(user1.getId());
+            List<MovieReview> reviewsByMovieId = reviewService.getMovieReviewsByUserId(user1.getId(), 0, countByUserId);
             assertTrue(reviewsByMovieId.contains(movieReview1));
             assertTrue(reviewsByMovieId.contains(movieReview2));
             assertEquals(reviewsByMovieId.size(), 2);

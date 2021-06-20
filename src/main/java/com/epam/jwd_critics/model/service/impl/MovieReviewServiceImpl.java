@@ -6,11 +6,13 @@ import com.epam.jwd_critics.exception.codes.MovieReviewServiceCode;
 import com.epam.jwd_critics.model.dao.AbstractMovieReviewDao;
 import com.epam.jwd_critics.model.dao.EntityTransaction;
 import com.epam.jwd_critics.model.dao.MovieReviewDao;
+import com.epam.jwd_critics.model.entity.Celebrity;
 import com.epam.jwd_critics.model.entity.MovieReview;
 import com.epam.jwd_critics.model.service.MovieReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MovieReviewServiceImpl implements MovieReviewService {
@@ -55,6 +57,70 @@ public class MovieReviewServiceImpl implements MovieReviewService {
             transaction.close();
         }
         return movieReview;
+    }
+
+    @Override
+    public List<MovieReview> getMovieReviewsByMovieId(Integer movieId, Integer begin, Integer end) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieReviewDao);
+        List<MovieReview> reviews;
+        try {
+            reviews = movieReviewDao.getMovieReviewsByMovieId(movieId, begin, end);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return reviews;
+    }
+
+    @Override
+    public List<MovieReview> getMovieReviewsByUserId(Integer userId, Integer begin, Integer end) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieReviewDao);
+        List<MovieReview> reviews;
+        try {
+            reviews = movieReviewDao.getMovieReviewsByUserId(userId, begin, end);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return reviews;
+    }
+
+    @Override
+    public int getCountByMovieId(Integer movieId) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieReviewDao);
+        int count;
+        try {
+            count = movieReviewDao.getCountByMovieId(movieId);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return count;
+    }
+
+    @Override
+    public int getCountByUserId(Integer userId) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(movieReviewDao);
+        int count;
+        try {
+            count = movieReviewDao.getCountByUserId(userId);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return count;
     }
 
     @Override
