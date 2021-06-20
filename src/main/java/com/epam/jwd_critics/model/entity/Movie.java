@@ -49,7 +49,6 @@ public class Movie extends AbstractBaseEntity {
     private AgeRestriction ageRestriction;
 
 
-    private List<MovieReview> reviews;
     private List<Genre> genres;
     private Map<Celebrity, List<Position>> staff;
 
@@ -141,14 +140,6 @@ public class Movie extends AbstractBaseEntity {
 
     public void setStaff(Map<Celebrity, List<Position>> staff) {
         this.staff = staff;
-    }
-
-    public List<MovieReview> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<MovieReview> reviews) {
-        this.reviews = reviews;
     }
 
     public String getImagePath() {
@@ -266,7 +257,6 @@ public class Movie extends AbstractBaseEntity {
             movie.reviewCount = Movie.this.reviewCount;
             movie.releaseDate = Movie.this.releaseDate;
             movie.ageRestriction = Movie.this.ageRestriction;
-            movie.reviews = Collections.emptyList();
             movie.genres = Movie.this.genres;
             movie.staff = Movie.this.staff;
             movie.imagePath = (Movie.this.imagePath == null) ? (DEFAULT_MOVIE_IMAGE) : (Movie.this.imagePath);

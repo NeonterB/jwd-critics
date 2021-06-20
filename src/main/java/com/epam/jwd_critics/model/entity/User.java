@@ -1,12 +1,5 @@
 package com.epam.jwd_critics.model.entity;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
@@ -38,8 +31,6 @@ public class User extends AbstractBaseEntity {
 
     @Column(name = "image_path")
     private String imagePath;
-
-    private List<MovieReview> reviews;
 
     private User() {
 
@@ -111,14 +102,6 @@ public class User extends AbstractBaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public List<MovieReview> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<MovieReview> reviews) {
-        this.reviews = reviews;
     }
 
     public String getImagePath() {
@@ -225,7 +208,6 @@ public class User extends AbstractBaseEntity {
             user.rating = User.this.rating;
             user.status = User.this.status;
             user.role = User.this.role;
-            user.reviews = Collections.emptyList();
             user.imagePath = (User.this.imagePath == null) ? (DEFAULT_PROFILE_IMAGE) : (User.this.imagePath);
             return user;
         }

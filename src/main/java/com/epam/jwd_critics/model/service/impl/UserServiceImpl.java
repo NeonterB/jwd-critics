@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
             } else if (user.getStatus().equals(Status.INACTIVE)) {
                 throw new ServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
-            updateInfo(user);
             transaction.commit();
             logger.info("{} logged in", user);
 
@@ -100,9 +99,6 @@ public class UserServiceImpl implements UserService {
         List<User> userList;
         try {
             userList = userDao.getAllBetween(begin, end);
-            for (User user : userList) {
-                updateInfo(user);
-            }
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -135,8 +131,6 @@ public class UserServiceImpl implements UserService {
         Optional<User> user;
         try {
             user = userDao.getEntityById(id);
-            if (user.isPresent())
-                updateInfo(user.get());
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -202,20 +196,6 @@ public class UserServiceImpl implements UserService {
         } catch (ServiceException e) {
             transaction.rollback();
             throw e;
-        } finally {
-            transaction.close();
-        }
-    }
-
-    private void updateInfo(User user) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(reviewDao);
-        try {
-            List<MovieReview> reviews = reviewDao.getMovieReviewsByUserId(user.getId());
-            user.setReviews(reviews);
-            transaction.commit();
-        } catch (DaoException e) {
-            transaction.rollback();
-            throw new ServiceException(e);
         } finally {
             transaction.close();
         }
