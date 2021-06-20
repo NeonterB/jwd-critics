@@ -37,16 +37,13 @@ public class SignInCommand implements Command {
                     req.setSessionAttribute(Attribute.USER_ID, user.getId());
                     req.setSessionAttribute(Attribute.USER_ROLE, user.getRole());
                     response.setDestination(ServletDestination.MAIN);
-                    response.setTransferType(TransferType.REDIRECT);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
-                    return response;
                 }
             } else {
                 req.setSessionAttribute(Attribute.VALIDATION_ERRORS, violations.stream()
                         .map(ConstraintViolation::getMessage)
                         .collect(Collectors.toList()));
-                return response;
             }
         }
         return response;
