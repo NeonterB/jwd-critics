@@ -60,7 +60,7 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
+            <form class="d-flex me-2 mb-2 mb-lg-0">
                 <input class="form-control me-2" type="search" placeholder="<fmt:message key="label.search"/> "
                        aria-label="Search">
                 <button class="btn search-btn" type="submit"><i class="fa fa-search"></i></button>
