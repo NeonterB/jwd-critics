@@ -27,10 +27,32 @@
                     <a class="nav-link text-white" href="#"><fmt:message key="button.celebrities"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="<c:url value="/controller?command=open_all_movies"/>"><fmt:message key="button.movies"/></a>
+                    <a class="nav-link text-white"
+                       href="${pageContext.request.contextPath}/controller?command=open_all_movies">
+                        <fmt:message key="button.movies"/>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><fmt:message key="button.profile"/></a>
+                    <c:choose>
+                    <c:when test="${empty userId}">
+                        <a class="nav-link text-white"
+                           href="${pageContext.request.contextPath}/controller?command=sign_in">
+                            <fmt:message key="button.signIn"/>
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                    <a class="nav-link text-white"
+                       href="${pageContext.request.contextPath}/controller?command=open_profile">
+                        <fmt:message key="button.profile"/>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-white"
+                       href="${pageContext.request.contextPath}/controller?command=sign_out">
+                        <fmt:message key="button.signOut"/>
+                    </a>
+                    </c:otherwise>
+                    </c:choose>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink"
