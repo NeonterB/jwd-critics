@@ -10,9 +10,10 @@ public class TagUtil {
         try {
             JspWriter writer = pageContext.getOut();
             String contextPath = pageContext.getServletContext().getContextPath();
-            writer.write("<form method=\"post\" action=\"" + contextPath + "/controller?command=" + commandName + "\">");
-            writer.write("<div class=\"accent-bar\">");
-            writer.write("<ul class=\"accents\">");
+            writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+            writer.write("<input type=\"hidden\" name=\"command\" value=\"" + commandName + "\"/>");
+            writer.write("<nav>");
+            writer.write("<ul class=\"pagination\">");
             for (int i = 0; i < pageCount; i++) {
                 createButton(writer, i + 1);
             }
@@ -25,10 +26,9 @@ public class TagUtil {
         }
     }
     static void createButton(JspWriter writer, int pageNumber) throws IOException {
-        writer.write("<li><button type=\"submit\" name=\"newPage\" ");
+        writer.write("<li class=\"page-item\"><button type=\"submit\" name=\"newPage\" ");
         writer.write("value=\"" + pageNumber + "\" ");
-        writer.write("style=\""
-                + "background-color: #ffffffb8; color: #000" + "\">");
+        writer.write(">");
         writer.write(pageNumber + " </button></li>");
     }
 }

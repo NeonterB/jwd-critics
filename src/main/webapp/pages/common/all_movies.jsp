@@ -7,8 +7,8 @@
 <fmt:setBundle basename="properties/content"/>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css" />
     <title>All Movies</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all_movies.css">
 </head>
 
 <c:import url="/pages/componets/header.jsp"/>

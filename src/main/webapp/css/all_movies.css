@@ -1,0 +1,16 @@
+.container img{
+    width: 100%;
+}
+
+.page-item button{
+    color: #FF416C;
+    border: 2px solid #FF416C;
+    background-color: white;
+    transition: 0.4s;
+}
+
+.page-item button:hover{
+    background-color: #FF416C;
+    color: white;
+    transition: 0.4s;
+}

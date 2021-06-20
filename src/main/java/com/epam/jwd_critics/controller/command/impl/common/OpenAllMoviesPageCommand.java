@@ -4,6 +4,7 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
+import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.exception.CommandException;
@@ -26,9 +27,9 @@ public class OpenAllMoviesPageCommand implements Command {
         CommandResponse commandResult = new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.REDIRECT);
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
-        Integer newPage = (Integer) req.getAttribute(Attribute.NEW_PAGE);
-        if (newPage != null) {
-            currentPage = newPage;
+        String newPageStr = req.getParameter(Parameter.NEW_PAGE);
+        if (newPageStr != null) {
+            currentPage = Integer.valueOf(newPageStr);
         } else if (currentPage == null) {
             currentPage = 1;
         }
@@ -41,11 +42,11 @@ public class OpenAllMoviesPageCommand implements Command {
             int movieCount = movieService.getCount();
             req.setSessionAttribute(Attribute.MOVIE_COUNT, movieCount);
             if (moviesToDisplay.size() == 0) {
-                //todo ?
+                req.setSessionAttribute(Attribute.REPORT_MESSAGE, "No movies here yet");
             }
         } catch (ServiceException e) {
-            logger.error(e.getMessage(), e);
-            throw new CommandException(e);
+            req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
+            commandResult.setDestination(ServletDestination.MAIN);
         }
         return commandResult;
     }

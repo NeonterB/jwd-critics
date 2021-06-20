@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShowAllMoviesTag extends TagSupport {
-    public static final int MOVIES_PER_PAGE_NUMBER = 5;
-    private static final String RATING_BUNDLE = "movie.rating";
+    public static final int MOVIES_PER_PAGE_NUMBER = 8;
+    public static final int MOVIES_PER_ROW = 4;
 
     @Override
     public int doStartTag() throws JspException {
@@ -61,37 +61,33 @@ public class ShowAllMoviesTag extends TagSupport {
     }
 
     @Override
-    public int doEndTag() throws JspException {
+    public int doEndTag() {
         return EVAL_PAGE;
     }
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
         List<Movie> movies = (List<Movie>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
         if (movies != null) {
-            int size = movies.size();
-            int createdMoviesCount = 0;
-            Movie movie;
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                writer.write("<ul>");
-                for (int i = 0; i < MOVIES_PER_PAGE_NUMBER; i++) {
-                    if (size > createdMoviesCount) {
-                        movie = movies.get(createdMoviesCount);
-                        writer.write("<li>");
-                        writer.write(" <div class=\"movie\">");
-                        writer.write("<a href=\"" + contextPath + "/controller?command=open_movie_page&movieId=" + movie.getId() + "\">");
-                        writer.write("<h4 class=\"title\">" + movie.getName() + "</h4>");
-                        writer.write("</a>");
-                        writer.write("<div class=\"poster\">");
-                        writer.write("<a href=\"" + contextPath + "/controller?command=open_movie_page&movieId=" + movie.getId() + "\">");
-                        writer.write("<img src=\"" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\"/>");
-                        writer.write("</a>");
-
+                writer.write("<div class=\"container mt-2\">");
+                for (int i = 0, j = 0; i < movies.size() && i < MOVIES_PER_PAGE_NUMBER; i++) {
+                    if (j == 0) {
+                        writer.write("<div class=\"row\">");
+                    }
+                    Movie movie = movies.get(i);
+                    writer.write("<div class=\"col-3\">");
+                    writer.write("<a href=\"<c:url value=" + contextPath + "/controller?command=open_movie&movieId=" + movie.getId() + "/>\">");
+                    writer.write("<img class=\"img-thumbnail\" src=\"" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\">");
+                    writer.write("</a>");
+                    writer.write("<p class=\"text-center\">" + movie.getName() + "</p>");
+                    writer.write("<p class=\"text-center\">Rating: " + movie.getRating() + "</p>");
+                    writer.write("</div>");
+                    if (j == MOVIES_PER_ROW - 1 || j == movies.size() - 1) {
                         writer.write("</div>");
-                        writer.write("<p class=\"description\">rating: " + movie.getRating() + "</p>");
-                        writer.write("</div>");
-                        writer.write("</li>");
-                        createdMoviesCount++;
+                        j = 0;
+                    } else {
+                        j++;
                     }
                 }
                 writer.write("</ul>");
