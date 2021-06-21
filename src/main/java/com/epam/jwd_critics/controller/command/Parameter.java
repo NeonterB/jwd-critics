@@ -8,6 +8,7 @@ public enum Parameter {
     LANG("lang"),
     PICTURE("picture"),
     MOVIE_ID("movieId"),
+    USER_ID("userId"),
     MOVIE_REVIEW_TEXT("movieReviewText"),
     MOVIE_REVIEW_SCORE("movieReviewScore"),
     FIRST_NAME("firstName"),
