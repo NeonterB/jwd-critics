@@ -11,13 +11,13 @@ public class ServiceException extends Exception {
         this.code = code;
     }
 
-    public ExceptionCode getCode() {
-        return code;
-    }
-
     public ServiceException(Throwable throwable){
         super(throwable);
         this.code = () -> "DAO EXCEPTION: " + throwable.getMessage();
+    }
+
+    public ExceptionCode getCode() {
+        return code;
     }
 
     @Override
