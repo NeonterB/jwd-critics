@@ -1,9 +1,7 @@
 package com.epam.jwd_critics.controller.command;
 
 public enum Attribute {
-    USER_ID("userId"),
-    USER_ROLE("userRole"),
-    USER_STATUS("userStatus"),
+    USER("user"),
     LANG("lang"),
     ALL_MOVIES_CURRENT_PAGE("allMoviesCurrentPage"),
     REVIEWS_CURRENT_PAGE("reviewsCurrentPage"),

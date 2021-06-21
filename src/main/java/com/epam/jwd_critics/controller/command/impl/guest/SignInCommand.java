@@ -7,6 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
+import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.validation.ConstraintViolation;
 import com.epam.jwd_critics.validation.UserValidator;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -34,9 +35,7 @@ public class SignInCommand implements Command {
             if (violations.isEmpty()) {
                 try {
                     User user = userService.login(login, password);
-                    req.setSessionAttribute(Attribute.USER_ID, user.getId());
-                    req.setSessionAttribute(Attribute.USER_ROLE, user.getRole());
-                    req.setSessionAttribute(Attribute.USER_STATUS, user.getStatus());
+                    req.setSessionAttribute(Attribute.USER, new UserDTO(user));
                     response.setDestination(ServletDestination.MAIN);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());

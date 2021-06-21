@@ -8,6 +8,7 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.MovieDTO;
+import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -35,9 +36,9 @@ public class OpenMoviePageCommand implements Command {
                 Optional<Movie> movie = movieService.getEntityById(Integer.valueOf(movieIdStr));
                 if (movie.isPresent()) {
                     req.setSessionAttribute(Attribute.MOVIE, new MovieDTO(movie.get()));
-                    Integer userId = (Integer) req.getSessionAttribute(Attribute.USER_ID);
-                    if (userId != null) {
-                        Optional<MovieReview> usersReview = reviewService.getEntity(userId, movie.get().getId());
+                    UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+                    if (user != null) {
+                        Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movie.get().getId());
                         usersReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
                     }
                 } else {
