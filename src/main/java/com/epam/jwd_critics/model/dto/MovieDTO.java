@@ -6,11 +6,11 @@ import com.epam.jwd_critics.model.entity.Position;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class MovieDTO {
+    private Integer id;
     private String name;
     private String summary;
     private String runtime;
@@ -23,6 +23,7 @@ public class MovieDTO {
     private Map<Position, List<Celebrity>> staff;
 
     public MovieDTO(Movie movie) {
+        this.id = movie.getId();
         this.name = movie.getName();
         this.summary = (movie.getSummary() == null) ? ("Unknown") : (movie.getSummary());
 
@@ -43,6 +44,14 @@ public class MovieDTO {
         this.ageRestriction = (movie.getAgeRestriction() == null) ? ("Unknown") : (movie.getAgeRestriction().name().replace("_", "-"));
         this.releaseDate = (movie.getReleaseDate() == null) ? ("Unknown") : (movie.getReleaseDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         this.staff = movie.getStaff();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
