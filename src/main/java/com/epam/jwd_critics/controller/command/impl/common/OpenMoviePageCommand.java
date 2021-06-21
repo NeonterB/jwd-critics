@@ -11,13 +11,17 @@ import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.model.dto.MovieDTO;
 import com.epam.jwd_critics.model.entity.Movie;
+import com.epam.jwd_critics.model.entity.MovieReview;
+import com.epam.jwd_critics.model.service.MovieReviewService;
 import com.epam.jwd_critics.model.service.MovieService;
+import com.epam.jwd_critics.model.service.impl.MovieReviewServiceImpl;
 import com.epam.jwd_critics.model.service.impl.MovieServiceImpl;
 
 import java.util.Optional;
 
 public class OpenMoviePageCommand implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
+    private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
@@ -32,7 +36,11 @@ public class OpenMoviePageCommand implements Command {
                 Optional<Movie> movie = movieService.getEntityById(Integer.valueOf(movieIdStr));
                 if (movie.isPresent()) {
                     req.setSessionAttribute(Attribute.MOVIE, new MovieDTO(movie.get()));
-                    req.setSessionAttribute(Attribute.MOVIE_ID, movie.get().getId());
+                    Integer userId = (Integer) req.getSessionAttribute(Attribute.USER_ID);
+                    if (userId != null){
+                        Optional<MovieReview> usersReview = reviewService.getEntity(userId, movie.get().getId());
+                        usersReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
+                    }
                 } else {
                     req.setSessionAttribute(Attribute.GLOBAL_ERROR, "Movie does not exist");
                     commandResult.setDestination(ServletDestination.MAIN);

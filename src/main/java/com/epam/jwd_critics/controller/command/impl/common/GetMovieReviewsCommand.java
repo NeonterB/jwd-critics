@@ -9,6 +9,7 @@ import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.model.dto.MovieDTO;
 import com.epam.jwd_critics.model.dto.MovieReviewDTO;
 import com.epam.jwd_critics.model.entity.MovieReview;
 import com.epam.jwd_critics.model.entity.User;
@@ -17,8 +18,6 @@ import com.epam.jwd_critics.model.service.UserService;
 import com.epam.jwd_critics.model.service.impl.MovieReviewServiceImpl;
 import com.epam.jwd_critics.model.service.impl.UserServiceImpl;
 import com.epam.jwd_critics.tag.ShowReviewsTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class GetMovieReviewsCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         CommandResponse commandResult = new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
-        Integer movieId =(Integer) req.getSessionAttribute(Attribute.MOVIE_ID);
+        Integer movieId = ((MovieDTO) req.getSessionAttribute(Attribute.MOVIE)).getId();
         if (movieId == null) {
             req.setSessionAttribute(Attribute.GLOBAL_ERROR, "Empty movie id");
             commandResult.setDestination(ServletDestination.MAIN);
