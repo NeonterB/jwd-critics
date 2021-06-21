@@ -16,4 +16,10 @@ public enum ServletDestination implements Destination {
     public String getPath() {
         return path;
     }
+
+    public final static String ADMIN_URL = "/pages/admin";
+    public final static String USER_URL = "/pages/user";
+    public final static String GUEST_URL = "/pages/guest";
+    public final static String ERROR_URL = "/pages/error";
+    public final static String COMPONENT_URL = "/pages/components";
 }
