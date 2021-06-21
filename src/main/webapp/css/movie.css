@@ -1,16 +1,60 @@
-.container img{
+.container img {
     width: 100%;
 }
 
-.page-item button{
-    color: #FF416C;
-    border: 2px solid #FF416C;
+.page-item button {
+    color: #FF4B2B;
+    border: 1px solid #FF4B2B;
+    margin-right: -1px;
     background-color: white;
     transition: 0.4s;
 }
 
-.page-item button:hover{
-    background-color: #FF416C;
+.page-item button:hover {
+    background-color: #FF4B2B;
     color: white;
     transition: 0.4s;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #FF4B2B;
+    margin-top: -4px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+.review button {
+    border-radius: 20px;
+    border: 1px solid #FF4B2B;
+    background-color: #FF4B2B;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
 }

@@ -6,15 +6,16 @@
     margin-bottom: 8px;
 }
 
-.page-item button{
-    color: #FF416C;
-    border: 2px solid #FF416C;
+.page-item button {
+    color: #FF4B2B;
+    border: 1px solid #FF4B2B;
+    margin-right: -1px;
     background-color: white;
     transition: 0.4s;
 }
 
-.page-item button:hover{
-    background-color: #FF416C;
+.page-item button:hover {
+    background-color: #FF4B2B;
     color: white;
     transition: 0.4s;
 }
