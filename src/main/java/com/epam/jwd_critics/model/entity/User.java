@@ -208,7 +208,7 @@ public class User extends AbstractBaseEntity {
             user.rating = User.this.rating;
             user.status = User.this.status;
             user.role = User.this.role;
-            user.imagePath = (User.this.imagePath == null) ? (DEFAULT_PROFILE_IMAGE) : (User.this.imagePath);
+            user.imagePath = (User.this.imagePath.equals("")) ? (DEFAULT_PROFILE_IMAGE) : (User.this.imagePath);
             return user;
         }
     }
