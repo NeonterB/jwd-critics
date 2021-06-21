@@ -5,14 +5,13 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
-import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.validation.ConstraintViolation;
-import com.epam.jwd_critics.controller.validation.MovieReviewValidator;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
+import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.model.entity.MovieReview;
-import com.epam.jwd_critics.model.service.MovieReviewService;
-import com.epam.jwd_critics.model.service.impl.MovieReviewServiceImpl;
+import com.epam.jwd_critics.service.MovieReviewService;
+import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
+import com.epam.jwd_critics.validation.ConstraintViolation;
+import com.epam.jwd_critics.validation.MovieReviewValidator;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +21,6 @@ public class CreateMovieReviewCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) {
-        CommandResponse commandResult = new CommandResponse(ServletDestination.MOVIE, TransferType.REDIRECT);
         String reviewScore = req.getParameter(Parameter.MOVIE_REVIEW_SCORE);
         String reviewText = req.getParameter(Parameter.MOVIE_REVIEW_TEXT);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
@@ -45,6 +43,6 @@ public class CreateMovieReviewCommand implements Command {
                         .collect(Collectors.toList()));
             }
         }
-        return commandResult;
+        return new OpenMoviePageCommand().execute(req);
     }
 }
