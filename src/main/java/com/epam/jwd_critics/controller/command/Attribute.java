@@ -6,7 +6,7 @@ public enum Attribute {
     ALL_MOVIES_CURRENT_PAGE("allMoviesCurrentPage"),
     REVIEWS_CURRENT_PAGE("reviewsCurrentPage"),
     NEW_PAGE("newPage"),
-    PAGE("page"),
+    CURRENT_PAGE("currentPage"),
     MOVIES_TO_DISPLAY("allMoviesList"),
     MOVIE_COUNT("movieCount"),
     MOVIE("movie"),
