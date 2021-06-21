@@ -8,13 +8,13 @@ public class MovieReviewDTO {
     private String userImagePath;
     private String userName;
     private Integer userId;
-    private Integer reviewId;
+    private Integer id;
 
     public MovieReviewDTO(MovieReview review){
         this.score = review.getScore();
         this.text = review.getText();
         this.userId = review.getUserId();
-        this.reviewId = review.getId();
+        this.id = review.getId();
     }
 
     public Integer getScore() {
@@ -57,11 +57,11 @@ public class MovieReviewDTO {
         this.userId = userId;
     }
 
-    public Integer getReviewId() {
-        return reviewId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setReviewId(Integer reviewId) {
-        this.reviewId = reviewId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
