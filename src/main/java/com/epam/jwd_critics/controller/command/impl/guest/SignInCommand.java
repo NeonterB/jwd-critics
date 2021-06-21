@@ -36,6 +36,7 @@ public class SignInCommand implements Command {
                     User user = userService.login(login, password);
                     req.setSessionAttribute(Attribute.USER_ID, user.getId());
                     req.setSessionAttribute(Attribute.USER_ROLE, user.getRole());
+                    req.setSessionAttribute(Attribute.USER_STATUS, user.getStatus());
                     response.setDestination(ServletDestination.MAIN);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
