@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<c:set var="page" value="/pages/common/movie.jsp" scope="session"/>
+<c:set var="currentPage" value="/pages/common/movie.jsp" scope="session"/>
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="properties/content"/>
 <html>
@@ -71,26 +71,27 @@
         </div>
     </div>
     <c:choose>
-        <c:when test="${empty userId}">
-            <p>Sign in to leave review</p>
+        <c:when test="${empty user}">
+            <p>Sign in to leave a review</p>
         </c:when>
-        <c:when test="${userStatus eq 'INACTIVE'}">
-            <p>Activate email to leave review</p>
+        <c:when test="${user.status eq 'INACTIVE'}">
+            <p>Activate email to leave a review</p>
         </c:when>
         <c:otherwise>
             <div class="row mt-4">
                 <div class="col-8 review">
-                <c:choose>
-                    <c:when test="${not empty userReview}">
-                        <c:set var="reviewFormUrl" scope="page" value="/controller?command=update_movie_review"/>
-                    </c:when>
-                    <c:otherwise>
-                        <c:set var="reviewFormUrl" scope="page" value="/controller?command=create_movie_review"/>
-                    </c:otherwise>
-                </c:choose>
+                    <c:choose>
+                        <c:when test="${not empty userReview}">
+                            <c:set var="reviewFormUrl" scope="page" value="/controller?command=update_movie_review"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="reviewFormUrl" scope="page" value="/controller?command=create_movie_review"/>
+                        </c:otherwise>
+                    </c:choose>
                     <form method="POST" action="<c:url value="${reviewFormUrl}"/>">
-                        <input type="hidden" name="userId" value="${userId}">
+                        <input type="hidden" name="userId" value="${user.id}">
                         <input type="hidden" name="movieId" value="${movie.id}">
+                        <input type="hidden" name="reviewId" value="${userReview.id}">
                         <div class="mb-3">
                             <label for="scoreRange" class="form-label">
                                 Your score:
@@ -105,22 +106,55 @@
                                 </c:choose>
                                 </span>
                             </label>
-                            <input type="range" name="movieReviewScore" class="form-range" id="scoreRange" min="0" max="100"
+                            <input type="range" name="movieReviewScore" class="form-range" id="scoreRange" min="0"
+                                   max="100"
                                    value="${userReview.score}"
                                    onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)">
                         </div>
                         <div class="mb-3">
                             <label for="reviewTextArea" class="form-label">Your review</label>
-                            <textarea name="movieReviewText" class="form-control" id="reviewTextArea" minlength="100" maxlength="10000"
+                            <textarea name="movieReviewText" class="form-control" id="reviewTextArea" minlength="100"
+                                      maxlength="10000"
                                       rows="7">${userReview.text}</textarea>
                         </div>
                         <button type="submit">Submit</button>
+                        <c:if test="${not empty userReview}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}">
+                                Delete
+                            </a>
+                        </c:if>
                     </form>
                 </div>
             </div>
         </c:otherwise>
     </c:choose>
-    <ctg:reviews/>
+    <c:if test="${not empty reviewsOnMoviePage}">
+        <div class="container mt-5">
+            <c:forEach var="review" items="${reviewsOnMoviePage}">
+                <div class="row mt-4">
+                    <div class="col-1">
+                        <a href="${pageContext.request.contextPath}/controller?command=open_profile&userId=${review.userId}">
+                            <img class="img-thumbnail" src="${review.userImagePath}" alt="${review.userName}">
+                        </a>
+                    </div>
+                    <div class="col">
+                            ${review.userName}<br>
+                        Score: ${review.score}<br>
+                            ${review.text}
+                    </div>
+                    <c:if test="${user.role eq 'ADMIN'}">
+                        <div class="col-1">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}">
+                                Delete
+                            </a>
+                        </div>
+                    </c:if>
+                </div>
+            </c:forEach>
+        </div>
+        <a href="${pageContext.request.contextPath}/controller?command=open_movie_reviews&movieId=${movie.id}">Show
+            more</a>
+    </c:if>
 </div>
 </body>
 </html>
