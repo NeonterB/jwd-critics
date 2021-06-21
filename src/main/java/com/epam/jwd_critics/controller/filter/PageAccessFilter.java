@@ -24,7 +24,7 @@ public class PageAccessFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession();
 
-        String page = (String) session.getAttribute(Attribute.PAGE.getName());
+        String page = (String) session.getAttribute(Attribute.CURRENT_PAGE.getName());
         if (page == null) {
             page = ServletDestination.MAIN.getPath();
         }
