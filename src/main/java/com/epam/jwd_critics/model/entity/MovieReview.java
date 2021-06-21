@@ -14,15 +14,9 @@ public class MovieReview extends AbstractBaseEntity {
     private final Integer movieId;
 
     @Column(name = "text")
-    @NotNull(message = "Review text can't be null")
-    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё0-9\\\\s()\"':?!.,-]{1,10000}$",
-            message = "Review text contains illegal characters")
     private String text;
 
     @Column(name = "score")
-    @NotNull(message = "Score can't be null")
-    @Max(value = 100, message = "Score value can't be greater than 100")
-    @Positive(message = "Score value must be positive")
     private Integer score;
 
     public MovieReview(String text, Integer score, Integer userId, Integer movieId) {
