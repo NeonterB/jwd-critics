@@ -38,7 +38,12 @@ public class RegisterCommand implements Command {
                 try {
                     User user = userService.register(firstName, lastName, email, login, password.toCharArray());
                     req.setSessionAttribute(Attribute.USER, new UserDTO(user));
-                    response.setDestination(ServletDestination.MAIN);
+                    String page = (String) req.getSessionAttribute(Attribute.CURRENT_PAGE);
+                    if (page != null) {
+                        response.setDestination(() -> page);
+                    } else {
+                        response.setDestination(ServletDestination.MAIN);
+                    }
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
                 }

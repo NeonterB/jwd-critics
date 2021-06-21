@@ -8,12 +8,12 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.UserDTO;
-import com.epam.jwd_critics.validation.ConstraintViolation;
-import com.epam.jwd_critics.validation.UserValidator;
-import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.service.impl.UserServiceImpl;
+import com.epam.jwd_critics.validation.ConstraintViolation;
+import com.epam.jwd_critics.validation.UserValidator;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +36,12 @@ public class SignInCommand implements Command {
                 try {
                     User user = userService.login(login, password);
                     req.setSessionAttribute(Attribute.USER, new UserDTO(user));
-                    response.setDestination(ServletDestination.MAIN);
+                    String page = (String) req.getSessionAttribute(Attribute.CURRENT_PAGE);
+                    if (page != null) {
+                        response.setDestination(() -> page);
+                    } else {
+                        response.setDestination(ServletDestination.MAIN);
+                    }
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
                 }
