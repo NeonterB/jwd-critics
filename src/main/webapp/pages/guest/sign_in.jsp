@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="properties/content"/>
-<c:set var="page" value="/pages/guest/signIn.jsp" scope="session"/>
+<%--<c:set var="currentPage" value="/pages/guest/signIn.jsp" scope="session"/>--%>
 <html>
 <head>
     <title>Log in</title>
