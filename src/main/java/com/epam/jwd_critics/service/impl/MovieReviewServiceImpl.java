@@ -143,6 +143,9 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         MovieReview createdReview;
         try {
+            if (getEntity(review.getUserId(), review.getMovieId()).isPresent()){
+                throw new ServiceException(MovieReviewServiceCode.USER_ALREADY_LEFT_A_REVIEW);
+            }
             createdReview = movieReviewDao.create(review);
             transaction.commit();
             logger.info("{} created", createdReview);
