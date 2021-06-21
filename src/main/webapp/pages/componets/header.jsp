@@ -7,6 +7,7 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
 </head>
@@ -34,7 +35,7 @@
                 </li>
                 <li class="nav-item">
                     <c:choose>
-                    <c:when test="${empty userId}">
+                    <c:when test="${empty user}">
                         <a class="nav-link text-white"
                            href="${pageContext.request.contextPath}/controller?command=sign_in">
                             <fmt:message key="button.signIn"/>
@@ -69,13 +70,13 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language&page=${sessionScope.page}&lang=ru">
+                               href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru">
                                 Русский
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language&page=${sessionScope.page}">
+                               href="${pageContext.request.contextPath}/controller?command=change_language">
                                 English
                             </a>
                         </li>

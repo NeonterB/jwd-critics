@@ -14,6 +14,8 @@
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
 <body>
-<ctg:all_movies/>
+<div class="container mt-2">
+    <ctg:all_movies/>
+</div>
 </body>
 </html>
