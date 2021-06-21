@@ -5,6 +5,8 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
+import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -34,6 +36,7 @@ public class CreateMovieReviewCommand implements Command {
             if (violations.isEmpty()) {
                 try {
                     reviewService.create(new MovieReview(reviewText, Integer.valueOf(reviewScore), Integer.valueOf(userIdStr), Integer.valueOf(movieIdStr)));
+                    req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, "Review created");
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
                 }
@@ -43,6 +46,7 @@ public class CreateMovieReviewCommand implements Command {
                         .collect(Collectors.toList()));
             }
         }
-        return new OpenMoviePageCommand().execute(req);
+        new OpenMoviePageCommand().execute(req);
+        return new CommandResponse(ServletDestination.MOVIE, TransferType.REDIRECT);
     }
 }

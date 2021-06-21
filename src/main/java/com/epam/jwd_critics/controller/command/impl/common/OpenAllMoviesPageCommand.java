@@ -26,21 +26,21 @@ public class OpenAllMoviesPageCommand implements Command {
     public CommandResponse execute(CommandRequest req) throws CommandException {
         CommandResponse commandResult = new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.FORWARD);
 
-        Integer currentPage = (Integer) req.getAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
+        Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
         String newPageStr = req.getParameter(Parameter.NEW_MOVIE_PAGE);
         if (newPageStr != null) {
             currentPage = Integer.valueOf(newPageStr);
         } else if (currentPage == null) {
             currentPage = 1;
         }
-        req.setAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE, currentPage);
+        req.setSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE, currentPage);
         int begin = (currentPage - 1) * ShowAllMoviesTag.MOVIES_PER_PAGE;
         int end = ShowAllMoviesTag.MOVIES_PER_PAGE + begin;
         try {
             List<Movie> moviesToDisplay = movieService.getAllBetween(begin, end);
-            req.setAttribute(Attribute.MOVIES_TO_DISPLAY, moviesToDisplay);
+            req.setSessionAttribute(Attribute.MOVIES_TO_DISPLAY, moviesToDisplay);
             int movieCount = movieService.getCount();
-            req.setAttribute(Attribute.MOVIE_COUNT, movieCount);
+            req.setSessionAttribute(Attribute.MOVIE_COUNT, movieCount);
             if (moviesToDisplay.size() == 0) {
                 req.setSessionAttribute(Attribute.REPORT_MESSAGE, "No movies here yet");
             }

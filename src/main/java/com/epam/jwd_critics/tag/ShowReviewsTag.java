@@ -5,6 +5,8 @@ import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
+import com.epam.jwd_critics.dto.UserDTO;
+import com.epam.jwd_critics.entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShowReviewsTag extends TagSupport {
-    public static final int REVIEWS_PER_PAGE = 1;
+    public static final int REVIEWS_PER_PAGE = 2;
 
     @Override
     public int doStartTag() throws JspException {
@@ -52,9 +54,9 @@ public class ShowReviewsTag extends TagSupport {
         };
         JspWriter writer = pageContext.getOut();
         writeReviews(writer, req);
-        int reviewCount = (int) req.getAttribute(Attribute.REVIEW_COUNT);
+        int reviewCount = (int) req.getSessionAttribute(Attribute.REVIEW_COUNT);
         int pageCount = reviewCount % REVIEWS_PER_PAGE == 0 ? (reviewCount / REVIEWS_PER_PAGE) : (reviewCount / REVIEWS_PER_PAGE + 1);
-        String commandName = CommandInstance.GET_MOVIE_REVIEWS.toString().toLowerCase();
+        String commandName = CommandInstance.OPEN_MOVIE_REVIEWS.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_REVIEW_PAGE);
         return SKIP_BODY;
     }
@@ -65,7 +67,12 @@ public class ShowReviewsTag extends TagSupport {
     }
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
-        List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getAttribute(Attribute.REVIEWS_TO_DISPLAY);
+        List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
+        UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+        Role userRole = Role.GUEST;
+        if (user != null) {
+            userRole = user.getRole();
+        }
         if (reviews != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
@@ -85,6 +92,14 @@ public class ShowReviewsTag extends TagSupport {
                     writer.write("Score: " + review.getScore() + "<br>");
                     writer.write(review.getText());
                     writer.write("</div>");
+
+                    if (userRole.equals(Role.ADMIN)) {
+                        writer.write("<div class=\"col-1\">");
+                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "\">");
+                        writer.write("Delete");
+                        writer.write("</a>");
+                        writer.write("</div>");
+                    }
 
                     writer.write("</div>");
                 }
