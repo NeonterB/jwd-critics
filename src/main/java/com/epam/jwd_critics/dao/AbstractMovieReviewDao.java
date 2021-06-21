@@ -16,4 +16,6 @@ public abstract class AbstractMovieReviewDao extends AbstractBaseDao<Integer, Mo
     public abstract int getCountByUserId(Integer userId) throws DaoException;
 
     public abstract Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws DaoException;
+
+    public abstract boolean reviewExists(Integer userId, Integer movieId) throws DaoException;
 }

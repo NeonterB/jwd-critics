@@ -47,6 +47,8 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     private static final String COUNT_REVIEWS_BY_USER_ID = "SELECT COUNT(*) FROM jwd_critics.review where user_id = ?";
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.review WHERE id = ?)";
+    @Language("SQL")
+    private static final String REVIEW_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.review WHERE user_id = ? and movie_id = ?)";
 
     public static MovieReviewDao getInstance() {
         return MovieReviewDaoSingleton.INSTANCE;
@@ -171,6 +173,22 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     @Override
     public boolean idExists(Integer reviewId) throws DaoException {
         return idExists(reviewId, ID_EXISTS);
+    }
+
+    public boolean reviewExists(Integer userId, Integer movieId) throws DaoException{
+        boolean result = false;
+        try (PreparedStatement preparedStatement = getPreparedStatement(REVIEW_EXISTS)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, movieId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    result = resultSet.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     private Integer getCount(String query, Integer id) throws DaoException {
