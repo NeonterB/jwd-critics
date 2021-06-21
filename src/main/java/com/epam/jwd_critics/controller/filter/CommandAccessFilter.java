@@ -5,6 +5,7 @@ import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.model.entity.Status;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,6 +29,10 @@ public class CommandAccessFilter implements Filter {
         if (userRole == null) {
             userRole = Role.GUEST;
         }
+        Status userStatus = (Status) session.getAttribute(Attribute.USER_STATUS.getName());
+        if (userStatus == null) {
+            userStatus = Status.INACTIVE;
+        }
         String commandName = httpRequest.getParameter(Parameter.COMMAND.getName());
         CommandInstance commandInstance;
         try {
@@ -40,7 +45,7 @@ public class CommandAccessFilter implements Filter {
             httpResponse.sendRedirect(ServletDestination.ERROR_404.getPath());
             return;
         }
-        if (!commandInstance.isRoleAllowed(userRole)) {
+        if (!commandInstance.isRoleAllowed(userRole) && (userStatus.equals(Status.ACTIVE) || !commandInstance.isUserMustBeActive())) {
             httpRequest.getSession(true).setAttribute(Attribute.GLOBAL_ERROR.getName(), "Illegal access to command");
             httpResponse.sendRedirect((String) session.getAttribute(Parameter.CURRENT_PAGE.getName()));
             return;
