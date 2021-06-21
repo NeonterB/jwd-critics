@@ -10,7 +10,7 @@ import com.epam.jwd_critics.controller.command.impl.common.OpenSignInPageCommand
 import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.CreateMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.SignOutCommand;
-import com.epam.jwd_critics.model.entity.Role;
+import com.epam.jwd_critics.entity.Role;
 
 import java.util.Arrays;
 import java.util.LinkedList;

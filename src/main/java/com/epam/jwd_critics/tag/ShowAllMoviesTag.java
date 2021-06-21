@@ -4,7 +4,7 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
-import com.epam.jwd_critics.model.entity.Movie;
+import com.epam.jwd_critics.entity.Movie;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;

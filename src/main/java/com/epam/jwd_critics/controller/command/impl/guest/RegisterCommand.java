@@ -7,12 +7,12 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.validation.ConstraintViolation;
-import com.epam.jwd_critics.controller.validation.UserValidator;
+import com.epam.jwd_critics.validation.ConstraintViolation;
+import com.epam.jwd_critics.validation.UserValidator;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.model.entity.User;
-import com.epam.jwd_critics.model.service.UserService;
-import com.epam.jwd_critics.model.service.impl.UserServiceImpl;
+import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.service.UserService;
+import com.epam.jwd_critics.service.impl.UserServiceImpl;
 
 import java.util.Set;
 import java.util.stream.Collectors;

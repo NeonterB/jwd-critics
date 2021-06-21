@@ -1,0 +1,14 @@
+package com.epam.jwd_critics.dao;
+
+import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.entity.User;
+
+import java.util.Optional;
+
+public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
+    public abstract Optional<User> getEntityByLogin(String login) throws DaoException;
+
+    public abstract void updatePassword(Integer id, String password) throws DaoException;
+
+    public abstract boolean loginExists(String login) throws DaoException;
+}

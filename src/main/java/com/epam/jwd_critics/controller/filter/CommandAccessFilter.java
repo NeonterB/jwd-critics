@@ -4,8 +4,8 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.model.entity.Role;
-import com.epam.jwd_critics.model.entity.Status;
+import com.epam.jwd_critics.entity.Role;
+import com.epam.jwd_critics.entity.Status;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

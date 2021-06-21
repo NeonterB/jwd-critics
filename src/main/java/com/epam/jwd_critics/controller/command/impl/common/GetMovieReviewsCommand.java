@@ -9,14 +9,14 @@ import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.model.dto.MovieDTO;
-import com.epam.jwd_critics.model.dto.MovieReviewDTO;
-import com.epam.jwd_critics.model.entity.MovieReview;
-import com.epam.jwd_critics.model.entity.User;
-import com.epam.jwd_critics.model.service.MovieReviewService;
-import com.epam.jwd_critics.model.service.UserService;
-import com.epam.jwd_critics.model.service.impl.MovieReviewServiceImpl;
-import com.epam.jwd_critics.model.service.impl.UserServiceImpl;
+import com.epam.jwd_critics.dto.MovieDTO;
+import com.epam.jwd_critics.dto.MovieReviewDTO;
+import com.epam.jwd_critics.entity.MovieReview;
+import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.service.MovieReviewService;
+import com.epam.jwd_critics.service.UserService;
+import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
+import com.epam.jwd_critics.service.impl.UserServiceImpl;
 import com.epam.jwd_critics.tag.ShowReviewsTag;
 
 import java.util.LinkedList;
@@ -28,7 +28,7 @@ public class GetMovieReviewsCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
-    public CommandResponse execute(CommandRequest req) throws CommandException {
+    public CommandResponse execute(CommandRequest req) {
         CommandResponse commandResult = new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
         Integer movieId = ((MovieDTO) req.getSessionAttribute(Attribute.MOVIE)).getId();
         if (movieId == null) {
