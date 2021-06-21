@@ -70,7 +70,62 @@
             <strong><fmt:message key="movie.summary"/>:</strong> ${movie.summary}
         </div>
     </div>
+    <c:choose>
+        <c:when test="${empty userId}">
+            <p>Sign in to leave review</p>
+        </c:when>
+        <c:when test="${userStatus eq 'INACTIVE'}">
+            <p>Activate email to leave review</p>
+        </c:when>
+        <c:otherwise>
+            <div class="row mt-4">
+                <div class="col-8 review">
+                <c:choose>
+                    <c:when test="${not empty userReview}">
+                        <c:set var="reviewFormUrl" scope="page" value="/controller?command=update_movie_review"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="reviewFormUrl" scope="page" value="/controller?command=create_movie_review"/>
+                    </c:otherwise>
+                </c:choose>
+                    <form method="POST" action="<c:url value="${reviewFormUrl}"/>">
+                        <input type="hidden" name="userId" value="${userId}">
+                        <input type="hidden" name="movieId" value="${movie.id}">
+                        <div class="mb-3">
+                            <label for="scoreRange" class="form-label">
+                                Your score:
+                                <span id="scoreValue">
+                                <c:choose>
+                                    <c:when test="${not empty userReview}">
+                                        ${userReview.score}
+                                    </c:when>
+                                    <c:otherwise>
+                                        50
+                                    </c:otherwise>
+                                </c:choose>
+                                </span>
+                            </label>
+                            <input type="range" name="movieReviewScore" class="form-range" id="scoreRange" min="0" max="100"
+                                   value="${userReview.score}"
+                                   onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="reviewTextArea" class="form-label">Your review</label>
+                            <textarea name="movieReviewText" class="form-control" id="reviewTextArea" minlength="100" maxlength="10000"
+                                      rows="7">${userReview.text}</textarea>
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </c:otherwise>
+    </c:choose>
     <ctg:reviews/>
 </div>
 </body>
 </html>
+<script type="text/javascript">
+    function rangeSlide(value) {
+        document.getElementById('scoreValue').innerHTML = value;
+    }
+</script>
