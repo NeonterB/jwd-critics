@@ -4,6 +4,7 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 
@@ -25,13 +26,12 @@ public class CommandAccessFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession();
-        Role userRole = (Role) session.getAttribute(Attribute.USER_ROLE.getName());
-        if (userRole == null) {
-            userRole = Role.GUEST;
-        }
-        Status userStatus = (Status) session.getAttribute(Attribute.USER_STATUS.getName());
-        if (userStatus == null) {
-            userStatus = Status.INACTIVE;
+        UserDTO user = (UserDTO) session.getAttribute(Attribute.USER.getName());
+        Role userRole = Role.GUEST;
+        Status userStatus = Status.INACTIVE;
+        if (user != null) {
+            userRole = user.getRole();
+            userStatus = user.getStatus();
         }
         String commandName = httpRequest.getParameter(Parameter.COMMAND.getName());
         CommandInstance commandInstance;
