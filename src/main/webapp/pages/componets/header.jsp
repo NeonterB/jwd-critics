@@ -42,6 +42,14 @@
                         </a>
                     </c:when>
                     <c:otherwise>
+                    <c:if test="${user.role eq 'ADMIN'}">
+                    <a class="nav-link text-white"
+                       href="${pageContext.request.contextPath}/controller?command=open_all_users">
+                        <fmt:message key="button.users"/>
+                    </a>
+                </li>
+                <li>
+                    </c:if>
                     <a class="nav-link text-white"
                        href="${pageContext.request.contextPath}/controller?command=open_profile">
                         <fmt:message key="button.profile"/>

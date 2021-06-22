@@ -15,6 +15,11 @@
         <body-content>empty</body-content>
     </tag>
     <tag>
+        <name>all_users</name>
+        <tag-class>com.epam.jwd_critics.tag.ShowAllUsersTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
         <name>reviews</name>
         <tag-class>com.epam.jwd_critics.tag.ShowReviewsTag</tag-class>
         <body-content>empty</body-content>
