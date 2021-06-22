@@ -8,6 +8,7 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
+import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.service.MovieReviewService;

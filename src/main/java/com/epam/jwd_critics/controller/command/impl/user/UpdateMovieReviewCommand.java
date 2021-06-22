@@ -8,6 +8,7 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
+import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -15,8 +16,6 @@ import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
 import com.epam.jwd_critics.validation.ConstraintViolation;
 import com.epam.jwd_critics.validation.MovieReviewValidator;
-
-
 
 import java.util.Set;
 import java.util.stream.Collectors;
