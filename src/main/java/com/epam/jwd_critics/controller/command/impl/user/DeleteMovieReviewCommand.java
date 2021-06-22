@@ -22,9 +22,7 @@ public class DeleteMovieReviewCommand implements Command {
         CommandResponse resp = new CommandResponse(ServletDestination.MOVIE, TransferType.REDIRECT);
         String movieReviewIdStr = req.getParameter(Parameter.MOVIE_REVIEW_ID);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
-        if (user == null) {
-            req.setSessionAttribute(Attribute.GLOBAL_ERROR, "User is empty");
-        } else if (movieReviewIdStr == null) {
+        if (movieReviewIdStr == null) {
             req.setSessionAttribute(Attribute.VALIDATION_ERRORS, "Empty review id");
         } else {
             try {

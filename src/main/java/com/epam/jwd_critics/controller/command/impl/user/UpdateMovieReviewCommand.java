@@ -31,9 +31,7 @@ public class UpdateMovieReviewCommand implements Command {
         String userIdStr = req.getParameter(Parameter.USER_ID);
         String reviewIdStr = req.getParameter(Parameter.REVIEW_ID);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
-        if (user == null) {
-            req.setSessionAttribute(Attribute.GLOBAL_ERROR, "User is empty");
-        } else if (reviewScore == null || reviewText == null) {
+        if (reviewScore == null || reviewText == null) {
             req.setSessionAttribute(Attribute.VALIDATION_ERRORS, "Empty review fields");
         } else if (userIdStr == null) {
             req.setSessionAttribute(Attribute.GLOBAL_ERROR, "Empty user id");
