@@ -8,6 +8,7 @@ public enum Parameter {
     NEW_USERS_PAGE("newUsersPage"),
     LANG("lang"),
     PICTURE("picture"),
+    NEW_STATUS("newStatus"),
     MOVIE_ID("movieId"),
     USER_ID("userId"),
     REVIEW_ID("reviewId"),

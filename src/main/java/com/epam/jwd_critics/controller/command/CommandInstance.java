@@ -1,6 +1,7 @@
 package com.epam.jwd_critics.controller.command;
 
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
 import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
@@ -29,6 +30,7 @@ public enum CommandInstance {
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_MOVIE_REVIEW(new UpdateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     DELETE_MOVIE_REVIEW(new DeleteMovieReviewCommand(), true, Role.USER, Role.ADMIN),
+    UPDATE_USER_STATUS(new UpdateUserStatusCommand(), true, Role.ADMIN),
     CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values()),
     SIGN_IN(new SignInCommand(), Role.GUEST),
     REGISTER(new RegisterCommand(), Role.GUEST),
