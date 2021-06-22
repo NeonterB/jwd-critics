@@ -14,6 +14,7 @@
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
 <div class="container mt-5">
+    <a href="${pageContext.request.contextPath}/controller?command=open_all_movies">Back to movie list</a>
     <div class="row">
         <div class="col-4">
             <img src="${movie.imagePath}" alt="${movie.name}" class="img-thumbnail">
