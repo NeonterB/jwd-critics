@@ -45,9 +45,9 @@ public class CommandAccessFilter implements Filter {
             httpResponse.sendRedirect(ServletDestination.ERROR_404.getPath());
             return;
         }
-        if (!commandInstance.isRoleAllowed(userRole) && (userStatus.equals(Status.ACTIVE) || !commandInstance.isUserMustBeActive())) {
+        if (!commandInstance.isRoleAllowed(userRole) || (userStatus.equals(Status.INACTIVE) && commandInstance.isUserMustBeActive())) {
             httpRequest.getSession(true).setAttribute(Attribute.GLOBAL_ERROR.getName(), "Illegal access to command");
-            httpResponse.sendRedirect((String) session.getAttribute(Parameter.CURRENT_PAGE.getName()));
+            httpResponse.sendRedirect(ServletDestination.MAIN.getPath());
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);
