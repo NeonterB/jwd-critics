@@ -27,7 +27,7 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String SELECT_ALL_USERS_BETWEEN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id order by UR.id, U.last_name, U.first_name limit ?, ?";
     @Language("SQL")
-    private static final String COUNT_USERS = "SELECT COUNT(*) FROM celebrity";
+    private static final String COUNT_USERS = "SELECT COUNT(*) FROM user";
     @Language("SQL")
     private static final String SELECT_USER_BY_ID = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.id = ?";
     @Language("SQL")
