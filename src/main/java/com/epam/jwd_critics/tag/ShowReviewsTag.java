@@ -68,6 +68,7 @@ public class ShowReviewsTag extends TagSupport {
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
+        String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         Role userRole = Role.GUEST;
         if (user != null) {
@@ -95,7 +96,7 @@ public class ShowReviewsTag extends TagSupport {
 
                     if (userRole.equals(Role.ADMIN)) {
                         writer.write("<div class=\"col-1\">");
-                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "\">");
+                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "&currentPage=" + currentPage + "\">");
                         writer.write("Delete");
                         writer.write("</a>");
                         writer.write("</div>");

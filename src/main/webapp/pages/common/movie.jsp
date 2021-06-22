@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<c:set var="currentPage" value="/pages/common/movie.jsp" scope="session"/>
+<c:set var="currentPage" value="/pages/common/movie.jsp" scope="request"/>
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="properties/content"/>
 <html>
@@ -119,7 +119,7 @@
                         </div>
                         <button type="submit">Submit</button>
                         <c:if test="${not empty userReview}">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}&currentPage=${currentPage}">
                                 Delete
                             </a>
                         </c:if>
@@ -144,7 +144,7 @@
                     </div>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <div class="col-1">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&currentPage=${currentPage}">
                                 Delete
                             </a>
                         </div>

@@ -37,7 +37,7 @@
                     <c:choose>
                     <c:when test="${empty user}">
                         <a class="nav-link text-white"
-                           href="${pageContext.request.contextPath}/controller?command=sign_in">
+                           href="${pageContext.request.contextPath}/controller?command=open_sign_in&currentPage=${requestScope.currentPage}">
                             <fmt:message key="button.signIn"/>
                         </a>
                     </c:when>
@@ -49,7 +49,7 @@
                 </li>
                 <li>
                     <a class="nav-link text-white"
-                       href="${pageContext.request.contextPath}/controller?command=sign_out">
+                       href="${pageContext.request.contextPath}/controller?command=sign_out&currentPage=${requestScope.currentPage}">
                         <fmt:message key="button.signOut"/>
                     </a>
                     </c:otherwise>
@@ -70,13 +70,13 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru">
+                               href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru&currentPage=${requestScope.currentPage}">
                                 Русский
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language">
+                               href="${pageContext.request.contextPath}/controller?command=change_language&currentPage=${requestScope.currentPage}">
                                 English
                             </a>
                         </li>

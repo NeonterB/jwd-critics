@@ -18,6 +18,7 @@
         <div class="form-container sign-up-container">
             <form name="registerForm" method="POST" action="<c:url value="/controller?command=register"/>">
                 <h1><fmt:message key="text.createAccount"/></h1>
+                <input type="hidden" name="currentPage" value="${requestScope.currentPage}"/>
                 <input type="text"
                        name="firstName"
                        pattern="^[A-Z][a-z]{1,14}"
@@ -46,8 +47,10 @@
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form name="signInForm" method="POST" action="<c:url value="/controller?command=sign_in"/>">
+            <form name="signInForm" method="GET">
                 <h1><fmt:message key="button.signIn"/></h1>
+                <input type="hidden" name="command" value="sign_in">
+                <input type="hidden" name="currentPage" value="${requestScope.currentPage}">
                 <input type="text"
                        name="login"
                        pattern="^[a-zA-Z0-9._-]{3,25}$"

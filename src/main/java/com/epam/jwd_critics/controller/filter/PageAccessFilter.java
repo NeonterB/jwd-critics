@@ -19,12 +19,12 @@ import java.io.IOException;
 @WebFilter
 public class PageAccessFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
+        HttpServletRequest httpRequest = (HttpServletRequest) req;
+        HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = httpRequest.getSession();
 
-        String page = (String) session.getAttribute(Attribute.CURRENT_PAGE.getName());
+        String page = (String) req.getAttribute(Attribute.CURRENT_PAGE.getName());
         if (page == null) {
             page = ServletDestination.MAIN.getPath();
         }
@@ -48,7 +48,7 @@ public class PageAccessFilter implements Filter {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + page);
                 return;
             }
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
         } catch (IOException | ServletException e) {
             //todo
         }

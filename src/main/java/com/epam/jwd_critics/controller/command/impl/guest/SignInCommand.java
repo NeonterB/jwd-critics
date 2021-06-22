@@ -19,6 +19,7 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 import com.epam.jwd_critics.validation.ConstraintViolation;
 import com.epam.jwd_critics.validation.UserValidator;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class SignInCommand implements Command {
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
         if (login == null || password == null) {
-            req.setSessionAttribute(Attribute.VALIDATION_ERRORS, "Sign in fields can't be empty");
+            req.setSessionAttribute(Attribute.VALIDATION_ERRORS, Collections.singletonList("Sign in fields can't be empty"));
         } else {
             UserValidator userValidator = new UserValidator();
             Set<ConstraintViolation> violations = userValidator.validateLogInData(login, password);
@@ -42,15 +43,15 @@ public class SignInCommand implements Command {
                 try {
                     User user = userService.login(login, password);
                     req.setSessionAttribute(Attribute.USER, new UserDTO(user));
-                    String page = (String) req.getSessionAttribute(Attribute.CURRENT_PAGE);
+                    String page = req.getParameter(Parameter.CURRENT_PAGE);
                     if (page != null) {
                         response.setDestination(() -> page);
-                        if (page.equals(ServletDestination.MOVIE.getPath())){
+                        if (page.equals(ServletDestination.MOVIE.getPath())) {
                             MovieDTO movie = (MovieDTO) req.getSessionAttribute(Attribute.MOVIE);
-                            if (movie != null){
+                            if (movie != null) {
                                 Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movie.getId());
                                 usersReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
-                            } else{
+                            } else {
                                 req.setSessionAttribute(Attribute.GLOBAL_ERROR, "Empty movie");
                             }
                         }
