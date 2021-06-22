@@ -28,7 +28,10 @@ public class CreateMovieReviewCommand implements Command {
         String reviewText = req.getParameter(Parameter.MOVIE_REVIEW_TEXT);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         String userIdStr = req.getParameter(Parameter.USER_ID);
-        if (reviewScore == null || reviewText == null || movieIdStr == null || userIdStr == null) {
+        UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+        if (user == null) {
+            req.setSessionAttribute(Attribute.GLOBAL_ERROR, "User is empty");
+        } else if (reviewScore == null || reviewText == null || movieIdStr == null || userIdStr == null) {
             req.setSessionAttribute(Attribute.VALIDATION_ERRORS, "Empty review fields");
         } else {
             MovieReviewValidator reviewValidator = new MovieReviewValidator();
