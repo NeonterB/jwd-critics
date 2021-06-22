@@ -56,7 +56,7 @@ public class ShowAllMoviesTag extends TagSupport {
         int movieCount = (int) req.getSessionAttribute(Attribute.MOVIE_COUNT);
         int pageCount = movieCount % MOVIES_PER_PAGE == 0 ? (movieCount / MOVIES_PER_PAGE) : (movieCount / MOVIES_PER_PAGE + 1);
         String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
-        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIE_PAGE);
+        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIES_PAGE);
         return SKIP_BODY;
     }
 

@@ -11,7 +11,6 @@ import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.User;
-import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.UserService;
@@ -41,7 +40,7 @@ public class OpenMovieReviewsPageCommand implements Command {
         } else {
             try {
                 Integer currentPage = (Integer) req.getSessionAttribute(Attribute.REVIEWS_CURRENT_PAGE);
-                String newPageStr = req.getParameter(Parameter.NEW_REVIEW_PAGE);
+                String newPageStr = req.getParameter(Parameter.NEW_REVIEWS_PAGE);
                 int reviewCount = reviewService.getCountByMovieId(movie.getId());
                 req.setSessionAttribute(Attribute.REVIEW_COUNT, reviewCount);
                 if (newPageStr != null) {

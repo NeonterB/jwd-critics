@@ -27,7 +27,7 @@ public class OpenAllMoviesPageCommand implements Command {
         CommandResponse commandResult = new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.FORWARD);
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
-        String newPageStr = req.getParameter(Parameter.NEW_MOVIE_PAGE);
+        String newPageStr = req.getParameter(Parameter.NEW_MOVIES_PAGE);
         if (newPageStr != null) {
             currentPage = Integer.valueOf(newPageStr);
         } else if (currentPage == null) {

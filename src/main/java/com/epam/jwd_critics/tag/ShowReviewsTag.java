@@ -57,7 +57,7 @@ public class ShowReviewsTag extends TagSupport {
         int reviewCount = (int) req.getSessionAttribute(Attribute.REVIEW_COUNT);
         int pageCount = reviewCount % REVIEWS_PER_PAGE == 0 ? (reviewCount / REVIEWS_PER_PAGE) : (reviewCount / REVIEWS_PER_PAGE + 1);
         String commandName = CommandInstance.OPEN_MOVIE_REVIEWS.toString().toLowerCase();
-        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_REVIEW_PAGE);
+        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_REVIEWS_PAGE);
         return SKIP_BODY;
     }
 
@@ -77,7 +77,6 @@ public class ShowReviewsTag extends TagSupport {
         if (reviews != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                writer.write("<div class=\"container mt-5\">");
                 for (int i = 0; i < reviews.size() && i < REVIEWS_PER_PAGE; i++) {
                     MovieReviewDTO review = reviews.get(i);
                     writer.write("<div class=\"row mt-4\">");
@@ -104,7 +103,6 @@ public class ShowReviewsTag extends TagSupport {
 
                     writer.write("</div>");
                 }
-                writer.write("</div>");
             } catch (IOException e) {
                 throw new JspException(e);
             }
