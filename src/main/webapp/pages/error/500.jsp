@@ -23,5 +23,4 @@
 </div>
 </body>
 </html>
-<script src="https://kit.fontawesome.com/4b9ba14b0f.js" crossorigin="anonymous"></script>
 <c:remove var="commandError"/>
