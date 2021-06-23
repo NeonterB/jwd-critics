@@ -4,7 +4,6 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
-import com.epam.jwd_critics.message.ErrorMessage;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
@@ -16,6 +15,7 @@ import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.message.ErrorMessage;
 import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.MovieService;
 import com.epam.jwd_critics.service.UserService;
@@ -50,12 +50,16 @@ public class OpenMoviePageCommand implements Command {
         }
         try {
             Optional<Movie> movie = movieService.getEntityById(movieId);
-            if (movie.isPresent()){
+            if (movie.isPresent()) {
                 req.setSessionAttribute(Attribute.MOVIE, new MovieDTO(movie.get()));
                 UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
                 if (user != null) {
-                    Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movie.get().getId());
-                    usersReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
+                    Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movieId);
+                    if (usersReview.isPresent()) {
+                        req.setSessionAttribute(Attribute.USER_REVIEW, usersReview.get());
+                    } else {
+                        req.removeSessionAttribute(Attribute.USER_REVIEW);
+                    }
                 }
                 List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, 0, AMOUNT_OF_REVIEWS_ON_PAGE);
                 List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
@@ -63,13 +67,13 @@ public class OpenMoviePageCommand implements Command {
                     MovieReviewDTO reviewDTO = new MovieReviewDTO(review);
                     Optional<User> userOfReview = userService.getEntityById(reviewDTO.getUserId());
                     if (userOfReview.isPresent()) {
-                        reviewDTO.setUserImagePath(userOfReview.get().getImagePath());
-                        reviewDTO.setUserName(userOfReview.get().getFirstName());
+                        reviewDTO.setImagePath(userOfReview.get().getImagePath());
+                        reviewDTO.setTitle(userOfReview.get().getFirstName());
                         reviewDTOS.add(reviewDTO);
                     }
                 }
                 req.setSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE, reviewDTOS);
-            } else{
+            } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
                 resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
