@@ -8,16 +8,17 @@ import com.epam.jwd_critics.entity.User;
 import java.util.List;
 
 public class UserDTO {
-    private Integer id;
+    private int id;
+    private int reviewCount;
     private Role role;
     private Status status;
     private String firstName;
     private String lastName;
     private String imagePath;
 
-    private List<MovieReview> reviews;
+    private List<MovieReviewDTO> reviews;
 
-    public UserDTO(User user){
+    public UserDTO(User user) {
         this.id = user.getId();
         this.role = user.getRole();
         this.status = user.getStatus();
@@ -26,11 +27,11 @@ public class UserDTO {
         this.imagePath = user.getImagePath();
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -66,7 +67,7 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getName(){
+    public String getName() {
         return firstName + " " + lastName;
     }
 
@@ -78,11 +79,20 @@ public class UserDTO {
         this.imagePath = imagePath;
     }
 
-    public List<MovieReview> getReviews() {
+    public List<MovieReviewDTO> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<MovieReview> reviews) {
+    public void setReviews(List<MovieReviewDTO> reviews) {
+        reviewCount = reviews.size();
         this.reviews = reviews;
+    }
+
+    public int getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(int reviewCount) {
+        this.reviewCount = reviewCount;
     }
 }
