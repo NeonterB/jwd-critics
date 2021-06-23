@@ -9,8 +9,8 @@ public class CommandResponse {
         this.transferType = transferType;
     }
 
-    public static CommandResponse redirectToMainOrPreviousPage(CommandRequest req) {
-        CommandResponse resp = new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
+    public static CommandResponse redirectToPreviousPageOr(ServletDestination destination, CommandRequest req) {
+        CommandResponse resp = new CommandResponse(destination, TransferType.REDIRECT);
         String page = req.getParameter(Parameter.CURRENT_PAGE);
         if (page != null) {
             resp.setDestination(() -> page);

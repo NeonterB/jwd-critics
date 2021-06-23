@@ -55,7 +55,7 @@ public class OpenAllUsersPageCommand implements Command {
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            resp = CommandResponse.redirectToMainOrPreviousPage(req);
+            resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
         return resp;
     }

@@ -24,7 +24,7 @@ public class RegisterCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) {
-        CommandResponse resp = CommandResponse.redirectToMainOrPreviousPage(req);
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
         String lastName = req.getParameter(Parameter.LAST_NAME);
         String email = req.getParameter(Parameter.EMAIL);

@@ -6,7 +6,6 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.CommandException;
@@ -59,6 +58,6 @@ public class UpdateMovieReviewCommand implements Command {
             }
         }
         new OpenMoviePageCommand().execute(req);
-        return CommandResponse.redirectToMainOrPreviousPage(req);
+        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MOVIE, req);
     }
 }

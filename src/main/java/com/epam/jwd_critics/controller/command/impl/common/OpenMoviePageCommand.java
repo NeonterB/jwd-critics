@@ -71,11 +71,11 @@ public class OpenMoviePageCommand implements Command {
                 req.setSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE, reviewDTOS);
             } else{
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
-                resp = CommandResponse.redirectToMainOrPreviousPage(req);
+                resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            resp = CommandResponse.redirectToMainOrPreviousPage(req);
+            resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
         return resp;
     }

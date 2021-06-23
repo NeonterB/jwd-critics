@@ -31,7 +31,7 @@ public class SignInCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = CommandResponse.redirectToMainOrPreviousPage(req);
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
 
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
