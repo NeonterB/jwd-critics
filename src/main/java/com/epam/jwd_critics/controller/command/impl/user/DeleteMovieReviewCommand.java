@@ -9,6 +9,7 @@ import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.message.ErrorMessage;
@@ -40,6 +41,8 @@ public class DeleteMovieReviewCommand implements Command {
                 new OpenMoviePageCommand().execute(req);
             } else if (page.equals(ServletDestination.REVIEWS.getPath())) {
                 new OpenMovieReviewsPageCommand().execute(req);
+            } else if (page.equals(ServletDestination.USER_PROFILE.getPath())) {
+                new OpenUserProfilePageCommand().execute(req);
             }
             resp.setDestination(() -> page);
         }
