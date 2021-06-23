@@ -56,7 +56,7 @@ public class ShowAllUsersTag extends TagSupport {
                     writer.write("<p class=\"text-center\">" + userDTO.getName() + "</p>");
                     writer.write("<p class=\"text-center\">Role: " + userDTO.getRole() + "</p>");
                     writer.write("<p class=\"text-center\">Status: " + userDTO.getStatus() + "</p>");
-                    if (!user.getId().equals(userDTO.getId())) {
+                    if (user.getId() != userDTO.getId()) {
                         if (userDTO.getStatus().equals(Status.BANNED)) {
                             writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&currentPage=" + currentPage + "&newStatus=active&userId=" + userDTO.getId() + "\">Unban</a>");
                         } else if (userDTO.getStatus().equals(Status.ACTIVE)) {
