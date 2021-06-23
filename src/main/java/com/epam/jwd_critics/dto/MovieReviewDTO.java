@@ -3,25 +3,27 @@ package com.epam.jwd_critics.dto;
 import com.epam.jwd_critics.entity.MovieReview;
 
 public class MovieReviewDTO {
-    private Integer score;
+    private int score;
     private String text;
-    private String userImagePath;
-    private String userName;
-    private Integer userId;
-    private Integer id;
+    private String imagePath;
+    private String title;
+    private int userId;
+    private int movieId;
+    private int id;
 
     public MovieReviewDTO(MovieReview review){
         this.score = review.getScore();
         this.text = review.getText();
         this.userId = review.getUserId();
+        this.movieId = review.getMovieId();
         this.id = review.getId();
     }
 
-    public Integer getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -33,35 +35,43 @@ public class MovieReviewDTO {
         this.text = text;
     }
 
-    public String getUserImagePath() {
-        return userImagePath;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setUserImagePath(String userImagePath) {
-        this.userImagePath = userImagePath;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getUserId() {
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 }
