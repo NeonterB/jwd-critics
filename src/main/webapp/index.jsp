@@ -5,6 +5,6 @@
     <title>index</title>
 </head>
 <body>
-<jsp:forward page="/pages/error/404.jsp"/>
+<jsp:forward page="/controller"/>
 </body>
 </html>
