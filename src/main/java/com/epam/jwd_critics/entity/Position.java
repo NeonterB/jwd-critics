@@ -10,9 +10,9 @@ public enum Position implements BaseEntity {
     ACTOR(2),
     WRITER(3),
     PRODUCER(4);
-    private final Integer id;
+    private final int id;
 
-    Position(Integer id) {
+    Position(int id) {
         this.id = id;
     }
 
@@ -24,7 +24,7 @@ public enum Position implements BaseEntity {
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 }

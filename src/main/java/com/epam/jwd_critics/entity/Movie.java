@@ -20,7 +20,7 @@ public class Movie extends AbstractBaseEntity {
     @Column(name = "summary")
     @Pattern(regexp = "^[A-Za-zА-Яа-яЁё0-9\\\\s()\"':?!.,-]{1,10000}$",
             message = "Movie summary contains illegal characters")
-    private String summary;
+    private String summary = "";
 
     @Column(name = "runtime")
     private Duration runtime;
@@ -35,11 +35,11 @@ public class Movie extends AbstractBaseEntity {
     @Column(name = "rating")
     @Max(value = 100, message = "Movie rating can't be greater than 100")
     @Positive(message = "Movie rating must be positive")
-    private Integer rating;
+    private int rating;
 
     @Column(name = "review_count")
     @Positive(message = "Movie review count can't be less than zero")
-    private Integer reviewCount;
+    private int reviewCount;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
@@ -93,19 +93,19 @@ public class Movie extends AbstractBaseEntity {
         this.country = country;
     }
 
-    public Integer getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
-    public Integer getReviewCount() {
+    public int getReviewCount() {
         return reviewCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
+    public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
 
@@ -150,16 +150,16 @@ public class Movie extends AbstractBaseEntity {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return name.equals(movie.name) && Objects.equals(summary, movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && Objects.equals(rating, movie.rating) && Objects.equals(reviewCount, movie.reviewCount) && Objects.equals(releaseDate, movie.releaseDate) && ageRestriction == movie.ageRestriction && Objects.equals(genres, movie.genres) && Objects.equals(staff, movie.staff);
+        return rating == movie.rating && reviewCount == movie.reviewCount && name.equals(movie.name) && summary.equals(movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && imagePath.equals(movie.imagePath) && Objects.equals(releaseDate, movie.releaseDate) && ageRestriction == movie.ageRestriction && genres.equals(movie.genres) && staff.equals(movie.staff);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, summary, runtime, country, imagePath, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class Movie extends AbstractBaseEntity {
             // private constructor
         }
 
-        public MovieBuilder setId(Integer id) {
+        public MovieBuilder setId(int id) {
             Movie.this.id = id;
             return this;
         }
@@ -210,12 +210,12 @@ public class Movie extends AbstractBaseEntity {
             return this;
         }
 
-        public MovieBuilder setRating(Integer rating) {
+        public MovieBuilder setRating(int rating) {
             Movie.this.rating = rating;
             return this;
         }
 
-        public MovieBuilder setReviewCount(Integer reviewCount) {
+        public MovieBuilder setReviewCount(int reviewCount) {
             Movie.this.reviewCount = reviewCount;
             return this;
         }

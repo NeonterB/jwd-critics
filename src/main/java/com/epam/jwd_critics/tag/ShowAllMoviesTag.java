@@ -19,38 +19,8 @@ public class ShowAllMoviesTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) pageContext.getRequest();
-        CommandRequest req = new CommandRequest() {
-            @Override
-            public Object getAttribute(Attribute attribute) {
-                return httpServletRequest.getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setAttribute(Attribute attribute, Object value) {
-                httpServletRequest.setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public String getParameter(Parameter parameter) {
-                return httpServletRequest.getParameter(parameter.getName());
-            }
-
-            @Override
-            public Object getSessionAttribute(Attribute attribute) {
-                return httpServletRequest.getSession().getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setSessionAttribute(Attribute attribute, Object value) {
-                httpServletRequest.getSession().setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public void removeSessionAttribute(Attribute attribute) {
-                httpServletRequest.getSession().removeAttribute(attribute.getName());
-            }
-        };
+        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+        CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeMovies(writer, req);
         int movieCount = (int) req.getSessionAttribute(Attribute.MOVIE_COUNT);

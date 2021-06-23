@@ -5,6 +5,7 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
+import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.exception.CommandException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,6 @@ import java.io.IOException;
 
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         processRequest(req, resp);
@@ -35,37 +34,7 @@ public class Controller extends HttpServlet {
         Command command = Command.of(commandName);
         try {
             if (command != null) {
-                CommandResponse response = command.execute(new CommandRequest() {
-                    @Override
-                    public Object getAttribute(Attribute attribute) {
-                        return req.getAttribute(attribute.getName());
-                    }
-
-                    @Override
-                    public void setAttribute(Attribute attribute, Object value) {
-                        req.setAttribute(attribute.getName(), value);
-                    }
-
-                    @Override
-                    public String getParameter(Parameter parameter) {
-                        return req.getParameter(parameter.getName());
-                    }
-
-                    @Override
-                    public Object getSessionAttribute(Attribute attribute) {
-                        return req.getSession().getAttribute(attribute.getName());
-                    }
-
-                    @Override
-                    public void setSessionAttribute(Attribute attribute, Object value) {
-                        req.getSession().setAttribute(attribute.getName(), value);
-                    }
-
-                    @Override
-                    public void removeSessionAttribute(Attribute attribute) {
-                        req.getSession().removeAttribute(attribute.getName());
-                    }
-                });
+                CommandResponse response = command.execute(CommandRequest.from(req));
 
                 switch (response.getTransferType()) {
                     case FORWARD:
@@ -77,7 +46,14 @@ public class Controller extends HttpServlet {
                 }
             }
 
-        } catch (ServletException | CommandException | IOException e) {
+        } catch (CommandException e) {
+            req.getSession().setAttribute(Attribute.COMMAND_ERROR.getName(), e.getMessage());
+            try {
+                resp.sendRedirect(ServletDestination.ERROR_500.getPath());
+            } catch (IOException ioException) {
+                //todo
+            }
+        } catch (IOException | ServletException e) {
             //todo
         }
     }

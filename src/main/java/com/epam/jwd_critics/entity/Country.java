@@ -12,14 +12,14 @@ public enum Country implements BaseEntity {
     NORWAY(8),
     FINLAND(9),
     SWEDEN(10);
-    private final Integer id;
+    private final int id;
 
-    Country(Integer id) {
+    Country(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

@@ -15,11 +15,11 @@ public interface UserService {
 
     int getCount() throws ServiceException;
 
-    Optional<User> getEntityById(Integer id) throws ServiceException;
+    Optional<User> getEntityById(int id) throws ServiceException;
 
     void update(User user) throws ServiceException;
 
-    void updatePassword(Integer id, char[] password) throws ServiceException;
+    void updatePassword(int id, char[] password) throws ServiceException;
 
-    void delete(Integer id) throws ServiceException;
+    void delete(int id) throws ServiceException;
 }

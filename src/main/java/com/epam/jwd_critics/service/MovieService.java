@@ -13,21 +13,21 @@ public interface MovieService {
 
     int getCount() throws ServiceException;
 
-    Optional<Movie> getEntityById(Integer id) throws ServiceException;
+    Optional<Movie> getEntityById(int id) throws ServiceException;
 
     List<Movie> getMoviesByName(String name) throws ServiceException;
 
-    void addGenre(Integer movieId, Genre genre) throws ServiceException;
+    void addGenre(int movieId, Genre genre) throws ServiceException;
 
-    void removeGenre(Integer movieId, Genre genre) throws ServiceException;
+    void removeGenre(int movieId, Genre genre) throws ServiceException;
 
-    void addCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException;
+    void addCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 
-    void removeCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException;
+    void removeCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 
     Movie create(Movie movie) throws ServiceException;
 
     void update(Movie movie) throws ServiceException;
 
-    void delete(Integer id) throws ServiceException;
+    void delete(int id) throws ServiceException;
 }

@@ -20,38 +20,8 @@ public class ShowAllUsersTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) pageContext.getRequest();
-        CommandRequest req = new CommandRequest() {
-            @Override
-            public Object getAttribute(Attribute attribute) {
-                return httpServletRequest.getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setAttribute(Attribute attribute, Object value) {
-                httpServletRequest.setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public String getParameter(Parameter parameter) {
-                return httpServletRequest.getParameter(parameter.getName());
-            }
-
-            @Override
-            public Object getSessionAttribute(Attribute attribute) {
-                return httpServletRequest.getSession().getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setSessionAttribute(Attribute attribute, Object value) {
-                httpServletRequest.getSession().setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public void removeSessionAttribute(Attribute attribute) {
-                httpServletRequest.getSession().removeAttribute(attribute.getName());
-            }
-        };
+        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+        CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeUsers(writer, req);
         int userCount = (int) req.getSessionAttribute(Attribute.USER_COUNT);
@@ -80,7 +50,7 @@ public class ShowAllUsersTag extends TagSupport {
                         writer.write("<div class=\"row\">");
                     }
                     writer.write("<div class=\"col-2\">");
-                    writer.write("<a href=\"" + contextPath + "/controller?command=open_profile&userId=" + userDTO.getId() + "\">");
+                    writer.write("<a href=\"" + contextPath + "/controller?command=open_user_profile&userId=" + userDTO.getId() + "\">");
                     writer.write("<img class=\"img-thumbnail\" src=\"" + userDTO.getImagePath() + "\" alt=\"" + userDTO.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + userDTO.getName() + "</p>");
@@ -89,7 +59,7 @@ public class ShowAllUsersTag extends TagSupport {
                     if (!user.getId().equals(userDTO.getId())) {
                         if (userDTO.getStatus().equals(Status.BANNED)) {
                             writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&currentPage=" + currentPage + "&newStatus=active&userId=" + userDTO.getId() + "\">Unban</a>");
-                        } else {
+                        } else if (userDTO.getStatus().equals(Status.ACTIVE)) {
                             writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&currentPage=" + currentPage + "&newStatus=banned&userId=" + userDTO.getId() + "\">Ban</a>");
                         }
                     }

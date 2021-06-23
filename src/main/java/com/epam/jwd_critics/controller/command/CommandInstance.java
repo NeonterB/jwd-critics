@@ -35,6 +35,7 @@ public enum CommandInstance {
     SIGN_IN(new SignInCommand(), Role.GUEST),
     REGISTER(new RegisterCommand(), Role.GUEST),
     SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER);
+
     private final Command command;
     private final List<Role> allowedRoles = new LinkedList<>();
     private boolean userMustBeActive = false;

@@ -72,7 +72,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<Movie> getEntityById(Integer id) throws ServiceException {
+    public Optional<Movie> getEntityById(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         Optional<Movie> movie;
         try {
@@ -110,7 +110,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addGenre(Integer movieId, Genre genre) throws ServiceException {
+    public void addGenre(int movieId, Genre genre) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
@@ -126,7 +126,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void removeGenre(Integer movieId, Genre genre) throws ServiceException {
+    public void removeGenre(int movieId, Genre genre) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
@@ -142,7 +142,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
+    public void addCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
@@ -158,7 +158,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void removeCelebrityAndPosition(Integer movieId, Integer celebrityId, Position position) throws ServiceException {
+    public void removeCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
@@ -212,20 +212,18 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void delete(Integer id) throws ServiceException {
+    public void delete(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao, reviewDao);
         try {
-            Movie movieToDelete = movieDao.getEntityById(id)
-                    .orElseThrow(() -> new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST));
+            if (!movieDao.idExists(id)) {
+                throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            }
             movieDao.delete(id);
             transaction.commit();
-            logger.info("{} was deleted", movieToDelete);
+            logger.info("Movie with id {} was deleted", id);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }

@@ -147,7 +147,7 @@ public class User extends AbstractBaseEntity {
             // private constructor
         }
 
-        public UserBuilder setId(Integer id) {
+        public UserBuilder setId(int id) {
             User.this.id = id;
             return this;
         }
@@ -177,7 +177,7 @@ public class User extends AbstractBaseEntity {
             return this;
         }
 
-        public UserBuilder setRating(Integer rating) {
+        public UserBuilder setRating(int rating) {
             User.this.rating = rating;
             return this;
         }

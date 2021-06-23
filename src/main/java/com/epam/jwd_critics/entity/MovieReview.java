@@ -4,25 +4,25 @@ import java.util.Objects;
 
 public class MovieReview extends AbstractBaseEntity {
     @Column(name = "user_id")
-    private final Integer userId;
+    private final int userId;
 
     @Column(name = "movie_id")
-    private final Integer movieId;
+    private final int movieId;
 
     @Column(name = "text")
     private String text;
 
     @Column(name = "score")
-    private Integer score;
+    private int score;
 
-    public MovieReview(String text, Integer score, Integer userId, Integer movieId) {
+    public MovieReview(String text, int score, int userId, int movieId) {
         this.text = text;
         this.score = score;
         this.userId = userId;
         this.movieId = movieId;
     }
 
-    public MovieReview(Integer id, String text, Integer score, Integer userId, Integer movieId) {
+    public MovieReview(int id, String text, int score, int userId, int movieId) {
         super(id);
         this.text = text;
         this.score = score;
@@ -38,25 +38,20 @@ public class MovieReview extends AbstractBaseEntity {
         this.text = text;
     }
 
-    public Integer getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public Integer getMovieId() {
+    public int getMovieId() {
         return movieId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(text, score, userId, movieId);
     }
 
     @Override
@@ -64,6 +59,11 @@ public class MovieReview extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieReview that = (MovieReview) o;
-        return text.equals(that.text) && score.equals(that.score) && userId.equals(that.userId) && movieId.equals(that.movieId);
+        return userId == that.userId && movieId == that.movieId && score == that.score && text.equals(that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, movieId, text, score);
     }
 }

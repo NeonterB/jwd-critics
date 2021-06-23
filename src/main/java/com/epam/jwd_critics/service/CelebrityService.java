@@ -11,11 +11,11 @@ public interface CelebrityService {
 
     int getCount() throws ServiceException;
 
-    Optional<Celebrity> getEntityById(Integer id) throws ServiceException;
+    Optional<Celebrity> getEntityById(int id) throws ServiceException;
 
     void update(Celebrity celebrity) throws ServiceException;
 
     Celebrity create(Celebrity celebrity) throws ServiceException;
 
-    void delete(Integer id) throws ServiceException;
+    void delete(int id) throws ServiceException;
 }

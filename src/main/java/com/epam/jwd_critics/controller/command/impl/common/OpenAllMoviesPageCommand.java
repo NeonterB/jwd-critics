@@ -10,21 +10,19 @@ import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.entity.Movie;
+import com.epam.jwd_critics.message.InfoMessage;
 import com.epam.jwd_critics.service.MovieService;
 import com.epam.jwd_critics.service.impl.MovieServiceImpl;
 import com.epam.jwd_critics.tag.ShowAllMoviesTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class OpenAllMoviesPageCommand implements Command {
-    private static final Logger logger = LoggerFactory.getLogger(OpenAllMoviesPageCommand.class);
     private final MovieService movieService = MovieServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse commandResult = new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.FORWARD);
+        CommandResponse resp = new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.FORWARD);
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
         String newPageStr = req.getParameter(Parameter.NEW_MOVIES_PAGE);
@@ -42,13 +40,12 @@ public class OpenAllMoviesPageCommand implements Command {
             int movieCount = movieService.getCount();
             req.setSessionAttribute(Attribute.MOVIE_COUNT, movieCount);
             if (moviesToDisplay.size() == 0) {
-                req.setSessionAttribute(Attribute.REPORT_MESSAGE, "No movies here yet");
+                req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.NO_MOVIES);
             }
         } catch (ServiceException e) {
-            logger.error(e.getMessage(), e);
-            req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
-            commandResult.setDestination(ServletDestination.MAIN);
+            req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
+            resp = CommandResponse.redirectToMainOrPreviousPage(req);
         }
-        return commandResult;
+        return resp;
     }
 }

@@ -5,9 +5,11 @@ public enum ServletDestination implements Destination {
     SIGN_IN("/pages/guest/sign_in.jsp"),
     ALL_MOVIES("/pages/common/all_movies.jsp"),
     ALL_USERS("/pages/admin/all_users.jsp"),
+    USER_PROFILE("/pages/common/user_profile.jsp"),
     REVIEWS("/pages/common/reviews.jsp"),
     MOVIE("/pages/common/movie.jsp"),
-    ERROR_404("/pages/error/404.jsp");
+    ERROR_404("/pages/error/404.jsp"),
+    ERROR_500("/pages/error/500.jsp");
     private final String path;
 
     ServletDestination(String path) {

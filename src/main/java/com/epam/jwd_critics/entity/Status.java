@@ -5,14 +5,14 @@ public enum Status implements BaseEntity {
     ACTIVE(1),
     INACTIVE(2),
     BANNED(3);
-    private final Integer id;
+    private final int id;
 
-    Status(Integer id) {
+    Status(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

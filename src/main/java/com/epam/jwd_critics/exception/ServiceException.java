@@ -2,8 +2,6 @@ package com.epam.jwd_critics.exception;
 
 import com.epam.jwd_critics.exception.codes.ExceptionCode;
 
-import java.net.ServerSocket;
-
 public class ServiceException extends Exception {
     private final ExceptionCode code;
 
@@ -11,9 +9,9 @@ public class ServiceException extends Exception {
         this.code = code;
     }
 
-    public ServiceException(Throwable throwable){
-        super(throwable);
-        this.code = () -> "DAO EXCEPTION: " + throwable.getMessage();
+    public ServiceException(DaoException e) {
+        super(e);
+        this.code = () -> "DAO EXCEPTION: " + e.getMessage();
     }
 
     public ExceptionCode getCode() {

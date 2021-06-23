@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieReviewService {
-    List<MovieReview> getMovieReviewsByMovieId(Integer movieId, Integer begin, Integer end) throws ServiceException;
+    List<MovieReview> getMovieReviewsByMovieId(int movieId, int begin, int end) throws ServiceException;
 
-    List<MovieReview> getMovieReviewsByUserId(Integer userId, Integer begin, Integer end) throws ServiceException;
+    List<MovieReview> getMovieReviewsByUserId(int userId, int begin, int end) throws ServiceException;
 
-    int getCountByMovieId(Integer movieId) throws ServiceException;
+    int getCountByMovieId(int movieId) throws ServiceException;
 
-    int getCountByUserId(Integer userId) throws ServiceException;
+    int getCountByUserId(int userId) throws ServiceException;
 
-    Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws ServiceException;
+    Optional<MovieReview> getEntity(int userId, int movieId) throws ServiceException;
 
-    Optional<MovieReview> getEntityById(Integer reviewId) throws ServiceException;
+    Optional<MovieReview> getEntityById(int reviewId) throws ServiceException;
 
     int getCount() throws ServiceException;
 
@@ -25,5 +25,5 @@ public interface MovieReviewService {
 
     void update(MovieReview review) throws ServiceException;
 
-    void delete(Integer reviewId) throws ServiceException;
+    void delete(int reviewId) throws ServiceException;
 }

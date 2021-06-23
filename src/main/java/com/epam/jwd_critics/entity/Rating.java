@@ -5,14 +5,14 @@ public enum Rating implements BaseEntity {
     LOW(1),
     MEDIUM(2),
     HIGH(3);
-    private final Integer id;
+    private final int id;
 
-    Rating(Integer id) {
+    Rating(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

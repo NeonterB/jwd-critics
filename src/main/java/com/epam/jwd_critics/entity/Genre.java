@@ -13,14 +13,14 @@ public enum Genre implements BaseEntity {
     HORROR(9),
     ROMANCE(10),
     THRILLER(11);
-    private final Integer id;
+    private final int id;
 
-    Genre(Integer id) {
+    Genre(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

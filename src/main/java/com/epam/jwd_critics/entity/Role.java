@@ -6,14 +6,14 @@ public enum Role implements BaseEntity {
     HELPER(2),
     USER(3),
     GUEST(4);
-    private final Integer id;
+    private final int id;
 
-    Role(Integer id) {
+    Role(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 }

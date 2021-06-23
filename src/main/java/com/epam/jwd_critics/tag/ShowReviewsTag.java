@@ -20,38 +20,8 @@ public class ShowReviewsTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) pageContext.getRequest();
-        CommandRequest req = new CommandRequest() {
-            @Override
-            public Object getAttribute(Attribute attribute) {
-                return httpServletRequest.getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setAttribute(Attribute attribute, Object value) {
-                httpServletRequest.setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public String getParameter(Parameter parameter) {
-                return httpServletRequest.getParameter(parameter.getName());
-            }
-
-            @Override
-            public Object getSessionAttribute(Attribute attribute) {
-                return httpServletRequest.getSession().getAttribute(attribute.getName());
-            }
-
-            @Override
-            public void setSessionAttribute(Attribute attribute, Object value) {
-                httpServletRequest.getSession().setAttribute(attribute.getName(), value);
-            }
-
-            @Override
-            public void removeSessionAttribute(Attribute attribute) {
-                httpServletRequest.getSession().removeAttribute(attribute.getName());
-            }
-        };
+        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+        CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeReviews(writer, req);
         int reviewCount = (int) req.getSessionAttribute(Attribute.REVIEW_COUNT);
@@ -82,7 +52,7 @@ public class ShowReviewsTag extends TagSupport {
                     writer.write("<div class=\"row mt-4\">");
 
                     writer.write("<div class=\"col-1\">");
-                    writer.write("<a href=\"" + contextPath + "/controller?command=open_profile&userId=" + review.getUserId() + "\">");
+                    writer.write("<a href=\"" + contextPath + "/controller?command=open_user_profile&userId=" + review.getUserId() + "\">");
                     writer.write("<img class=\"img-thumbnail\" src=\"" + review.getUserImagePath() + "\" alt=\"" + review.getUserName() + "\">");
                     writer.write("</a>");
                     writer.write("</div>");

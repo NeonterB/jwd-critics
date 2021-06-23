@@ -1,3 +1,4 @@
+<%--suppress ALL --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -27,25 +28,25 @@
     });
 </script>
 <body>
-<c:forEach var="validationError" items="${validationErrors}">
-    <script>Notiflix.Notify.Failure('${validationError}')</script>
+<c:forEach var="warning" items="${validationWarnings}">
+    <script>Notiflix.Notify.Warning('${warning}')</script>
 </c:forEach>
-<c:if test="${not empty serviceError}">
-    <script>Notiflix.Notify.Failure('${serviceError}')</script>
+<c:if test="${not empty fatalNotification}">
+    <script>Notiflix.Notify.Failure('${fatalNotification}')</script>
+</c:if>
+<c:if test="${not empty commandError}">
+    <script>Notiflix.Report.Failure('${commandError}')</script>
 </c:if>
 <c:if test="${not empty successNotification}">
     <script>Notiflix.Notify.Success('${successNotification}')</script>
 </c:if>
-<c:if test="${not empty globalError}">
-    <script>Notiflix.Report.Failure('${globalError}')</script>
-</c:if>
-<c:if test="${not empty reportMessage}">
-    <script>Notiflix.Report.Success('${reportMessage}')</script>
+<c:if test="${not empty infoMessage}">
+    <script>Notiflix.Report.Info('${infoMessage}')</script>
 </c:if>
 </body>
 </html>
-<c:remove var="serviceError"/>
-<c:remove var="validationErrors"/>
+<c:remove var="validationWarnings"/>
+<c:remove var="fatalNotification"/>
+<c:remove var="commandError"/>
 <c:remove var="successNotification"/>
-<c:remove var="globalError"/>
-<c:remove var="reportMessage"/>
+<c:remove var="infoMessage"/>

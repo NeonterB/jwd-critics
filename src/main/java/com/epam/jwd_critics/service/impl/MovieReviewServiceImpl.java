@@ -43,7 +43,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public Optional<MovieReview> getEntity(Integer userId, Integer movieId) throws ServiceException {
+    public Optional<MovieReview> getEntity(int userId, int movieId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         Optional<MovieReview> movieReview;
         try {
@@ -59,7 +59,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public Optional<MovieReview> getEntityById(Integer reviewId) throws ServiceException {
+    public Optional<MovieReview> getEntityById(int reviewId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         Optional<MovieReview> movieReview;
         try {
@@ -75,7 +75,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public List<MovieReview> getMovieReviewsByMovieId(Integer movieId, Integer begin, Integer end) throws ServiceException {
+    public List<MovieReview> getMovieReviewsByMovieId(int movieId, int begin, int end) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         List<MovieReview> reviews;
         try {
@@ -91,7 +91,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public List<MovieReview> getMovieReviewsByUserId(Integer userId, Integer begin, Integer end) throws ServiceException {
+    public List<MovieReview> getMovieReviewsByUserId(int userId, int begin, int end) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         List<MovieReview> reviews;
         try {
@@ -107,7 +107,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public int getCountByMovieId(Integer movieId) throws ServiceException {
+    public int getCountByMovieId(int movieId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         int count;
         try {
@@ -123,7 +123,7 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     }
 
     @Override
-    public int getCountByUserId(Integer userId) throws ServiceException {
+    public int getCountByUserId(int userId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         int count;
         try {
@@ -167,33 +167,28 @@ public class MovieReviewServiceImpl implements MovieReviewService {
             }
             movieReviewDao.update(review);
             transaction.commit();
-            logger.info("Celebrity with id {} was updated", review.getId());
+            logger.info("Review with id {} was updated", review.getId());
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
     }
 
     @Override
-    public void delete(Integer reviewId) throws ServiceException {
+    public void delete(int reviewId) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieReviewDao);
         try {
-            MovieReview reviewToDelete = movieReviewDao.getEntityById(reviewId)
-                    .orElseThrow(() -> new ServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST));
+            if (!movieReviewDao.idExists(reviewId)){
+                throw new ServiceException(MovieReviewServiceCode.REVIEW_DOES_NOT_EXIST);
+            }
             movieReviewDao.delete(reviewId);
             transaction.commit();
-            logger.info("{} was deleted", reviewToDelete);
+            logger.info("Review with id {} was deleted", reviewId);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }

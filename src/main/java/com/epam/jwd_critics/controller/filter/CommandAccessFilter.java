@@ -4,6 +4,8 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
@@ -41,13 +43,18 @@ public class CommandAccessFilter implements Filter {
             }
             commandInstance = CommandInstance.valueOf(commandName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            httpRequest.getSession(true).setAttribute(Attribute.GLOBAL_ERROR.getName(), "Unknown command");
+            httpRequest.getSession(true).setAttribute(Attribute.COMMAND_ERROR.getName(), "Unknown command");
             httpResponse.sendRedirect(ServletDestination.ERROR_404.getPath());
             return;
         }
         if (!commandInstance.isRoleAllowed(userRole) || (userStatus.equals(Status.INACTIVE) && commandInstance.isUserMustBeActive())) {
-            httpRequest.getSession(true).setAttribute(Attribute.GLOBAL_ERROR.getName(), "Illegal access to command");
-            httpResponse.sendRedirect(ServletDestination.MAIN.getPath());
+            httpRequest.getSession(true).setAttribute(Attribute.FATAL_NOTIFICATION.getName(), "Illegal access to command");
+            String page = httpRequest.getParameter(Parameter.CURRENT_PAGE.getName());
+            if (page != null) {
+                httpResponse.sendRedirect(page);
+            } else{
+                httpResponse.sendRedirect(ServletDestination.MAIN.getPath());
+            }
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

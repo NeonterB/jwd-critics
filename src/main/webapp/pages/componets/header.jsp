@@ -51,7 +51,7 @@
                 <li>
                     </c:if>
                     <a class="nav-link text-white"
-                       href="${pageContext.request.contextPath}/controller?command=open_profile">
+                       href="${pageContext.request.contextPath}/controller?command=open_user_profile&userId=${user.id}">
                         <fmt:message key="button.profile"/>
                     </a>
                 </li>

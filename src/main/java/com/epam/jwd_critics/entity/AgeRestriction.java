@@ -8,14 +8,14 @@ public enum AgeRestriction implements BaseEntity {
     PG_13(3),
     R(4),
     NC_17(5);
-    private final Integer id;
+    private final int id;
 
-    AgeRestriction(Integer id) {
+    AgeRestriction(int id) {
         this.id = id;
     }
 
     @Override
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 public class MovieDTO {
-    private Integer id;
+    private int id;
     private String name;
     private String summary;
     private String runtime;
     private String country;
     private String imagePath;
-    private Integer rating;
-    private Integer reviewCount;
+    private int rating;
+    private int reviewCount;
     private String releaseDate;
     private String ageRestriction;
     private Map<Position, List<Celebrity>> staff;
@@ -46,11 +46,11 @@ public class MovieDTO {
         this.staff = movie.getStaff();
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -94,19 +94,19 @@ public class MovieDTO {
         this.imagePath = imagePath;
     }
 
-    public Integer getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
-    public Integer getReviewCount() {
+    public int getReviewCount() {
         return reviewCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
+    public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
 

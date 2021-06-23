@@ -1,8 +1,5 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.dao.AbstractCelebrityDao;
 import com.epam.jwd_critics.dao.AbstractMovieDao;
 import com.epam.jwd_critics.dao.CelebrityDao;
@@ -11,6 +8,9 @@ import com.epam.jwd_critics.dao.MovieDao;
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
+import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.service.CelebrityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,14 +68,11 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public Optional<Celebrity> getEntityById(Integer id) throws ServiceException {
+    public Optional<Celebrity> getEntityById(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
         Optional<Celebrity> celebrity;
         try {
             celebrity = celebrityDao.getEntityById(id);
-            if (celebrity.isPresent()) {
-                updateInfo(celebrity.get());
-            }
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -99,9 +96,6 @@ public class CelebrityServiceImpl implements CelebrityService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
@@ -126,25 +120,19 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public void delete(Integer id) throws ServiceException {
+    public void delete(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(celebrityDao, movieDao);
         try {
-            Celebrity celebrityToDelete = celebrityDao.getEntityById(id)
-                    .orElseThrow(() -> new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST));
-            updateInfo(celebrityToDelete);
-            for (Movie movie : celebrityToDelete.getJobs().keySet()) {
-                movie.getStaff().remove(celebrityToDelete);
-                movieDao.update(movie);
+            if (celebrityDao.idExists(id)) {
+                celebrityDao.delete(id);
+            } else {
+                throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
             }
-            celebrityDao.delete(id);
             transaction.commit();
-            logger.info("{} was deleted", celebrityToDelete);
+            logger.info("Celebrity with id {} was deleted", id);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }

@@ -26,7 +26,7 @@ public class OpenAllUsersPageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse commandResult = new CommandResponse(ServletDestination.ALL_USERS, TransferType.FORWARD);
+        CommandResponse resp = new CommandResponse(ServletDestination.ALL_USERS, TransferType.FORWARD);
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_USERS_CURRENT_PAGE);
         String newPageStr = req.getParameter(Parameter.NEW_USERS_PAGE);
@@ -51,12 +51,12 @@ public class OpenAllUsersPageCommand implements Command {
             int userCount = userService.getCount();
             req.setSessionAttribute(Attribute.USER_COUNT, userCount);
             if (userDTOS.size() == 0) {
-                req.setSessionAttribute(Attribute.REPORT_MESSAGE, "No users here yet");
+                req.setSessionAttribute(Attribute.INFO_MESSAGE, "No users here yet");
             }
         } catch (ServiceException e) {
-            req.setSessionAttribute(Attribute.SERVICE_ERROR, e.getMessage());
-            commandResult.setDestination(ServletDestination.MAIN);
+            req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
+            resp = CommandResponse.redirectToMainOrPreviousPage(req);
         }
-        return commandResult;
+        return resp;
     }
 }

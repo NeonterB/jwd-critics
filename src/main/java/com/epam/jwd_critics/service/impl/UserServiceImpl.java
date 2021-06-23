@@ -52,9 +52,6 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
@@ -83,9 +80,6 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
@@ -125,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getEntityById(Integer id) throws ServiceException {
+    public Optional<User> getEntityById(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         Optional<User> user;
         try {
@@ -153,15 +147,12 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
     }
 
-    public void updatePassword(Integer id, char[] password) throws ServiceException {
+    public void updatePassword(int id, char[] password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
             if (!userDao.idExists(id)) {
@@ -173,22 +164,21 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
-        } catch (ServiceException e) {
-            transaction.rollback();
-            throw e;
         } finally {
             transaction.close();
         }
     }
 
     @Override
-    public void delete(Integer id) throws ServiceException {
+    public void delete(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
-            User userToDelete = userDao.getEntityById(id).orElseThrow(() -> new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST));
+            if(!userDao.idExists(id)){
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
             userDao.delete(id);
             transaction.commit();
-            logger.info("{} was deleted", userToDelete);
+            logger.info("User with id {} was deleted", id);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
