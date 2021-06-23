@@ -53,12 +53,12 @@ public class ShowReviewsTag extends TagSupport {
 
                     writer.write("<div class=\"col-1\">");
                     writer.write("<a href=\"" + contextPath + "/controller?command=open_user_profile&userId=" + review.getUserId() + "\">");
-                    writer.write("<img class=\"img-thumbnail\" src=\"" + review.getUserImagePath() + "\" alt=\"" + review.getUserName() + "\">");
+                    writer.write("<img class=\"img-thumbnail\" src=\"" + review.getImagePath() + "\" alt=\"" + review.getTitle() + "\">");
                     writer.write("</a>");
                     writer.write("</div>");
 
                     writer.write("<div class=\"col\">");
-                    writer.write("<strong>" + review.getUserName() + "</strong><br>");
+                    writer.write("<strong>" + review.getTitle() + "</strong><br>");
                     writer.write("Score: " + review.getScore() + "<br>");
                     writer.write(review.getText());
                     writer.write("</div>");

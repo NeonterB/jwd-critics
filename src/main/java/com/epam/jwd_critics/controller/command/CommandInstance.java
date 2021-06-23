@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
 import com.epam.jwd_critics.controller.command.impl.guest.RegisterCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenSignInPageCommand;
@@ -26,6 +27,7 @@ public enum CommandInstance {
     OPEN_ALL_MOVIES(new OpenAllMoviesPageCommand(), Role.values()),
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
+    OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_MOVIE_REVIEW(new UpdateMovieReviewCommand(), true, Role.USER, Role.ADMIN),

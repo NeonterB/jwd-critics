@@ -23,6 +23,9 @@ public enum Attribute {
     REVIEWS_ON_MOVIE_PAGE("reviewsOnMoviePage"),
     USER_REVIEW("userReview"),
 
+    USER_PROFILE("userProfile"),
+    REVIEWS_ON_USER_PROFILE_PAGE("reviewsOnUserProfilePage"),
+
     VALIDATION_WARNINGS("validationWarnings"),
     FATAL_NOTIFICATION("fatalNotification"),
     COMMAND_ERROR("commandError"),

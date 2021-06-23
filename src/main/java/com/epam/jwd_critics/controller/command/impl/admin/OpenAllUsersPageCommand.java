@@ -19,6 +19,7 @@ import com.epam.jwd_critics.tag.ShowAllUsersTag;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OpenAllUsersPageCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
@@ -40,13 +41,7 @@ public class OpenAllUsersPageCommand implements Command {
         int end = ShowAllUsersTag.USERS_PER_PAGE + begin;
         try {
             List<User> users = userService.getAllBetween(begin, end);
-            List<UserDTO> userDTOS = new LinkedList<>();
-            for (User user : users) {
-                UserDTO userDTO = new UserDTO(user);
-                int reviewCount = reviewService.getCountByUserId(user.getId());
-                userDTO.setReviews(reviewService.getMovieReviewsByUserId(user.getId(), 0, reviewCount));
-                userDTOS.add(userDTO);
-            }
+            List<UserDTO> userDTOS = users.stream().map(UserDTO::new).collect(Collectors.toList());
             req.setSessionAttribute(Attribute.USERS_TO_DISPLAY, userDTOS);
             int userCount = userService.getCount();
             req.setSessionAttribute(Attribute.USER_COUNT, userCount);

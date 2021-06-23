@@ -64,8 +64,8 @@ public class OpenMovieReviewsPageCommand implements Command {
                 MovieReviewDTO reviewDTO = new MovieReviewDTO(review);
                 Optional<User> user = userService.getEntityById(reviewDTO.getUserId());
                 if (user.isPresent()) {
-                    reviewDTO.setUserImagePath(user.get().getImagePath());
-                    reviewDTO.setUserName(user.get().getFirstName());
+                    reviewDTO.setImagePath(user.get().getImagePath());
+                    reviewDTO.setTitle(user.get().getFirstName());
                     reviewDTOS.add(reviewDTO);
                 }
             }
