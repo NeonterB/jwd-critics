@@ -3,7 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
 <fmt:setBundle basename="properties/content"/>
-<%--<c:set var="currentPage" value="/pages/guest/signIn.jsp" scope="session"/>--%>
 <html>
 <head>
     <title>Log in</title>
@@ -18,7 +17,7 @@
         <div class="form-container sign-up-container">
             <form name="registerForm" method="POST" action="<c:url value="/controller?command=register"/>">
                 <h1><fmt:message key="text.createAccount"/></h1>
-                <input type="hidden" name="currentPage" value="${requestScope.currentPage}"/>
+                <input type="hidden" name="previousPage" value="${sessionScope.previousPage}"/>
                 <input type="text"
                        name="firstName"
                        pattern="^[A-Z][a-z]{1,14}"
@@ -47,10 +46,10 @@
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form name="signInForm" method="GET">
+            <form name="signInForm" method="GET" action="<c:url value="/controller"/>">
                 <h1><fmt:message key="button.signIn"/></h1>
                 <input type="hidden" name="command" value="sign_in">
-                <input type="hidden" name="currentPage" value="${requestScope.currentPage}">
+                <input type="hidden" name="previousPage" value="${sessionScope.previousPage}">
                 <input type="text"
                        name="login"
                        pattern="^[a-zA-Z0-9._-]{3,25}$"

@@ -45,9 +45,9 @@ public class SignInCommand implements Command {
                 try {
                     User user = userService.login(login, password);
                     req.setSessionAttribute(Attribute.USER, new UserDTO(user));
-                    String page = req.getParameter(Parameter.CURRENT_PAGE);
-                    if (page != null) {
-                        if (page.equals(ServletDestination.MOVIE.getPath())) {
+                    String previousPage = resp.getDestination().getPath();
+                    if (!previousPage.equals(ServletDestination.MAIN.getPath())) {
+                        if (previousPage.equals(ServletDestination.MOVIE.getPath())) {
                             MovieDTO movie = (MovieDTO) req.getSessionAttribute(Attribute.MOVIE);
                             if (movie != null) {
                                 Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movie.getId());
@@ -59,6 +59,7 @@ public class SignInCommand implements Command {
                     }
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
+                    req.setSessionAttribute(Attribute.PREVIOUS_PAGE, resp.getDestination().getPath());
                     resp.setDestination(ServletDestination.SIGN_IN);
                 }
             } else {
