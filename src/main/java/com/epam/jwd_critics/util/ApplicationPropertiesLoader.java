@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class PropertiesLoaderUtil {
+public final class ApplicationPropertiesLoader {
 
-    private final Logger logger = LoggerFactory.getLogger(PropertiesLoaderUtil.class);
+    private final Logger logger = LoggerFactory.getLogger(ApplicationPropertiesLoader.class);
 
     private final Properties properties = new Properties();
 
     private ApplicationProperties appProperties;
 
-    private PropertiesLoaderUtil() {
+    private ApplicationPropertiesLoader() {
         loadProperties();
     }
 
@@ -24,7 +24,7 @@ public final class PropertiesLoaderUtil {
     }
 
     private void loadProperties() {
-        try (InputStream input = PropertiesLoaderUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
+        try (InputStream input = ApplicationPropertiesLoader.class.getClassLoader().getResourceAsStream("properties/application.properties")) {
             properties.load(input);
             appProperties = new ApplicationProperties(
                     properties.getProperty("url"),
@@ -41,6 +41,6 @@ public final class PropertiesLoaderUtil {
     }
 
     private static class PropertiesLoaderUtilSingleton {
-        private static final PropertiesLoaderUtil INSTANCE = new PropertiesLoaderUtil();
+        private static final ApplicationPropertiesLoader INSTANCE = new ApplicationPropertiesLoader();
     }
 }
