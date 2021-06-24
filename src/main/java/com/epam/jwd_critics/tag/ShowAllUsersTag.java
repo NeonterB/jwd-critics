@@ -51,7 +51,7 @@ public class ShowAllUsersTag extends TagSupport {
                     }
                     writer.write("<div class=\"col-2\">");
                     writer.write("<a href=\"" + contextPath + "/controller?command=open_user_profile&userId=" + userDTO.getId() + "\">");
-                    writer.write("<img class=\"img-thumbnail\" src=\"" + userDTO.getImagePath() + "\" alt=\"" + userDTO.getName() + "\">");
+                    writer.write("<img class=\"img-thumbnail\" src=\"" + contextPath + "/picture?currentPicture=" + userDTO.getImagePath() + "\" alt=\"" + userDTO.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + userDTO.getName() + "</p>");
                     writer.write("<p class=\"text-center\">Role: " + userDTO.getRole() + "</p>");

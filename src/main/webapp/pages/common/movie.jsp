@@ -17,7 +17,7 @@
     <a href="${pageContext.request.contextPath}/controller?command=open_all_movies">To movie list</a>
     <div class="row">
         <div class="col-4">
-            <img src="${movie.imagePath}" alt="${movie.name}" class="img-thumbnail">
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${movie.imagePath}" alt="${movie.name}" class="img-thumbnail">
         </div>
         <div class="col-4">
             <h4>${movie.name}</h4>
@@ -110,7 +110,7 @@
                 <div class="row mt-4">
                     <div class="col-1">
                         <a href="${pageContext.request.contextPath}/controller?command=open_user_profile&userId=${review.userId}">
-                            <img class="img-thumbnail" src="${review.imagePath}" alt="${review.title}">
+                            <img class="img-thumbnail" src="${pageContext.request.contextPath}/picture?currentPicture=${review.imagePath}" alt="${review.title}">
                         </a>
                     </div>
                     <div class="col">

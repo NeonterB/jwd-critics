@@ -16,7 +16,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <img src="${userProfile.imagePath}" alt="${userProfile.firstName}" class="img-thumbnail">
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${userProfile.imagePath}" alt="${userProfile.firstName}" class="img-thumbnail">
         </div>
         <div class="col-4">
             <h4>${userProfile.firstName} ${userProfile.lastName}</h4>
@@ -26,19 +26,19 @@
             <c:choose>
                 <c:when test="${userProfile.id eq user.id}">
                     <a href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&currentPage=${currentPage}">
-                        <fmt:message key="command.update"/>
+                        <fmt:message key="button.edit"/>
                     </a>
                 </c:when>
                 <c:otherwise>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <c:if test="${userProfile.status eq 'BANNED'}">
                             <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=active&currentPage=${currentPage}">
-                                <fmt:message key="command.unban"/>
+                                <fmt:message key="button.unban"/>
                             </a>
                         </c:if>
                         <c:if test="${userProfile.status eq 'ACTIVE'}">
                             <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&&newStatus=banned&currentPage=${currentPage}">
-                                <fmt:message key="command.ban"/>
+                                <fmt:message key="button.ban"/>
                             </a>
                         </c:if>
                     </c:if>
@@ -52,7 +52,7 @@
                 <div class="row mt-4">
                     <div class="col-1">
                         <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${review.movieId}">
-                            <img class="img-thumbnail" src="${review.imagePath}" alt="${review.title}">
+                            <img class="img-thumbnail" src="${pageContext.request.contextPath}/picture?currentPicture=${review.imagePath}" alt="${review.title}">
                         </a>
                     </div>
                     <div class="col">

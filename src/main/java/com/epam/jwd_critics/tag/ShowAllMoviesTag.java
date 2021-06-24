@@ -47,7 +47,7 @@ public class ShowAllMoviesTag extends TagSupport {
                     }
                     writer.write("<div class=\"col-3\">");
                     writer.write("<a href=\"" + contextPath + "/controller?command=open_movie&movieId=" + movie.getId() + "\">");
-                    writer.write("<img class=\"img-thumbnail\" src=\"" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\">");
+                    writer.write("<img class=\"img-thumbnail\" src=\"" + contextPath + "/picture?currentPicture=" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + movie.getName() + "</p>");
                     writer.write("<p class=\"text-center\">Rating: " + movie.getRating() + "</p>");
