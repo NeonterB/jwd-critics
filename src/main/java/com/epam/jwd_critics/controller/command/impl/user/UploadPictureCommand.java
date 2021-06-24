@@ -7,7 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.message.ErrorMessage;
-import com.epam.jwd_critics.util.PropertiesLoaderUtil;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
@@ -19,7 +19,7 @@ public class UploadPictureCommand implements Command {
     private static final String USER_ICONS_DIR = "user-icons";
     private static final String MOVIE_POSTERS_DIR = "movie-posters";
     private static final String CELEBRITY_ICONS_DIR = "celebrity-icons";
-    private static final String SYSTEM_DIR = PropertiesLoaderUtil.getApplicationProperties().getAssetsDir();
+    private static final String SYSTEM_DIR = ApplicationPropertiesLoader.getApplicationProperties().getAssetsDir();
     private static final char FILE_FORMAT_SEPARATOR = '.';
 
     @Override

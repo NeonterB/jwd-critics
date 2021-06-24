@@ -2,7 +2,7 @@ package com.epam.jwd_critics.pool;
 
 import com.epam.jwd_critics.exception.ConnectionException;
 import com.epam.jwd_critics.util.ApplicationProperties;
-import com.epam.jwd_critics.util.PropertiesLoaderUtil;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,8 @@ public class ConnectionPool {
     private final Condition lockCondition = lock.newCondition();
 
     private ConnectionPool() {
-        availableConnections = new LinkedBlockingQueue<>(PropertiesLoaderUtil.getApplicationProperties().getMaxPoolSize());
-        unavailableConnections = new ArrayDeque<>(PropertiesLoaderUtil.getApplicationProperties().getMaxPoolSize());
+        availableConnections = new LinkedBlockingQueue<>(ApplicationPropertiesLoader.getApplicationProperties().getMaxPoolSize());
+        unavailableConnections = new ArrayDeque<>(ApplicationPropertiesLoader.getApplicationProperties().getMaxPoolSize());
         initPool();
     }
 
@@ -43,7 +43,7 @@ public class ConnectionPool {
     }
 
     private void initPool() {
-        ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
+        ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
         for (int i = 0; i < properties.getMinPoolSize(); i++) {
             ConnectionProxy connection = new ConnectionProxy(factory.createConnection());
             availableConnections.add(connection);
@@ -55,7 +55,7 @@ public class ConnectionPool {
     public Connection getConnection() {
         lock.lock();
         ConnectionProxy connection = null;
-        ApplicationProperties properties = PropertiesLoaderUtil.getApplicationProperties();
+        ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
         try {
             if (!availableConnections.isEmpty()) {
                 connection = availableConnections.take();

@@ -9,10 +9,12 @@ import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.MovieReview;
+import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.message.ErrorMessage;
+import com.epam.jwd_critics.message.InfoMessage;
 import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
@@ -45,6 +47,9 @@ public class SignInCommand implements Command {
                 try {
                     User user = userService.login(login, password);
                     req.setSessionAttribute(Attribute.USER, new UserDTO(user));
+                    if (user.getStatus().equals(Status.INACTIVE)) {
+                        req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.ACTIVATE_EMAIL);
+                    }
                     String previousPage = resp.getDestination().getPath();
                     if (!previousPage.equals(ServletDestination.MAIN.getPath())) {
                         if (previousPage.equals(ServletDestination.MOVIE.getPath())) {
