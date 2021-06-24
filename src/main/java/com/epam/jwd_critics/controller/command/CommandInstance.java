@@ -13,8 +13,11 @@ import com.epam.jwd_critics.controller.command.impl.common.OpenSignInPageCommand
 import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.CreateMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.DeleteMovieReviewCommand;
+import com.epam.jwd_critics.controller.command.impl.user.OpenUpdateUserPageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.SignOutCommand;
 import com.epam.jwd_critics.controller.command.impl.user.UpdateMovieReviewCommand;
+import com.epam.jwd_critics.controller.command.impl.user.UpdateUserCommand;
+import com.epam.jwd_critics.controller.command.impl.user.UploadPictureCommand;
 import com.epam.jwd_critics.entity.Role;
 
 import java.util.Arrays;
@@ -28,11 +31,14 @@ public enum CommandInstance {
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
     OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
+    OPEN_UPDATE_USER(new OpenUpdateUserPageCommand(), Role.USER, Role.ADMIN),
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_MOVIE_REVIEW(new UpdateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     DELETE_MOVIE_REVIEW(new DeleteMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_USER_STATUS(new UpdateUserStatusCommand(), true, Role.ADMIN),
+    UPDATE_USER(new UpdateUserCommand(), true, Role.ADMIN, Role.USER),
+    UPLOAD_PICTURE(new UploadPictureCommand(), true, Role.USER, Role.ADMIN),
     CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values()),
     SIGN_IN(new SignInCommand(), Role.GUEST),
     REGISTER(new RegisterCommand(), Role.GUEST),

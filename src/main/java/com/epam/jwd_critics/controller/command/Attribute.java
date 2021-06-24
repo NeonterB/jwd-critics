@@ -26,6 +26,8 @@ public enum Attribute {
     USER_PROFILE("userProfile"),
     REVIEWS_ON_USER_PROFILE_PAGE("reviewsOnUserProfilePage"),
 
+    NEW_IMAGE("newImage"),
+
     VALIDATION_WARNINGS("validationWarnings"),
     FATAL_NOTIFICATION("fatalNotification"),
     COMMAND_ERROR("commandError"),

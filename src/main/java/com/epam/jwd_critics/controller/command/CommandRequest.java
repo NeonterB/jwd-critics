@@ -1,7 +1,12 @@
 package com.epam.jwd_critics.controller.command;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 public interface CommandRequest {
     Object getAttribute(Attribute attribute);
@@ -15,6 +20,8 @@ public interface CommandRequest {
     void setSessionAttribute(Attribute attribute, Object value);
 
     void removeSessionAttribute(Attribute attribute);
+
+    Collection<Part> getFileParts() throws ServletException, IOException;
 
     static CommandRequest from(HttpServletRequest req){
         return new CommandRequest() {
@@ -46,6 +53,11 @@ public interface CommandRequest {
             @Override
             public void removeSessionAttribute(Attribute attribute) {
                 req.getSession().removeAttribute(attribute.getName());
+            }
+
+            @Override
+            public Collection<Part> getFileParts() throws ServletException, IOException {
+                return req.getParts();
             }
         };
     }
