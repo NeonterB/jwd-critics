@@ -25,19 +25,19 @@
             <strong><fmt:message key="user.reviewCount"/>:</strong> ${userProfile.reviewCount}<br>
             <c:choose>
                 <c:when test="${userProfile.id eq user.id}">
-                    <a href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&currentPage=${currentPage}">
+                    <a href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&previousPage=${currentPage}">
                         <fmt:message key="button.edit"/>
                     </a>
                 </c:when>
                 <c:otherwise>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <c:if test="${userProfile.status eq 'BANNED'}">
-                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=active&currentPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=active&previousPage=${currentPage}">
                                 <fmt:message key="button.unban"/>
                             </a>
                         </c:if>
                         <c:if test="${userProfile.status eq 'ACTIVE'}">
-                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&&newStatus=banned&currentPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&&newStatus=banned&previousPage=${currentPage}">
                                 <fmt:message key="button.ban"/>
                             </a>
                         </c:if>
@@ -62,7 +62,7 @@
                     </div>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <div class="col-1">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&currentPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
                                 Delete
                             </a>
                         </div>

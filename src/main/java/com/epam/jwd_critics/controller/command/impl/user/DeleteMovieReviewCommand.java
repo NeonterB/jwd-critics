@@ -35,7 +35,7 @@ public class DeleteMovieReviewCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        String page = req.getParameter(Parameter.CURRENT_PAGE);
+        String page = req.getParameter(Parameter.PREVIOUS_PAGE);
         if (page != null) {
             if (page.equals(ServletDestination.MOVIE.getPath())) {
                 new OpenMoviePageCommand().execute(req);

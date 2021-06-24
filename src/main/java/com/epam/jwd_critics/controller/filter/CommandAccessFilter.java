@@ -49,7 +49,7 @@ public class CommandAccessFilter implements Filter {
         }
         if (!commandInstance.isRoleAllowed(userRole) || (userStatus.equals(Status.INACTIVE) && commandInstance.isUserMustBeActive())) {
             httpRequest.getSession(true).setAttribute(Attribute.FATAL_NOTIFICATION.getName(), "Illegal access to command");
-            String page = httpRequest.getParameter(Parameter.CURRENT_PAGE.getName());
+            String page = httpRequest.getParameter(Parameter.PREVIOUS_PAGE.getName());
             if (page != null) {
                 httpResponse.sendRedirect(page);
             } else{

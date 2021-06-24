@@ -58,7 +58,7 @@
                 required/>
                 <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content" id="input-file">
                 <button type="submit" class="mt-2"><fmt:message key="button.submit"/></button>
-                <input type="hidden" name="currentPage" value="${currentPage}">
+                <input type="hidden" name="previousPage" value="${currentPage}">
             </form>
         </div>
     </div>

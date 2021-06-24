@@ -1,4 +1,4 @@
-package com.epam.jwd_critics.controller.command.impl.common;
+package com.epam.jwd_critics.controller.command.impl.guest;
 
 import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;
@@ -12,10 +12,10 @@ import static com.epam.jwd_critics.controller.command.ServletDestination.SIGN_IN
 public class OpenSignInPageCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
-        String currentPage = req.getParameter(Parameter.CURRENT_PAGE);
-        if (currentPage != null) {
-            req.setAttribute(Attribute.CURRENT_PAGE, currentPage);
+        String previousPage = req.getParameter(Parameter.PREVIOUS_PAGE);
+        if (previousPage != null) {
+            req.setSessionAttribute(Attribute.PREVIOUS_PAGE, previousPage);
         }
-        return new CommandResponse(SIGN_IN, TransferType.FORWARD);
+        return new CommandResponse(SIGN_IN, TransferType.REDIRECT);
     }
 }

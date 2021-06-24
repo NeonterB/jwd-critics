@@ -37,7 +37,7 @@
                     <c:choose>
                     <c:when test="${empty user}">
                         <a class="nav-link text-white"
-                           href="${pageContext.request.contextPath}/controller?command=open_sign_in&currentPage=${requestScope.currentPage}">
+                           href="${pageContext.request.contextPath}/controller?command=open_sign_in&previousPage=${requestScope.currentPage}">
                             <fmt:message key="button.signIn"/>
                         </a>
                     </c:when>
@@ -57,7 +57,7 @@
                 </li>
                 <li>
                     <a class="nav-link text-white"
-                       href="${pageContext.request.contextPath}/controller?command=sign_out&currentPage=${requestScope.currentPage}">
+                       href="${pageContext.request.contextPath}/controller?command=sign_out&previousPage=${requestScope.currentPage}">
                         <fmt:message key="button.signOut"/>
                     </a>
                     </c:otherwise>
@@ -78,13 +78,13 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru&currentPage=${requestScope.currentPage}">
+                               href="${pageContext.request.contextPath}/controller?command=change_language&lang=ru&previousPage=${requestScope.currentPage}">
                                 Русский
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item"
-                               href="${pageContext.request.contextPath}/controller?command=change_language&currentPage=${requestScope.currentPage}">
+                               href="${pageContext.request.contextPath}/controller?command=change_language&previousPage=${requestScope.currentPage}">
                                 English
                             </a>
                         </li>

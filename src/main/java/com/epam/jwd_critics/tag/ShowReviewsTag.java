@@ -65,7 +65,7 @@ public class ShowReviewsTag extends TagSupport {
 
                     if (userRole.equals(Role.ADMIN)) {
                         writer.write("<div class=\"col-1\">");
-                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "&currentPage=" + currentPage + "\">");
+                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "&previousPage=" + currentPage + "\">");
                         writer.write("Delete");
                         writer.write("</a>");
                         writer.write("</div>");

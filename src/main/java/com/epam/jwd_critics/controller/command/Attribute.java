@@ -10,6 +10,7 @@ public enum Attribute {
     NEW_PAGE("newPage"),
 
     CURRENT_PAGE("currentPage"),
+    PREVIOUS_PAGE("previousPage"),
 
     MOVIES_TO_DISPLAY("allMoviesList"),
     REVIEWS_TO_DISPLAY("reviewsToDisplay"),

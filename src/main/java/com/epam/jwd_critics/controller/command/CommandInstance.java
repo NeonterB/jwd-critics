@@ -9,7 +9,7 @@ import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageC
 import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
 import com.epam.jwd_critics.controller.command.impl.guest.RegisterCommand;
-import com.epam.jwd_critics.controller.command.impl.common.OpenSignInPageCommand;
+import com.epam.jwd_critics.controller.command.impl.guest.OpenSignInPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.CreateMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.DeleteMovieReviewCommand;

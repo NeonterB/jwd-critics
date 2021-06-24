@@ -67,7 +67,7 @@
                         <input type="hidden" name="userId" value="${user.id}">
                         <input type="hidden" name="movieId" value="${movie.id}">
                         <input type="hidden" name="reviewId" value="${userReview.id}">
-                        <input type="hidden" name="currentPage" value="${currentPage}">
+                        <input type="hidden" name="previousPage" value="${currentPage}">
                         <div class="mb-3">
                             <label for="scoreRange" class="form-label">
                                 Your score:
@@ -95,7 +95,7 @@
                         </div>
                         <button type="submit">Submit</button>
                         <c:if test="${not empty userReview}">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}&currentPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}&previousPage=${currentPage}">
                                 Delete
                             </a>
                         </c:if>
@@ -120,7 +120,7 @@
                     </div>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <div class="col-1">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&currentPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
                                 Delete
                             </a>
                         </div>

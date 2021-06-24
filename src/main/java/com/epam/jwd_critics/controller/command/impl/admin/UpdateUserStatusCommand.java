@@ -28,8 +28,8 @@ public class UpdateUserStatusCommand implements Command {
         CommandResponse resp = new CommandResponse(ServletDestination.ALL_USERS, TransferType.REDIRECT);
 
         String userToUpdateId = req.getParameter(Parameter.USER_ID);
-        String newStatus = req.getParameter(Parameter.NEW_STATUS);
-        if (newStatus == null || userToUpdateId == null) {
+        String newStatusStr = req.getParameter(Parameter.NEW_STATUS);
+        if (newStatusStr == null || userToUpdateId == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         }
         try {
@@ -39,9 +39,21 @@ public class UpdateUserStatusCommand implements Command {
                     req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.INACTIVE_USER);
                     return CommandResponse.redirectToPreviousPageOr(ServletDestination.ALL_USERS, req);
                 }
-                userToUpdate.get().setStatus(Status.valueOf(newStatus.toUpperCase()));
+                Status newStatus = Status.valueOf(newStatusStr.toUpperCase());
+                userToUpdate.get().setStatus(newStatus);
                 userService.update(userToUpdate.get());
-                req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_BANNED);
+                String message = null;
+                switch (newStatus){
+                    case BANNED:{
+                        message = SuccessMessage.USER_BANNED;
+                        break;
+                    }
+                    case ACTIVE:{
+                        message = SuccessMessage.USER_UNBANNED;
+                        break;
+                    }
+                }
+                req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, message);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
             }
@@ -49,7 +61,7 @@ public class UpdateUserStatusCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        String page = req.getParameter(Parameter.CURRENT_PAGE);
+        String page = req.getParameter(Parameter.PREVIOUS_PAGE);
         if (page != null) {
             if (page.equals(ServletDestination.USER_PROFILE.getPath())) {
                 new OpenUserProfilePageCommand().execute(req);
