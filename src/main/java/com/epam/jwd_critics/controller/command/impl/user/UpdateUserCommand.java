@@ -50,7 +50,7 @@ public class UpdateUserCommand implements Command {
                     if (userToUpdate.isPresent()) {
                         userToUpdate.get().setFirstName(firstName);
                         userToUpdate.get().setLastName(lastName);
-                        if (!newPicture.equals("")) {
+                        if (newPicture != null && !newPicture.equals("")) {
                             userToUpdate.get().setImagePath(newPicture);
                         }
                         userService.update(userToUpdate.get());

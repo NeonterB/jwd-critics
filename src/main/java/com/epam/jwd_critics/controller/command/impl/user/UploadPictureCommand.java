@@ -47,14 +47,9 @@ public class UploadPictureCommand implements Command {
                     break;
                 }
             }
-            if (fileName == null) {
-                req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.EMPTY_FIELDS);
-            } else {
-                if (!fileName.isEmpty()) {
-                    req.setAttribute(Attribute.NEW_IMAGE, fileName);
-                } else {
-                    throw new CommandException();
-                }
+            if (fileName != null && !fileName.isEmpty()) {
+                req.setAttribute(Attribute.NEW_IMAGE, fileName);
+
             }
         } catch (ServletException | IOException e) {
             throw new CommandException(e);
