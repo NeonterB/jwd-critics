@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/*")
-public class PageAccessFilter implements Filter {
+@WebFilter("/pages/*")
+public class JspAccessFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
