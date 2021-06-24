@@ -84,3 +84,4 @@
 </body>
 </html>
 <script type="text/javascript" src="../../scripts/signIn.js"></script>
+<c:remove var="previousPage" scope="session"/>
