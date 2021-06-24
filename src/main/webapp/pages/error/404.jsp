@@ -1,5 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:choose>
+    <c:when test="${not empty sessionScope.lang}">
+        <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en" scope="session"/>
+    </c:otherwise>
+</c:choose>
+<fmt:setBundle basename="properties/content"/>
 <html>
 <head>
     <title>404 - Not Found</title>
