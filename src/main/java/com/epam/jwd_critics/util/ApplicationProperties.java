@@ -9,13 +9,16 @@ public class ApplicationProperties {
     private final Integer minPoolSize;
     private final Integer maxPoolSize;
 
-    public ApplicationProperties(String url, String databaseName, String user, String password, Integer minPoolSize, Integer maxPoolSize) {
+    private final String assetsDir;
+
+    public ApplicationProperties(String url, String databaseName, String user, String password, Integer minPoolSize, Integer maxPoolSize, String assetsDir) {
         this.url = url;
         this.databaseName = databaseName;
         this.user = user;
         this.password = password;
         this.minPoolSize = minPoolSize;
         this.maxPoolSize = maxPoolSize;
+        this.assetsDir = assetsDir;
     }
 
     public String getUrl() {
@@ -40,5 +43,9 @@ public class ApplicationProperties {
 
     public Integer getMaxPoolSize() {
         return maxPoolSize;
+    }
+
+    public String getAssetsDir() {
+        return assetsDir;
     }
 }

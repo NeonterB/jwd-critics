@@ -32,8 +32,8 @@ public final class PropertiesLoaderUtil {
                     properties.getProperty("user"),
                     properties.getProperty("password"),
                     Integer.parseInt(properties.getProperty("minPoolSize")),
-                    Integer.parseInt(properties.getProperty("maxPoolSize"))
-            );
+                    Integer.parseInt(properties.getProperty("maxPoolSize")),
+                    properties.getProperty("assetsDir"));
             logger.info("Application properties loaded");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
