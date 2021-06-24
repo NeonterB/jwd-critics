@@ -31,7 +31,7 @@ public class RegisterCommand implements Command {
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
         if (firstName == null || lastName == null || email == null || login == null || password == null) {
-            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_REGISTRATION_FIELDS));
+            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
             resp.setDestination(ServletDestination.SIGN_IN);
         } else {
             UserValidator userValidator = new UserValidator();

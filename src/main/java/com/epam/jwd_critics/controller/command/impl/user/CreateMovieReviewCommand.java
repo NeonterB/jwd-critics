@@ -31,7 +31,7 @@ public class CreateMovieReviewCommand implements Command {
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (reviewScore == null || reviewText == null) {
-            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_MOVIE_REVIEW_FIELDS));
+            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
         } else if (movieIdStr == null || userIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         } else {

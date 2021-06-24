@@ -36,7 +36,7 @@ public class SignInCommand implements Command {
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
         if (login == null || password == null) {
-            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_SIGN_IN_FIELDS));
+            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
             resp.setDestination(ServletDestination.SIGN_IN);
         } else {
             UserValidator userValidator = new UserValidator();

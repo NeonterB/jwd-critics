@@ -30,7 +30,7 @@ public class UpdateMovieReviewCommand implements Command {
         String reviewText = req.getParameter(Parameter.MOVIE_REVIEW_TEXT);
         String reviewIdStr = req.getParameter(Parameter.REVIEW_ID);
         if (reviewScore == null || reviewText == null) {
-            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_MOVIE_REVIEW_FIELDS);
+            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
         } else if (reviewIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         } else {
