@@ -12,7 +12,7 @@ public enum Attribute {
     CURRENT_PAGE("currentPage"),
     PREVIOUS_PAGE("previousPage"),
 
-    MOVIES_TO_DISPLAY("allMoviesList"),
+    MOVIES_TO_DISPLAY("moviesToDisplay"),
     REVIEWS_TO_DISPLAY("reviewsToDisplay"),
     USERS_TO_DISPLAY("usersToDisplay"),
 
