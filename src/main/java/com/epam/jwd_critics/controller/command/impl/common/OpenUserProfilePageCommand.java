@@ -37,7 +37,11 @@ public class OpenUserProfilePageCommand implements Command {
         int userId;
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (userIdStr == null) {
-            throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
+            UserDTO userProfile = (UserDTO) req.getSessionAttribute(Attribute.USER_PROFILE);
+            if (userProfile == null){
+                throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
+            }
+            userId = userProfile.getId();
         } else {
             userId = Integer.parseInt(userIdStr);
         }
