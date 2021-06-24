@@ -2,6 +2,8 @@ package com.epam.jwd_critics.exception.codes;
 
 public enum UserServiceCode implements ExceptionCode {
     USER_DOES_NOT_EXIST("User does not exist"),
+    ACTIVATION_KEY_EXISTS("Activation key already exists"),
+    WRONG_ACTIVATION_KEY("Wrong activation key"),
     LOGIN_EXISTS("Login already exists"),
     INCORRECT_PASSWORD("Incorrect password"),
     USER_IS_BANNED("User is banned"),

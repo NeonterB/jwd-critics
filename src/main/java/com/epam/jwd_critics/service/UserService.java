@@ -22,4 +22,10 @@ public interface UserService {
     void updatePassword(int id, char[] password) throws ServiceException;
 
     void delete(int id) throws ServiceException;
+
+    void buildAndSendActivationMail(User user, String key, String locale);
+
+    void createActivationKey(int userId, String key) throws ServiceException;
+
+    void deleteActivationKey(int userId, String key) throws ServiceException;
 }

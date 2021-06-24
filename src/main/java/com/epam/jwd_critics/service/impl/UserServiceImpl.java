@@ -13,6 +13,8 @@ import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.util.PasswordAuthenticator;
+import com.epam.jwd_critics.util.mail.MailBuilder;
+import com.epam.jwd_critics.util.mail.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +45,6 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(UserServiceCode.INCORRECT_PASSWORD);
             } else if (user.getStatus().equals(Status.BANNED)) {
                 throw new ServiceException(UserServiceCode.USER_IS_BANNED);
-            } else if (user.getStatus().equals(Status.INACTIVE)) {
-                throw new ServiceException(UserServiceCode.USER_IS_INACTIVE);
             }
             transaction.commit();
             logger.info("{} logged in", user);
@@ -155,10 +155,9 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(int id, char[] password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
-            if (!userDao.idExists(id)) {
+            if (!userDao.updatePassword(id, passwordAuthenticator.hash(password))) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            userDao.updatePassword(id, passwordAuthenticator.hash(password));
             transaction.commit();
             logger.info("User with id {} updated password to ", password);
         } catch (DaoException e) {
@@ -185,6 +184,48 @@ public class UserServiceImpl implements UserService {
         } catch (ServiceException e) {
             transaction.rollback();
             throw e;
+        } finally {
+            transaction.close();
+        }
+    }
+
+    @Override
+    public void buildAndSendActivationMail(User user, String key, String locale) {
+        String emailSubject = MailBuilder.buildEmailSubject(locale);
+        String emailBody = MailBuilder.buildEmailBody(user, key, locale);
+        MailSender mailSender = new MailSender(emailSubject, emailBody, user.getEmail());
+        mailSender.send();
+    }
+
+    @Override
+    public void createActivationKey(int userId, String key) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.insertActivationKey(userId, key)) {
+                throw new ServiceException(UserServiceCode.ACTIVATION_KEY_EXISTS);
+            }
+            transaction.commit();
+            logger.info("Activation key {} for user {} created", key, userId);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    @Override
+    public void deleteActivationKey(int userId, String key) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.deleteActivationKey(userId, key)) {
+                throw new ServiceException(UserServiceCode.WRONG_ACTIVATION_KEY);
+            }
+            transaction.commit();
+            logger.info("Activation key {} for user {} deleted", key, userId);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
         } finally {
             transaction.close();
         }

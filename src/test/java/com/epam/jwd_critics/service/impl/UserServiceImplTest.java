@@ -60,6 +60,12 @@ class UserServiceImplTest {
         }
     }
 
+    @Test
+    public void buildAndSendActivationMail() throws ServiceException {
+        User user = userService.login("neonter", "75315962mM*");
+        userService.buildAndSendActivationMail(user, "key", "en");
+    }
+
     @AfterAll
     public static void clear() {
         try {

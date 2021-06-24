@@ -1,10 +1,10 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
-    private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, image_path, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
     @Language("SQL")
@@ -44,6 +44,12 @@ public class UserDao extends AbstractUserDao {
     private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.user WHERE id = ?)";
+    @Language("SQL")
+    private static final String INSERT_ACTIVATION_KEY = "INSERT INTO jwd_critics.user_activation_key (user_id, activation_key) VALUES (?, ?)";
+    @Language("SQL")
+    private static final String DELETE_ACTIVATION_KEY = "DELETE FROM jwd_critics.user_activation_key UAK where user_id = ? and activation_key = ?";
+    @Language("SQL")
+    private static final String SELECT_ACTIVATION_KEY = "SELECT activation_key FROM jwd_critics.user_activation_key where user_id = ?";
 
     public static UserDao getInstance() {
         return UserDaoSingleton.INSTANCE;
@@ -56,8 +62,10 @@ public class UserDao extends AbstractUserDao {
             ps.setInt(1, begin);
             ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(buildUser(rs));
+            User user = buildUser(rs);
+            while (user != null) {
+                list.add(user);
+                user = buildUser(rs);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -74,10 +82,8 @@ public class UserDao extends AbstractUserDao {
     public Optional<User> getEntityById(Integer userId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_ID)) {
             ps.setInt(1, userId);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.ofNullable(buildUser(resultSet));
-                } else return Optional.empty();
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildUser(rs));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -103,8 +109,9 @@ public class UserDao extends AbstractUserDao {
             ps.setString(4, user.getLogin());
             ps.setString(5, user.getPassword());
             ps.setInt(6, user.getRating());
-            ps.setInt(7, user.getRole().getId());
-            ps.setInt(8, user.getStatus().getId());
+            ps.setString(7, user.getImagePath());
+            ps.setInt(8, user.getRole().getId());
+            ps.setInt(9, user.getStatus().getId());
             user.setId(executeQueryAndGetGeneratesKeys(ps));
             return user;
         } catch (SQLException e) {
@@ -139,10 +146,8 @@ public class UserDao extends AbstractUserDao {
     public Optional<User> getEntityByLogin(String login) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_LOGIN)) {
             ps.setString(1, login);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.ofNullable(buildUser(resultSet));
-                } else return Optional.empty();
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildUser(rs));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -150,11 +155,11 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public void updatePassword(Integer id, String password) throws DaoException {
+    public boolean updatePassword(int id, String password) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
             ps.setString(1, password);
             ps.setInt(2, id);
-            ps.executeUpdate();
+            return ps.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -165,9 +170,9 @@ public class UserDao extends AbstractUserDao {
         boolean result = false;
         try (PreparedStatement ps = getPreparedStatement(LOGIN_EXISTS)) {
             ps.setString(1, login);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    result = resultSet.getInt(1) != 0;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1) != 0;
                 }
             }
         } catch (SQLException e) {
@@ -176,8 +181,30 @@ public class UserDao extends AbstractUserDao {
         return result;
     }
 
-    private User buildUser(ResultSet resultSet) throws SQLException {
-        if (resultSet.wasNull()) {
+    @Override
+    public boolean insertActivationKey(int userId, String key) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(INSERT_ACTIVATION_KEY)) {
+            ps.setInt(1, userId);
+            ps.setString(2, key);
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean deleteActivationKey(int userId, String key) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_ACTIVATION_KEY)) {
+            ps.setInt(1, userId);
+            ps.setString(2, key);
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    private User buildUser(ResultSet rs) throws SQLException {
+        if (!rs.next()) {
             return null;
         }
         Map<String, String> columnNames = Arrays.stream(User.class.getDeclaredFields())
@@ -191,16 +218,16 @@ public class UserDao extends AbstractUserDao {
         }
         assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
-        return User.newBuilder().setId(resultSet.getInt(columnNames.get("id")))
-                .setFirstName(resultSet.getString(columnNames.get("firstName")))
-                .setLastName(resultSet.getString(columnNames.get("lastName")))
-                .setLogin(resultSet.getString(columnNames.get("login")))
-                .setPassword(resultSet.getString(columnNames.get("password")))
-                .setEmail(resultSet.getString(columnNames.get("email")))
-                .setRating(resultSet.getInt(columnNames.get("rating")))
-                .setStatus(Status.valueOf(resultSet.getString(columnNames.get("status")).toUpperCase()))
-                .setRole(Role.valueOf(resultSet.getString(columnNames.get("role")).toUpperCase()))
-                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
+        return User.newBuilder().setId(rs.getInt(columnNames.get("id")))
+                .setFirstName(rs.getString(columnNames.get("firstName")))
+                .setLastName(rs.getString(columnNames.get("lastName")))
+                .setLogin(rs.getString(columnNames.get("login")))
+                .setPassword(rs.getString(columnNames.get("password")))
+                .setEmail(rs.getString(columnNames.get("email")))
+                .setRating(rs.getInt(columnNames.get("rating")))
+                .setStatus(Status.valueOf(rs.getString(columnNames.get("status")).toUpperCase()))
+                .setRole(Role.valueOf(rs.getString(columnNames.get("role")).toUpperCase()))
+                .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
     }
 
