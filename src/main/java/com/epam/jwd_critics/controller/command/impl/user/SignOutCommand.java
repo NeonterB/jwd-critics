@@ -11,6 +11,11 @@ public class SignOutCommand implements Command {
     public CommandResponse execute(CommandRequest req) {
         req.removeSessionAttribute(Attribute.USER);
         req.removeSessionAttribute(Attribute.USER_REVIEW);
-        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        if (resp.getDestination().getPath().contains(ServletDestination.USER_URL) ||
+                resp.getDestination().getPath().contains(ServletDestination.ADMIN_URL)) {
+            resp.setDestination(ServletDestination.MAIN);
+        }
+        return resp;
     }
 }
