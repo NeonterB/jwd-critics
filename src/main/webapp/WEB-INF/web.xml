@@ -5,6 +5,10 @@
          version="4.0">
     <error-page>
         <error-code>404</error-code>
-        <location>/pages/error/404.jsp</location> <!-- /src/main/webapp/error-404.html-->
+        <location>/pages/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/error/500.jsp</location>
     </error-page>
 </web-app>
