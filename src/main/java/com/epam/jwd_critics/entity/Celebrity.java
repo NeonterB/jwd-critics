@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Celebrity extends AbstractBaseEntity {
-    private static final String DEFAULT_PROFILE_IMAGE = "c:\\Multimedia\\Programming\\Idea\\jwd-critics\\src\\main\\resources\\assets\\default_profile.jpg";
+    private static final String DEFAULT_CELEBRITY_IMAGE = "celebrity-icons/default_celebrity.jpg";
 
     @Column(name = "first_name")
     @NotNull(message = "First name can't be null")
@@ -122,7 +122,7 @@ public class Celebrity extends AbstractBaseEntity {
             celebrity.id = Celebrity.this.id;
             celebrity.firstName = Celebrity.this.firstName;
             celebrity.lastName = Celebrity.this.lastName;
-            celebrity.imagePath = (Celebrity.this.imagePath == null) ? (DEFAULT_PROFILE_IMAGE) : (Celebrity.this.imagePath);
+            celebrity.imagePath = (Celebrity.this.imagePath == null) ? (DEFAULT_CELEBRITY_IMAGE) : (Celebrity.this.imagePath);
             return celebrity;
         }
     }

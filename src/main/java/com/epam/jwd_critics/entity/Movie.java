@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Movie extends AbstractBaseEntity {
+    private static final String DEFAULT_MOVIE_IMAGE = "movie-posters/default_movie.png";
+
     @Column(name = "name")
     @NotNull(message = "Movie name can't be null")
     @Size(max = 150, message = "Movie name is suspiciously long")
@@ -50,8 +52,6 @@ public class Movie extends AbstractBaseEntity {
 
     private List<Genre> genres;
     private Map<Position, List<Celebrity>> staff;
-
-    private static final String DEFAULT_MOVIE_IMAGE = "/assets/movie-posters/default_movie.png";
 
     private Movie() {
 

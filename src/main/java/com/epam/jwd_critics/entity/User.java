@@ -3,7 +3,7 @@ package com.epam.jwd_critics.entity;
 import java.util.Objects;
 
 public class User extends AbstractBaseEntity {
-    private static final String DEFAULT_PROFILE_IMAGE = "/assets/user-icons/default_profile.jpg";
+    private static final String DEFAULT_PROFILE_IMAGE = "user-icons/default_profile.jpg";
 
     @Column(name = "first_name")
     private String firstName;
