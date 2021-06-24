@@ -4,13 +4,14 @@ import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageComman
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
 import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
-import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
-import com.epam.jwd_critics.controller.command.impl.guest.RegisterCommand;
 import com.epam.jwd_critics.controller.command.impl.guest.OpenSignInPageCommand;
-import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
+import com.epam.jwd_critics.controller.command.impl.guest.RegisterCommand;
+import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
+import com.epam.jwd_critics.controller.command.impl.user.ActivateUserCommand;
 import com.epam.jwd_critics.controller.command.impl.user.CreateMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.DeleteMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.OpenUpdateUserPageCommand;
@@ -42,13 +43,14 @@ public enum CommandInstance {
     CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values()),
     SIGN_IN(new SignInCommand(), Role.GUEST),
     REGISTER(new RegisterCommand(), Role.GUEST),
+    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER),
     SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER);
 
     private final Command command;
     private final List<Role> allowedRoles = new LinkedList<>();
     private boolean userMustBeActive = false;
 
-    CommandInstance(Command command, Role ...roles) {
+    CommandInstance(Command command, Role... roles) {
         this.command = command;
         this.allowedRoles.addAll(Arrays.asList(roles));
     }
