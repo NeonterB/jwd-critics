@@ -22,6 +22,7 @@ public enum Parameter {
 
     NEW_STATUS("newStatus"),
 
+    ACTIVATION_KEY("activationKey"),
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
     EMAIL("email"),
