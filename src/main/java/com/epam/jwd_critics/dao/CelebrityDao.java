@@ -1,9 +1,9 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.Position;
+import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String DELETE_CELEBRITY_BY_ID = "DELETE FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")
-    private static final String INSERT_CELEBRITY = "INSERT INTO jwd_critics.celebrity (first_name, last_name) VALUES (?, ?)";
+    private static final String INSERT_CELEBRITY = "INSERT INTO jwd_critics.celebrity (first_name, last_name, image_path) VALUES (?, ?, ?)";
     @Language("SQL")
     private static final String UPDATE_CELEBRITY = "UPDATE jwd_critics.celebrity U SET U.first_name = ?, U.last_name = ?, U.image_path = ? WHERE U.id = ?";
     @Language("SQL")
@@ -52,8 +52,10 @@ public class CelebrityDao extends AbstractCelebrityDao {
             ps.setInt(1, begin);
             ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(buildCelebrity(rs));
+            Celebrity celebrity = buildCelebrity(rs);
+            while (celebrity != null) {
+                list.add(celebrity);
+                celebrity = buildCelebrity(rs);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -70,10 +72,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
     public Optional<Celebrity> getEntityById(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
             ps.setInt(1, celebrityId);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.ofNullable(buildCelebrity(resultSet));
-                } else return Optional.empty();
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildCelebrity(rs));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -95,6 +95,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
         try (PreparedStatement ps = getPreparedStatement(INSERT_CELEBRITY, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, celebrity.getFirstName());
             ps.setString(2, celebrity.getLastName());
+            ps.setString(3, celebrity.getImagePath());
             celebrity.setId(executeQueryAndGetGeneratesKeys(ps));
             return celebrity;
         } catch (SQLException e) {
@@ -104,12 +105,12 @@ public class CelebrityDao extends AbstractCelebrityDao {
 
     @Override
     public void update(Celebrity celebrity) throws DaoException {
-        try (PreparedStatement preparedStatement = getPreparedStatement(UPDATE_CELEBRITY)) {
-            preparedStatement.setString(1, celebrity.getFirstName());
-            preparedStatement.setString(2, celebrity.getLastName());
-            preparedStatement.setString(3, celebrity.getImagePath());
-            preparedStatement.setInt(4, celebrity.getId());
-            preparedStatement.executeUpdate();
+        try (PreparedStatement ps = getPreparedStatement(UPDATE_CELEBRITY)) {
+            ps.setString(1, celebrity.getFirstName());
+            ps.setString(2, celebrity.getLastName());
+            ps.setString(3, celebrity.getImagePath());
+            ps.setInt(4, celebrity.getId());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -123,13 +124,13 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Override
     public Map<Position, List<Celebrity>> getStaffByMovieId(Integer movieId) throws DaoException {
         Map<Position, List<Celebrity>> crew = new LinkedHashMap<>();
-        try (PreparedStatement preparedStatement = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
-            preparedStatement.setInt(1, movieId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITIES_BY_MOVIE_ID)) {
+            ps.setInt(1, movieId);
+            try (ResultSet rs = ps.executeQuery()) {
                 String positionColumnName = Position.class.getAnnotation(Column.class).name();
-                while (resultSet.next()) {
-                    Celebrity celebrity = buildCelebrity(resultSet);
-                    Position position = Position.valueOf(resultSet.getString(positionColumnName).toUpperCase());
+                Celebrity celebrity = buildCelebrity(rs);
+                while (celebrity != null) {
+                    Position position = Position.valueOf(rs.getString(positionColumnName).toUpperCase());
                     if (!crew.containsKey(position)) {
                         ArrayList<Celebrity> celebrities = new ArrayList<>();
                         celebrities.add(celebrity);
@@ -137,6 +138,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
                     } else {
                         crew.get(position).add(celebrity);
                     }
+                    celebrity = buildCelebrity(rs);
                 }
             }
             return crew;
@@ -145,8 +147,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
         }
     }
 
-    private Celebrity buildCelebrity(ResultSet resultSet) throws SQLException {
-        if (resultSet.wasNull()) {
+    private Celebrity buildCelebrity(ResultSet rs) throws SQLException {
+        if (!rs.next()) {
             return null;
         }
         Map<String, String> columnNames = Arrays.stream(Celebrity.class.getDeclaredFields())
@@ -161,10 +163,10 @@ public class CelebrityDao extends AbstractCelebrityDao {
         assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
         return Celebrity.newBuilder()
-                .setId(resultSet.getInt(columnNames.get("id")))
-                .setFirstName(resultSet.getString(columnNames.get("firstName")))
-                .setLastName(resultSet.getString(columnNames.get("lastName")))
-                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
+                .setId(rs.getInt(columnNames.get("id")))
+                .setFirstName(rs.getString(columnNames.get("firstName")))
+                .setLastName(rs.getString(columnNames.get("lastName")))
+                .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
     }
 

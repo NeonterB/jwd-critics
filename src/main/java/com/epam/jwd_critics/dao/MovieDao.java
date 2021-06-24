@@ -1,12 +1,12 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Column;
 import com.epam.jwd_critics.entity.Country;
 import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
+import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,10 +63,6 @@ public class MovieDao extends AbstractMovieDao {
         return MovieDaoSingleton.INSTANCE;
     }
 
-    private static class MovieDaoSingleton {
-        private static final MovieDao INSTANCE = new MovieDao();
-    }
-
     @Override
     public List<Movie> getAllBetween(int begin, int end) throws DaoException {
         List<Movie> list = new ArrayList<>();
@@ -74,8 +70,10 @@ public class MovieDao extends AbstractMovieDao {
             ps.setInt(1, begin);
             ps.setInt(2, end);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(buildMovie(rs));
+            Movie movie = buildMovie(rs);
+            while (movie != null) {
+                list.add(movie);
+                movie = buildMovie(rs);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -92,11 +90,19 @@ public class MovieDao extends AbstractMovieDao {
     public Optional<Movie> getEntityById(Integer id) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIE_BY_ID)) {
             ps.setInt(1, id);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.ofNullable(buildMovie(resultSet));
-                } else return Optional.empty();
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildMovie(rs));
             }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public void delete(Integer movieId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
+            ps.setInt(1, movieId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -139,50 +145,50 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public void delete(Integer movieId) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_MOVIE_BY_ID)) {
-            ps.setInt(1, movieId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
+    public boolean idExists(Integer movieID) throws DaoException {
+        return idExists(movieID, ID_EXISTS);
     }
 
     @Override
-    public List<Movie> getMoviesByName(String name) throws DaoException {
-        List<Movie> movies = new LinkedList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME)) {
-            ps.setString(1, name);
+    public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
+        Map<Movie, List<Position>> crew = new HashMap<>();
+        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
+            ps.setInt(1, celebrityId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    movies.add(buildMovie(rs));
+                String positionColumnName = Position.class.getAnnotation(Column.class).name();
+                Movie movie = buildMovie(rs);
+                while (movie != null) {
+                    if (!crew.containsKey(movie)) {
+                        ArrayList<Position> positions = new ArrayList<>();
+                        positions.add(Position.valueOf(rs.getString(positionColumnName).toUpperCase()));
+                        crew.put(movie, positions);
+                    } else {
+                        crew.get(movie).add(Position.valueOf(rs.getString(positionColumnName).toUpperCase()));
+                    }
+                    movie = buildMovie(rs);
                 }
             }
+            return crew;
         } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
-        return movies;
     }
 
     @Override
     public List<Genre> getMovieGenresById(Integer movieId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_GENRES_BY_MOVIE_ID)) {
             ps.setInt(1, movieId);
-            try (ResultSet resultSet = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 List<Genre> genres = new ArrayList<>();
-                while (resultSet.next()) {
-                    genres.add(Genre.valueOf(resultSet.getString(1).toUpperCase()));
+                while (rs.next()) {
+                    genres.add(Genre.valueOf(rs.getString(1).toUpperCase()));
                 }
                 return genres;
             }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-    }
-
-    @Override
-    public boolean idExists(Integer movieID) throws DaoException {
-        return idExists(movieID, ID_EXISTS);
     }
 
     @Override
@@ -232,32 +238,25 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
-        Map<Movie, List<Position>> crew = new HashMap<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
-            ps.setInt(1, celebrityId);
-            try (ResultSet resultSet = ps.executeQuery()) {
-                String positionColumnName = Position.class.getAnnotation(Column.class).name();
-                while (resultSet.next()) {
-                    Movie movie = buildMovie(resultSet);
-                    if (!crew.containsKey(movie)) {
-                        ArrayList<Position> positions = new ArrayList<>();
-                        positions.add(Position.valueOf(resultSet.getString(positionColumnName).toUpperCase()));
-                        crew.put(movie, positions);
-                    } else {
-                        crew.get(movie).add(Position.valueOf(resultSet.getString(positionColumnName).toUpperCase()));
-                    }
+    public List<Movie> getMoviesByName(String name) throws DaoException {
+        List<Movie> list = new LinkedList<>();
+        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                Movie movie = buildMovie(rs);
+                while (movie != null) {
+                    list.add(movie);
+                    movie = buildMovie(rs);
                 }
             }
-            return crew;
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
+        return list;
     }
 
-    private Movie buildMovie(ResultSet resultSet) throws SQLException {
-        if (resultSet.wasNull()) {
+    private Movie buildMovie(ResultSet rs) throws SQLException {
+        if (!rs.next()) {
             return null;
         }
         Map<String, String> columnNames = Arrays.stream(Movie.class.getDeclaredFields())
@@ -273,16 +272,20 @@ public class MovieDao extends AbstractMovieDao {
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
 
         return Movie.newBuilder()
-                .setId(resultSet.getInt(columnNames.get("id")))
-                .setName(resultSet.getString(columnNames.get("name")))
-                .setSummary(resultSet.getString(columnNames.get("summary")))
-                .setRuntime(Duration.parse(resultSet.getString(columnNames.get("runtime"))))
-                .setCountry(Country.valueOf(resultSet.getString(columnNames.get("country")).toUpperCase()))
-                .setRating(resultSet.getInt(columnNames.get("rating")))
-                .setReviewCount(resultSet.getInt(columnNames.get("reviewCount")))
-                .setReleaseDate(LocalDate.parse(resultSet.getString(columnNames.get("releaseDate"))))
-                .setAgeRestriction(AgeRestriction.valueOf(resultSet.getString(columnNames.get("ageRestriction")).toUpperCase()))
-                .setImagePath(resultSet.getString(columnNames.get("imagePath")))
+                .setId(rs.getInt(columnNames.get("id")))
+                .setName(rs.getString(columnNames.get("name")))
+                .setSummary(rs.getString(columnNames.get("summary")))
+                .setRuntime(Duration.parse(rs.getString(columnNames.get("runtime"))))
+                .setCountry(Country.valueOf(rs.getString(columnNames.get("country")).toUpperCase()))
+                .setRating(rs.getInt(columnNames.get("rating")))
+                .setReviewCount(rs.getInt(columnNames.get("reviewCount")))
+                .setReleaseDate(LocalDate.parse(rs.getString(columnNames.get("releaseDate"))))
+                .setAgeRestriction(AgeRestriction.valueOf(rs.getString(columnNames.get("ageRestriction")).toUpperCase()))
+                .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
+    }
+
+    private static class MovieDaoSingleton {
+        private static final MovieDao INSTANCE = new MovieDao();
     }
 }
