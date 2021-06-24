@@ -122,7 +122,7 @@ public class Celebrity extends AbstractBaseEntity {
             celebrity.id = Celebrity.this.id;
             celebrity.firstName = Celebrity.this.firstName;
             celebrity.lastName = Celebrity.this.lastName;
-            celebrity.imagePath = (Celebrity.this.imagePath == null) ? (DEFAULT_CELEBRITY_IMAGE) : (Celebrity.this.imagePath);
+            celebrity.imagePath = (Celebrity.this.imagePath == null || Celebrity.this.imagePath.equals("")) ? (DEFAULT_CELEBRITY_IMAGE) : (Celebrity.this.imagePath);
             return celebrity;
         }
     }

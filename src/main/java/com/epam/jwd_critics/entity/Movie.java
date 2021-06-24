@@ -258,7 +258,7 @@ public class Movie extends AbstractBaseEntity {
             movie.ageRestriction = Movie.this.ageRestriction;
             movie.genres = Movie.this.genres;
             movie.staff = Movie.this.staff;
-            movie.imagePath = (Movie.this.imagePath == null) ? (DEFAULT_MOVIE_IMAGE) : (Movie.this.imagePath);
+            movie.imagePath = (Movie.this.imagePath == null || Movie.this.imagePath.equals("")) ? (DEFAULT_MOVIE_IMAGE) : (Movie.this.imagePath);
             return movie;
         }
     }
