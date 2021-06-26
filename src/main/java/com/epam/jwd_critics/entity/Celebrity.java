@@ -1,7 +1,5 @@
 package com.epam.jwd_critics.entity;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -10,17 +8,17 @@ public class Celebrity extends AbstractBaseEntity {
     private static final String DEFAULT_CELEBRITY_IMAGE = "celebrity-icons/default_celebrity.jpg";
 
     @Column(name = "first_name")
-    @NotNull(message = "First name can't be null")
-    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "First name contains illegal characters")
+//    @NotNull(message = "First name can't be null")
+//    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "First name contains illegal characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull(message = "Last name can't be null")
-    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
+//    @NotNull(message = "Last name can't be null")
+//    @Pattern(regexp = "^[A-Z][a-z]{1,14}", message = "Last name contains illegal characters")
     private String lastName;
 
     @Column(name = "image_path")
-    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
+//    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
     private String imagePath;
 
     private Map<Movie, List<Position>> jobs;

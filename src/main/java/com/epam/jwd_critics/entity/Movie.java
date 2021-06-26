@@ -1,10 +1,5 @@
 package com.epam.jwd_critics.entity;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,13 +10,13 @@ public class Movie extends AbstractBaseEntity {
     private static final String DEFAULT_MOVIE_IMAGE = "movie-posters/default_movie.png";
 
     @Column(name = "name")
-    @NotNull(message = "Movie name can't be null")
-    @Size(max = 150, message = "Movie name is suspiciously long")
+//    @NotNull(message = "Movie name can't be null")
+//    @Size(max = 150, message = "Movie name is suspiciously long")
     private String name;
 
     @Column(name = "summary")
-    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё0-9\\\\s()\"':?!.,-]{1,10000}$",
-            message = "Movie summary contains illegal characters")
+//    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё0-9\\\\s()\"':?!.,-]{1,10000}$",
+//            message = "Movie summary contains illegal characters")
     private String summary = "";
 
     @Column(name = "runtime")
@@ -31,16 +26,16 @@ public class Movie extends AbstractBaseEntity {
     private Country country;
 
     @Column(name = "image_path")
-    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
+//    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)", message = "Image path is not valid")
     private String imagePath;
 
     @Column(name = "rating")
-    @Max(value = 100, message = "Movie rating can't be greater than 100")
-    @Positive(message = "Movie rating must be positive")
+//    @Max(value = 100, message = "Movie rating can't be greater than 100")
+//    @Positive(message = "Movie rating must be positive")
     private int rating;
 
     @Column(name = "review_count")
-    @Positive(message = "Movie review count can't be less than zero")
+//    @Positive(message = "Movie review count can't be less than zero")
     private int reviewCount;
 
     @Column(name = "release_date")
