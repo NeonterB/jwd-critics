@@ -14,9 +14,14 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
 
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+
 public class ShowAllUsersTag extends TagSupport {
     public static final int USERS_PER_PAGE = 2;
-    public static final int USERS_PER_ROW = 6;
+    private static final int USERS_PER_ROW = 6;
+    private static final String ROLE_KEY = "user.role";
+    private static final String STATUS_KEY = "user.status";
+
 
     @Override
     public int doStartTag() throws JspException {
@@ -38,6 +43,9 @@ public class ShowAllUsersTag extends TagSupport {
 
     private void writeUsers(JspWriter writer, CommandRequest req) throws JspException {
         List<UserDTO> users = (List<UserDTO>) req.getSessionAttribute(Attribute.USERS_TO_DISPLAY);
+        String roleStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ROLE_KEY);
+        String statusStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), STATUS_KEY);
+
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         if (users != null) {
@@ -54,8 +62,8 @@ public class ShowAllUsersTag extends TagSupport {
                     writer.write("<img class=\"img-thumbnail\" src=\"" + contextPath + "/picture?currentPicture=" + userDTO.getImagePath() + "\" alt=\"" + userDTO.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + userDTO.getName() + "</p>");
-                    writer.write("<p class=\"text-center\">Role: " + userDTO.getRole() + "</p>");
-                    writer.write("<p class=\"text-center\">Status: " + userDTO.getStatus() + "</p>");
+                    writer.write("<p class=\"text-center\">" + roleStr + ": " + userDTO.getRole() + "</p>");
+                    writer.write("<p class=\"text-center\">" + statusStr + ": " + userDTO.getStatus() + "</p>");
                     if (user.getId() != userDTO.getId()) {
                         if (userDTO.getStatus().equals(Status.BANNED)) {
                             writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&previousPage=" + currentPage + "&newStatus=active&userId=" + userDTO.getId() + "\">Unban</a>");

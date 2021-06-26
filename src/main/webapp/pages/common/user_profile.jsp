@@ -70,7 +70,7 @@
                     <c:if test="${user.role eq 'ADMIN'}">
                         <div class="col-1">
                             <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
-                                Delete
+                                <fmt:message key="button.delete"/>
                             </a>
                         </div>
                     </c:if>

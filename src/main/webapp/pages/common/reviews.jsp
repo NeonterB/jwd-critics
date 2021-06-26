@@ -21,7 +21,9 @@
 <c:import url="/pages/componets/message.jsp"/>
 <body>
 <div class="container mt-2">
-    <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${movie.id}">Back to the movie</a>
+    <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${movie.id}">
+        <fmt:message key="button.toMovie"/>
+    </a>
     <ctg:reviews/>
 </div>
 </body>

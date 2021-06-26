@@ -15,8 +15,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
 
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+
 public class ShowReviewsTag extends TagSupport {
     public static final int REVIEWS_PER_PAGE = 2;
+    private static final String SCORE_KEY = "review.score";
 
     @Override
     public int doStartTag() throws JspException {
@@ -38,6 +41,7 @@ public class ShowReviewsTag extends TagSupport {
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
+        String scoreStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), SCORE_KEY);
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         Role userRole = Role.GUEST;
@@ -59,7 +63,7 @@ public class ShowReviewsTag extends TagSupport {
 
                     writer.write("<div class=\"col\">");
                     writer.write("<strong>" + review.getTitle() + "</strong><br>");
-                    writer.write("Score: " + review.getScore() + "<br>");
+                    writer.write(scoreStr + ": " + review.getScore() + "<br>");
                     writer.write(review.getText());
                     writer.write("</div>");
 

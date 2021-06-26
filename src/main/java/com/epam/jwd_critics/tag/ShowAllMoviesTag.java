@@ -13,9 +13,12 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.List;
 
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+
 public class ShowAllMoviesTag extends TagSupport {
     public static final int MOVIES_PER_PAGE = 1;
-    public static final int MOVIES_PER_ROW = 4;
+    private static final int MOVIES_PER_ROW = 4;
+    private static final String RATING_KEY = "movie.rating";
 
     @Override
     public int doStartTag() throws JspException {
@@ -37,6 +40,7 @@ public class ShowAllMoviesTag extends TagSupport {
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
         List<Movie> movies = (List<Movie>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
+        String ratingStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), RATING_KEY);
         if (movies != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
@@ -50,7 +54,7 @@ public class ShowAllMoviesTag extends TagSupport {
                     writer.write("<img class=\"img-thumbnail\" src=\"" + contextPath + "/picture?currentPicture=" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\">");
                     writer.write("</a>");
                     writer.write("<p class=\"text-center\">" + movie.getName() + "</p>");
-                    writer.write("<p class=\"text-center\">Rating: " + movie.getRating() + "</p>");
+                    writer.write("<p class=\"text-center\">" + ratingStr + ": " + movie.getRating() + "</p>");
                     writer.write("</div>");
                     if (j == MOVIES_PER_ROW - 1 || j == movies.size() - 1) {
                         writer.write("</div>");
