@@ -35,12 +35,6 @@
                     <img src="${pageContext.request.contextPath}/picture?currentPicture=${user.imagePath}" alt="${user.firstName}" id="user-image" class="img-thumbnail">
                 </c:otherwise>
             </c:choose>
-            <form class="mb-3" id="uploadForm" action="<c:url value="/controller?command=upload_picture"/>"
-                  enctype="multipart/form-data" method="POST">
-                <label for="input-file" class="form-label"><fmt:message key="user.profilePicture"/></label>
-<%--                <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content" id="input-file">--%>
-<%--                <input type="hidden" name="currentPage" value="${currentPage}">--%>
-            </form>
         </div>
         <div class="col-4">
             <form method="POST" id="updateForm" enctype="multipart/form-data" action="<c:url value="/controller?command=update_user"/>">
@@ -53,7 +47,7 @@
                        name="firstName"
                        pattern="^[A-Z][a-z]{1,14}"
                        title="<fmt:message key="validation.firstName"/>"
-                required/>
+                       required/>
                 <label for="lastNameInput" class="form-label mt-2"><fmt:message key="label.lastName"/></label>
                 <input type="text"
                        class="form-control"
@@ -62,8 +56,10 @@
                        name="lastName"
                        pattern="^[A-Z][a-z]{1,14}"
                        title="<fmt:message key="validation.lastName"/>"
-                required/>
-                <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content" id="input-file">
+                       required/>
+                <label for="input-file" class="form-label mt-2"><fmt:message key="label.profilePicture"/></label>
+                <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content"
+                       id="input-file">
                 <button type="submit" class="mt-2"><fmt:message key="button.submit"/></button>
                 <input type="hidden" name="previousPage" value="${currentPage}">
             </form>
