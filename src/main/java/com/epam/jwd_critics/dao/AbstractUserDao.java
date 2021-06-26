@@ -12,6 +12,8 @@ public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
 
     public abstract boolean loginExists(String login) throws DaoException;
 
+    public abstract boolean emailExists(String email) throws DaoException;
+
     public abstract boolean insertActivationKey(int userId, String key) throws DaoException;
 
     public abstract boolean deleteActivationKey(int userId, String key) throws DaoException;

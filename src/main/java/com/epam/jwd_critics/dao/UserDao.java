@@ -43,6 +43,8 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String LOGIN_EXISTS = "SELECT EXISTS(SELECT login FROM jwd_critics.user WHERE login = ?)";
     @Language("SQL")
+    private static final String EMAIL_EXISTS = "SELECT EXISTS(SELECT email FROM jwd_critics.user WHERE email = ?)";
+    @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.user WHERE id = ?)";
     @Language("SQL")
     private static final String INSERT_ACTIVATION_KEY = "INSERT INTO jwd_critics.user_activation_key (user_id, activation_key) VALUES (?, ?)";
@@ -165,9 +167,18 @@ public class UserDao extends AbstractUserDao {
 
     @Override
     public boolean loginExists(String login) throws DaoException {
+        return existsQuery(LOGIN_EXISTS, login);
+    }
+
+    @Override
+    public boolean emailExists(String email) throws DaoException {
+        return existsQuery(EMAIL_EXISTS, email);
+    }
+
+    private boolean existsQuery(String query, String key) throws DaoException {
         boolean result = false;
-        try (PreparedStatement ps = getPreparedStatement(LOGIN_EXISTS)) {
-            ps.setString(1, login);
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ps.setString(1, key);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = rs.getInt(1) != 0;

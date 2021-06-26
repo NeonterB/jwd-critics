@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
             } else if (user.getStatus().equals(Status.BANNED)) {
                 throw new ServiceException(UserServiceCode.USER_IS_BANNED);
             }
-            transaction.commit();
             logger.info("{}, id = {} logged in", user.getFirstName() + " " + user.getLastName(), user.getId());
+            transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -69,13 +69,15 @@ public class UserServiceImpl implements UserService {
         try {
             if (userDao.loginExists(login)) {
                 throw new ServiceException(UserServiceCode.LOGIN_EXISTS);
-            } else {
-                userToRegister.setPassword(passwordAuthenticator.hash(password));
-                setDefaultFields(userToRegister);
-                userToRegister = userDao.create(userToRegister);
             }
-            transaction.commit();
+            if (userDao.emailExists(email)) {
+                throw new ServiceException(UserServiceCode.EMAIL_EXISTS);
+            }
+            userToRegister.setPassword(passwordAuthenticator.hash(password));
+            setDefaultFields(userToRegister);
+            userToRegister = userDao.create(userToRegister);
             logger.info("{}, id = {} registered in", userToRegister.getFirstName() + " " + userToRegister.getLastName(), userToRegister.getId());
+            transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -171,7 +173,7 @@ public class UserServiceImpl implements UserService {
     public void delete(int id) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao, reviewDao);
         try {
-            if(!userDao.idExists(id)){
+            if (!userDao.idExists(id)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
             userDao.delete(id);
