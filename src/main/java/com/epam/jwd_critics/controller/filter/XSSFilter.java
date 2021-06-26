@@ -1,7 +1,5 @@
 package com.epam.jwd_critics.controller.filter;
 
-import org.owasp.esapi.ESAPI;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
