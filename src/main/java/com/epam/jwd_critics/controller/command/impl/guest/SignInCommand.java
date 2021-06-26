@@ -62,6 +62,7 @@ public class SignInCommand implements Command {
                             }
                         }
                     }
+                    req.removeSessionAttribute(Attribute.PREVIOUS_PAGE);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
                     req.setSessionAttribute(Attribute.PREVIOUS_PAGE, resp.getDestination().getPath());

@@ -46,6 +46,7 @@ public class RegisterCommand implements Command {
                     userService.createActivationKey(user.getId(), key);
                     String lang = (String) req.getSessionAttribute(Attribute.LANG);
                     userService.buildAndSendActivationMail(user, key, lang);
+                    req.removeSessionAttribute(Attribute.PREVIOUS_PAGE);
                     req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.ACTIVATE_EMAIL);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());

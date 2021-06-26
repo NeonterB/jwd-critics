@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="currentPage" scope="request" value="/pages/guest/sign_in.jsp"/>
 <c:choose>
     <c:when test="${not empty sessionScope.lang}">
         <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
@@ -91,4 +92,3 @@
 </body>
 </html>
 <script type="text/javascript" src="../../scripts/signIn.js"></script>
-<c:remove var="previousPage" scope="session"/>
