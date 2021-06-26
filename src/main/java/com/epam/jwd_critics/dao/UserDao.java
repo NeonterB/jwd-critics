@@ -48,8 +48,6 @@ public class UserDao extends AbstractUserDao {
     private static final String INSERT_ACTIVATION_KEY = "INSERT INTO jwd_critics.user_activation_key (user_id, activation_key) VALUES (?, ?)";
     @Language("SQL")
     private static final String DELETE_ACTIVATION_KEY = "DELETE FROM jwd_critics.user_activation_key UAK where user_id = ? and activation_key = ?";
-    @Language("SQL")
-    private static final String SELECT_ACTIVATION_KEY = "SELECT activation_key FROM jwd_critics.user_activation_key where user_id = ?";
 
     public static UserDao getInstance() {
         return UserDaoSingleton.INSTANCE;
@@ -210,13 +208,13 @@ public class UserDao extends AbstractUserDao {
         Map<String, String> columnNames = Arrays.stream(User.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Column.class))
                 .collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
-        Field idField = null;
+        Field idField;
         try {
             idField = User.class.getSuperclass().getDeclaredField("id");
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
+            return null;
         }
-        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
         return User.newBuilder().setId(rs.getInt(columnNames.get("id")))
                 .setFirstName(rs.getString(columnNames.get("firstName")))

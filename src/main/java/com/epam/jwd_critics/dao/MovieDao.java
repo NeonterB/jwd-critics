@@ -76,7 +76,7 @@ public class MovieDao extends AbstractMovieDao {
                 movie = buildMovie(rs);
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
+            throw new DaoException(e);
         }
         return list;
     }
@@ -139,7 +139,6 @@ public class MovieDao extends AbstractMovieDao {
             ps.setInt(9, movie.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
@@ -170,7 +169,6 @@ public class MovieDao extends AbstractMovieDao {
             }
             return crew;
         } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
             throw new DaoException(e);
         }
     }
@@ -262,13 +260,13 @@ public class MovieDao extends AbstractMovieDao {
         Map<String, String> columnNames = Arrays.stream(Movie.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Column.class))
                 .collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
-        Field idField = null;
+        Field idField;
         try {
             idField = Movie.class.getSuperclass().getDeclaredField("id");
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
+            return null;
         }
-        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
 
         return Movie.newBuilder()

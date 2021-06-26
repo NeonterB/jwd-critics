@@ -154,13 +154,13 @@ public class CelebrityDao extends AbstractCelebrityDao {
         Map<String, String> columnNames = Arrays.stream(Celebrity.class.getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Column.class))
                 .collect(Collectors.toMap(Field::getName, field -> field.getAnnotation(Column.class).name()));
-        Field idField = null;
+        Field idField;
         try {
             idField = Celebrity.class.getSuperclass().getDeclaredField("id");
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage(), e);
+            return null;
         }
-        assert idField != null;
         columnNames.put(idField.getName(), idField.getAnnotation(Column.class).name());
         return Celebrity.newBuilder()
                 .setId(rs.getInt(columnNames.get("id")))
