@@ -1,8 +1,5 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.dao.AbstractCelebrityDao;
 import com.epam.jwd_critics.dao.AbstractMovieDao;
 import com.epam.jwd_critics.dao.AbstractMovieReviewDao;
@@ -14,6 +11,9 @@ import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
+import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +116,7 @@ public class MovieServiceImpl implements MovieService {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.addGenre(movieId, genre);
+            logger.info("Genre {} was added to movie with id {}", genre, movieId);
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -132,6 +133,7 @@ public class MovieServiceImpl implements MovieService {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.removeGenre(movieId, genre);
+            logger.info("Genre {} was removed from movie with id {}", genre, movieId);
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -148,6 +150,7 @@ public class MovieServiceImpl implements MovieService {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.addStaffAndPosition(movieId, celebrityId, position);
+            logger.info("Celebrity with id {} was added to movie with id {} on position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -164,6 +167,7 @@ public class MovieServiceImpl implements MovieService {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             movieDao.removeStaffAndPosition(movieId, celebrityId, position);
+            logger.info("Celebrity with id {} was removed from movie with id {} from position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();

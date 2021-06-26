@@ -49,7 +49,7 @@ public class ConnectionPool {
             availableConnections.add(connection);
             poolSize.incrementAndGet();
         }
-        logger.info("Connection pool initialized");
+        logger.debug("Connection pool initialized");
     }
 
     public Connection getConnection() {
@@ -67,7 +67,7 @@ public class ConnectionPool {
                 }
             }
             unavailableConnections.offer(connection);
-            logger.info("Connection taken");
+            logger.debug("Connection taken");
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -84,7 +84,7 @@ public class ConnectionPool {
                 availableConnections.offer((ConnectionProxy) connection);
                 unavailableConnections.remove(connection);
                 lockCondition.signalAll();
-                logger.info("Connection returned");
+                logger.debug("Connection returned");
             } else {
                 throw new ConnectionException();
             }

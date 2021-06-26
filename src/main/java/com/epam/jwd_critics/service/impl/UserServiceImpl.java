@@ -1,8 +1,5 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.dao.AbstractMovieReviewDao;
 import com.epam.jwd_critics.dao.AbstractUserDao;
 import com.epam.jwd_critics.dao.EntityTransaction;
@@ -11,6 +8,9 @@ import com.epam.jwd_critics.dao.UserDao;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.util.PasswordAuthenticator;
 import com.epam.jwd_critics.util.mail.MailBuilder;
@@ -47,8 +47,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(UserServiceCode.USER_IS_BANNED);
             }
             transaction.commit();
-            logger.info("{} logged in", user);
-
+            logger.info("{}, id = {} logged in", user.getFirstName() + " " + user.getLastName(), user.getId());
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
                 userToRegister = userDao.create(userToRegister);
             }
             transaction.commit();
-            logger.info("{} registered", userToRegister);
+            logger.info("{}, id = {} registered in", userToRegister.getFirstName() + " " + userToRegister.getLastName(), userToRegister.getId());
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -159,7 +158,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
             transaction.commit();
-            logger.info("User with id {} updated password to ", password);
+            logger.info("User with id {} updated password", id);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -195,6 +194,7 @@ public class UserServiceImpl implements UserService {
         String emailBody = MailBuilder.buildEmailBody(user, key, locale);
         MailSender mailSender = new MailSender(emailSubject, emailBody, user.getEmail());
         mailSender.send();
+        logger.info("Activation link was sent to user with id {}", user.getId());
     }
 
     @Override
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(UserServiceCode.ACTIVATION_KEY_EXISTS);
             }
             transaction.commit();
-            logger.info("Activation key {} for user {} created", key, userId);
+            logger.info("Activation key created for user with id {}", userId);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(UserServiceCode.WRONG_ACTIVATION_KEY);
             }
             transaction.commit();
-            logger.info("Activation key {} for user {} deleted", key, userId);
+            logger.info("Activation key deleted for user with id {}", userId);
         } catch (DaoException e) {
             transaction.rollback();
             throw new ServiceException(e);

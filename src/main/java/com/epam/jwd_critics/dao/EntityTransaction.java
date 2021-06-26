@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class EntityTransaction {
     private Connection connection;
     private final AbstractBaseDao<?, ? extends BaseEntity>[] daos;
-    private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class);
 
     public EntityTransaction(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
         this.daos = daos;
