@@ -139,7 +139,7 @@ public class UserDao extends AbstractUserDao {
 
     @Override
     public boolean idExists(Integer userId) throws DaoException {
-        return idExists(userId, ID_EXISTS);
+        return existsQuery(ID_EXISTS, userId);
     }
 
     @Override

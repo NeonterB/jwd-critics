@@ -118,7 +118,7 @@ public class CelebrityDao extends AbstractCelebrityDao {
 
     @Override
     public boolean idExists(Integer celebrityId) throws DaoException {
-        return idExists(celebrityId, ID_EXISTS);
+        return existsQuery(ID_EXISTS, celebrityId);
     }
 
     @Override

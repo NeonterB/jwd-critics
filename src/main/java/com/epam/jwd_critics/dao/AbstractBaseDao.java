@@ -1,7 +1,7 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.BaseEntity;
+import com.epam.jwd_critics.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,13 +43,13 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
         return count;
     }
 
-    protected boolean idExists(Integer id, String idExistsQuery) throws DaoException {
+    protected boolean existsQuery(String query, int key) throws DaoException {
         boolean result = false;
-        try (PreparedStatement preparedStatement = getPreparedStatement(idExistsQuery)) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    result = resultSet.getInt(1) != 0;
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ps.setInt(1, key);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1) != 0;
                 }
             }
         } catch (SQLException e) {

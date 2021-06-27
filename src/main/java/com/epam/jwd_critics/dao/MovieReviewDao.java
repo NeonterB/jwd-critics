@@ -129,7 +129,7 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
 
     @Override
     public boolean idExists(Integer reviewId) throws DaoException {
-        return idExists(reviewId, ID_EXISTS);
+        return existsQuery(ID_EXISTS, reviewId);
     }
 
     @Override

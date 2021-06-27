@@ -145,7 +145,7 @@ public class MovieDao extends AbstractMovieDao {
 
     @Override
     public boolean idExists(Integer movieID) throws DaoException {
-        return idExists(movieID, ID_EXISTS);
+        return existsQuery(ID_EXISTS, movieID);
     }
 
     @Override
