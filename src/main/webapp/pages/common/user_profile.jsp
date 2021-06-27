@@ -23,18 +23,24 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <img src="${pageContext.request.contextPath}/picture?currentPicture=${userProfile.imagePath}" alt="${userProfile.firstName}" class="img-thumbnail">
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${userProfile.imagePath}"
+                 alt="${userProfile.firstName}" class="img-thumbnail">
         </div>
         <div class="col-4">
             <h4>${userProfile.firstName} ${userProfile.lastName}</h4>
             <strong><fmt:message key="user.role"/>:</strong> ${userProfile.role}<br>
-            <strong><fmt:message key="user.status"/>:</strong> ${userProfile.status}<br>
+            <strong><fmt:message key="user.status"/>:</strong> ${userProfile.status}<br>K
             <strong><fmt:message key="user.reviewCount"/>:</strong> ${userProfile.reviewCount}<br>
             <c:choose>
                 <c:when test="${userProfile.id eq user.id}">
                     <a href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&previousPage=${currentPage}">
                         <fmt:message key="button.edit"/>
                     </a>
+                    <c:if test="${user.role ne 'ADMIN'}">
+                        <a href="${pageContext.request.contextPath}/controller?command=delete_user&userId=${user.id}">
+                            <fmt:message key="button.delete"/>
+                        </a>
+                    </c:if>
                 </c:when>
                 <c:otherwise>
                     <c:if test="${user.role eq 'ADMIN'}">
@@ -44,7 +50,7 @@
                             </a>
                         </c:if>
                         <c:if test="${userProfile.status eq 'ACTIVE'}">
-                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&&newStatus=banned&previousPage=${currentPage}">
+                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=banned&previousPage=${currentPage}">
                                 <fmt:message key="button.ban"/>
                             </a>
                         </c:if>

@@ -14,6 +14,7 @@ import com.epam.jwd_critics.controller.command.impl.guest.SignInCommand;
 import com.epam.jwd_critics.controller.command.impl.user.ActivateUserCommand;
 import com.epam.jwd_critics.controller.command.impl.user.CreateMovieReviewCommand;
 import com.epam.jwd_critics.controller.command.impl.user.DeleteMovieReviewCommand;
+import com.epam.jwd_critics.controller.command.impl.user.DeleteUserCommand;
 import com.epam.jwd_critics.controller.command.impl.user.OpenUpdateUserPageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.SignOutCommand;
 import com.epam.jwd_critics.controller.command.impl.user.UpdateMovieReviewCommand;
@@ -43,8 +44,9 @@ public enum CommandInstance {
     CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values()),
     SIGN_IN(new SignInCommand(), Role.GUEST),
     REGISTER(new RegisterCommand(), Role.GUEST),
-    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER),
-    SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER);
+    SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER),
+    DELETE_USER(new DeleteUserCommand(), Role.USER),
+    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER);
 
     private final Command command;
     private final List<Role> allowedRoles = new LinkedList<>();
