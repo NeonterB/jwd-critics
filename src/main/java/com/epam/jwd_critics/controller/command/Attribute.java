@@ -2,6 +2,7 @@ package com.epam.jwd_critics.controller.command;
 
 public enum Attribute {
     USER("user"),
+    USER_ID("userId"),
     LANG("lang"),
 
     ALL_MOVIES_CURRENT_PAGE("allMoviesCurrentPage"),

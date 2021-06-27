@@ -25,7 +25,9 @@
         <div class="form-container sign-up-container">
             <form name="registerForm" method="POST" action="<c:url value="/controller?command=register"/>">
                 <h1><fmt:message key="text.createAccount"/></h1>
-                <input type="hidden" name="previousPage" value="${sessionScope.previousPage}"/>
+                <c:if test="${not empty sessionScope.previousPage}">
+                    <input type="hidden" name="previousPage" value="${sessionScope.previousPage}"/>
+                </c:if>
                 <input type="text"
                        name="firstName"
                        pattern="^[A-Z][a-z]{1,14}"
@@ -57,7 +59,9 @@
             <form name="signInForm" method="GET" action="<c:url value="/controller"/>">
                 <h1><fmt:message key="button.signIn"/></h1>
                 <input type="hidden" name="command" value="sign_in">
-                <input type="hidden" name="previousPage" value="${sessionScope.previousPage}">
+                <c:if test="${not empty sessionScope.previousPage}">
+                    <input type="hidden" name="previousPage" value="${sessionScope.previousPage}"/>
+                </c:if>
                 <input type="text"
                        name="login"
                        pattern="^[a-zA-Z0-9._-]{3,25}$"
@@ -68,7 +72,8 @@
                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$"
                        title="<fmt:message key="validation.password"/>"
                        required placeholder="<fmt:message key="label.password"/>"/>
-                <a href="#">Forgot your password?</a>
+                <a href="${pageContext.request.contextPath}/controller?command=open_forgot_password">Forgot your
+                    password?</a>
                 <button type="submit"><fmt:message key="button.signIn"/></button>
             </form>
         </div>

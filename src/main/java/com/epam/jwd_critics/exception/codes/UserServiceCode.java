@@ -4,6 +4,8 @@ public enum UserServiceCode implements ExceptionCode {
     USER_DOES_NOT_EXIST("User does not exist"),
     ACTIVATION_KEY_EXISTS("Activation key already exists"),
     WRONG_ACTIVATION_KEY("Wrong activation key"),
+    RECOVERY_KEY_EXISTS("Recover key already exists"),
+    WRONG_RECOVERY_KEY("Wrong recover key"),
     LOGIN_EXISTS("This login is unavailable"),
     EMAIL_EXISTS("Account with this email already exists"),
     INCORRECT_PASSWORD("Incorrect password"),

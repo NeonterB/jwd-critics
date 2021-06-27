@@ -1,28 +1,25 @@
 package com.epam.jwd_critics.util.mail;
 
-import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.entity.User;
 
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
 public class MailBuilder {
-    private static final String EMAIL_SUBJECT = "mail.subject";
-    private static final String EMAIL_BODY = "mail.body";
+    private static final String MAIL_SUBJECT = "mail.subject";
+    private static final String MAIL_BODY = "mail.body";
+    private final MailType mailType;
 
-
-    private static final String LINK_FOR_CONFIRMATION = "http://localhost:8081/controller?command=activate_user&" +
-            Parameter.USER_ID.getName() + "=%s&" + Parameter.ACTIVATION_KEY.getName() + "=%s";
-
-    private MailBuilder() {
+    public MailBuilder(MailType type) {
+        this.mailType = type;
     }
 
 
-    public static String buildEmailSubject(String locale) {
-        return getLocalizedMessageFromResources(locale, EMAIL_SUBJECT);
+    public String buildMailSubject(String locale) {
+        return getLocalizedMessageFromResources(locale, MAIL_SUBJECT + "." + mailType.getPropertyName());
     }
 
-    public static String buildEmailBody(User user, String key, String locale) {
-        return String.format(getLocalizedMessageFromResources(locale, EMAIL_BODY),
-                user.getFirstName(), String.format(LINK_FOR_CONFIRMATION, user.getId(), key));
+    public String buildMailBody(User user, String key, String locale) {
+        return String.format(getLocalizedMessageFromResources(locale, MAIL_BODY + "." + mailType.getPropertyName()),
+                user.getFirstName(), String.format(mailType.getLink(), user.getId(), key));
     }
 }

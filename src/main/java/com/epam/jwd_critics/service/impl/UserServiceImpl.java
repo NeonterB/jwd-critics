@@ -15,6 +15,7 @@ import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.util.PasswordAuthenticator;
 import com.epam.jwd_critics.util.mail.MailBuilder;
 import com.epam.jwd_critics.util.mail.MailSender;
+import com.epam.jwd_critics.util.mail.MailType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,6 +137,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getEntityByEmail(String email) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        Optional<User> user;
+        try {
+            user = userDao.getEntityByEmail(email);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return user;
+    }
+
+    @Override
     public void update(User user) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
@@ -192,17 +209,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void buildAndSendActivationMail(User user, String key, String locale) {
-        String emailSubject = MailBuilder.buildEmailSubject(locale);
-        String emailBody = MailBuilder.buildEmailBody(user, key, locale);
-        MailSender mailSender = new MailSender(emailSubject, emailBody, user.getEmail());
-        mailSender.send();
+        buildAndSendMail(user, locale, key, MailType.ACCOUNT_ACTIVATION);
         logger.info("Activation link was sent to user with id {}", user.getId());
+    }
+
+    @Override
+    public void buildAndSendRecoveryMail(User user, String key, String locale) {
+        buildAndSendMail(user, locale, key, MailType.PASSWORD_RECOVERY);
+        logger.info("Password recovery link was sent to user with id {}", user.getId());
     }
 
     @Override
     public void createActivationKey(int userId, String key) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
             if (!userDao.insertActivationKey(userId, key)) {
                 throw new ServiceException(UserServiceCode.ACTIVATION_KEY_EXISTS);
             }
@@ -220,6 +243,9 @@ public class UserServiceImpl implements UserService {
     public void deleteActivationKey(int userId, String key) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
             if (!userDao.deleteActivationKey(userId, key)) {
                 throw new ServiceException(UserServiceCode.WRONG_ACTIVATION_KEY);
             }
@@ -231,6 +257,54 @@ public class UserServiceImpl implements UserService {
         } finally {
             transaction.close();
         }
+    }
+
+    @Override
+    public void createRecoveryKey(int userId, String key) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            if (!userDao.insertRecoverKey(userId, key)) {
+                throw new ServiceException(UserServiceCode.RECOVERY_KEY_EXISTS);
+            }
+            transaction.commit();
+            logger.info("Recovery key created for user with id {}", userId);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    @Override
+    public void deleteRecoveryKey(int userId, String key) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            if (!userDao.deleteRecoverKey(userId, key)) {
+                throw new ServiceException(UserServiceCode.WRONG_RECOVERY_KEY);
+            }
+            transaction.commit();
+            logger.info("Recovery key deleted for user with id {}", userId);
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    private void buildAndSendMail(User user, String locale, String key, MailType mailType) {
+        MailBuilder mailBuilder = new MailBuilder(mailType);
+        String emailSubject = mailBuilder.buildMailSubject(locale);
+        String emailBody = mailBuilder.buildMailBody(user, key, locale);
+        MailSender mailSender = new MailSender(emailSubject, emailBody, user.getEmail());
+        mailSender.send();
     }
 
     private void setDefaultFields(User user) {

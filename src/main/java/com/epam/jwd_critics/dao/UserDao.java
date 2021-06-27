@@ -33,6 +33,8 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String SELECT_USER_BY_LOGIN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.login = ?";
     @Language("SQL")
+    private static final String SELECT_USER_BY_EMAIL = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.email = ?";
+    @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, image_path, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -45,11 +47,17 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String EMAIL_EXISTS = "SELECT EXISTS(SELECT email FROM jwd_critics.user WHERE email = ?)";
     @Language("SQL")
+    private static final String RECOVERY_KEY_EXISTS = "SELECT EXISTS(SELECT recovery_key FROM jwd_critics.user_recovery_key WHERE user_id = ?)";
+    @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.user WHERE id = ?)";
     @Language("SQL")
     private static final String INSERT_ACTIVATION_KEY = "INSERT INTO jwd_critics.user_activation_key (user_id, activation_key) VALUES (?, ?)";
     @Language("SQL")
     private static final String DELETE_ACTIVATION_KEY = "DELETE FROM jwd_critics.user_activation_key UAK where user_id = ? and activation_key = ?";
+    @Language("SQL")
+    private static final String INSERT_RECOVER_KEY = "INSERT INTO jwd_critics.user_recovery_key (user_id, recovery_key) VALUES (?, ?)";
+    @Language("SQL")
+    private static final String DELETE_RECOVER_KEY = "DELETE FROM jwd_critics.user_recovery_key UAK where user_id = ? and recovery_key = ?";
 
     public static UserDao getInstance() {
         return UserDaoSingleton.INSTANCE;
@@ -155,6 +163,18 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
+    public Optional<User> getEntityByEmail(String email) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_USER_BY_EMAIL)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildUser(rs));
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public boolean updatePassword(int id, String password) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
             ps.setString(1, password);
@@ -173,21 +193,6 @@ public class UserDao extends AbstractUserDao {
     @Override
     public boolean emailExists(String email) throws DaoException {
         return existsQuery(EMAIL_EXISTS, email);
-    }
-
-    private boolean existsQuery(String query, String key) throws DaoException {
-        boolean result = false;
-        try (PreparedStatement ps = getPreparedStatement(query)) {
-            ps.setString(1, key);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    result = rs.getInt(1) != 0;
-                }
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return result;
     }
 
     @Override
@@ -210,6 +215,48 @@ public class UserDao extends AbstractUserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public boolean insertRecoverKey(int userId, String key) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(INSERT_RECOVER_KEY)) {
+            ps.setInt(1, userId);
+            ps.setString(2, key);
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean recoveryKeyExists(int userId) throws DaoException {
+        return existsQuery(RECOVERY_KEY_EXISTS, userId);
+    }
+
+    @Override
+    public boolean deleteRecoverKey(int userId, String key) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_RECOVER_KEY)) {
+            ps.setInt(1, userId);
+            ps.setString(2, key);
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    private boolean existsQuery(String query, String key) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ps.setString(1, key);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     private User buildUser(ResultSet rs) throws SQLException {

@@ -21,8 +21,11 @@ public enum Parameter {
     IMAGE_PATH("imagePath"),
 
     NEW_STATUS("newStatus"),
+    NEW_PASSWORD("newPassword"),
+    CONFIRM_NEW_PASSWORD("confirmedNewPassword"),
 
     ACTIVATION_KEY("activationKey"),
+    RECOVERY_KEY("recoveryKey"),
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
     EMAIL("email"),
