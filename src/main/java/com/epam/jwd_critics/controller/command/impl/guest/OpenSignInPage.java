@@ -9,7 +9,7 @@ import com.epam.jwd_critics.controller.command.TransferType;
 
 import static com.epam.jwd_critics.controller.command.ServletDestination.SIGN_IN;
 
-public class OpenSignInPageCommand implements Command {
+public class OpenSignInPage implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
         String previousPage = req.getParameter(Parameter.PREVIOUS_PAGE);

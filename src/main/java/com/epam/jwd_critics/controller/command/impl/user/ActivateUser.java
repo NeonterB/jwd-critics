@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -18,7 +19,7 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 
 import java.util.Optional;
 
-public class ActivateUserCommand implements Command {
+public class ActivateUser implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -52,6 +53,6 @@ public class ActivateUserCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        return new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
     }
 }

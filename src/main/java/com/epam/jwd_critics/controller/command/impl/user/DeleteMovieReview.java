@@ -7,9 +7,9 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
-import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
-import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePage;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPage;
+import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePage;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.message.ErrorMessage;
@@ -17,7 +17,7 @@ import com.epam.jwd_critics.message.SuccessMessage;
 import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
 
-public class DeleteMovieReviewCommand implements Command {
+public class DeleteMovieReview implements Command {
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
 
     @Override
@@ -38,11 +38,11 @@ public class DeleteMovieReviewCommand implements Command {
         String page = req.getParameter(Parameter.PREVIOUS_PAGE);
         if (page != null) {
             if (page.equals(ServletDestination.MOVIE.getPath())) {
-                new OpenMoviePageCommand().execute(req);
+                new OpenMoviePage().execute(req);
             } else if (page.equals(ServletDestination.REVIEWS.getPath())) {
-                new OpenMovieReviewsPageCommand().execute(req);
+                new OpenMovieReviewsPage().execute(req);
             } else if (page.equals(ServletDestination.USER_PROFILE.getPath())) {
-                new OpenUserProfilePageCommand().execute(req);
+                new OpenUserProfilePage().execute(req);
             }
             resp.setDestination(() -> page);
         }

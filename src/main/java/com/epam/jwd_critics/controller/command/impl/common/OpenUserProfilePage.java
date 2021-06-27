@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class OpenUserProfilePageCommand implements Command {
+public class OpenUserProfilePage implements Command {
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
     private final MovieService movieService = MovieServiceImpl.getInstance();
     private final UserService userService = UserServiceImpl.getInstance();

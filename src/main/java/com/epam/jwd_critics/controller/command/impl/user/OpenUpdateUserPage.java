@@ -7,7 +7,7 @@ import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.exception.CommandException;
 
-public class OpenUpdateUserPageCommand implements Command {
+public class OpenUpdateUserPage implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);

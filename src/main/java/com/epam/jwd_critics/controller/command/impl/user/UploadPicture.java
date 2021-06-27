@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.UUID;
 
-public class UploadPictureCommand implements Command {
+public class UploadPicture implements Command {
     private static final String USER_ICONS_DIR = "user-icons";
     private static final String MOVIE_POSTERS_DIR = "movie-posters";
     private static final String CELEBRITY_ICONS_DIR = "celebrity-icons";

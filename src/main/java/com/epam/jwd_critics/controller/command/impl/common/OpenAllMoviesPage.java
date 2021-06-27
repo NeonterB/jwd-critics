@@ -7,9 +7,9 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.message.InfoMessage;
 import com.epam.jwd_critics.service.MovieService;
 import com.epam.jwd_critics.service.impl.MovieServiceImpl;
@@ -17,7 +17,7 @@ import com.epam.jwd_critics.tag.ShowAllMoviesTag;
 
 import java.util.List;
 
-public class OpenAllMoviesPageCommand implements Command {
+public class OpenAllMoviesPage implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
 
     @Override
