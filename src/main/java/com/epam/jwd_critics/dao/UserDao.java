@@ -6,6 +6,7 @@ import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.DaoException;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,11 +54,15 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String INSERT_ACTIVATION_KEY = "INSERT INTO jwd_critics.user_activation_key (user_id, activation_key) VALUES (?, ?)";
     @Language("SQL")
-    private static final String DELETE_ACTIVATION_KEY = "DELETE FROM jwd_critics.user_activation_key UAK where user_id = ? and activation_key = ?";
+    private static final String SELECT_ACTIVATION_KEY = "SELECT activation_key from jwd_critics.user_activation_key where user_id = ?";
     @Language("SQL")
-    private static final String INSERT_RECOVER_KEY = "INSERT INTO jwd_critics.user_recovery_key (user_id, recovery_key) VALUES (?, ?)";
+    private static final String DELETE_ACTIVATION_KEY = "DELETE FROM jwd_critics.user_activation_key where user_id = ?";
     @Language("SQL")
-    private static final String DELETE_RECOVER_KEY = "DELETE FROM jwd_critics.user_recovery_key UAK where user_id = ? and recovery_key = ?";
+    private static final String INSERT_RECOVERY_KEY = "INSERT INTO jwd_critics.user_recovery_key (user_id, recovery_key) VALUES (?, ?)";
+    @Language("SQL")
+    private static final String SELECT_RECOVERY_KEY = "SELECT recovery_key from jwd_critics.user_recovery_key where user_id = ?";
+    @Language("SQL")
+    private static final String DELETE_RECOVERY_KEY = "DELETE FROM jwd_critics.user_recovery_key where user_id = ?";
 
     public static UserDao getInstance() {
         return UserDaoSingleton.INSTANCE;
@@ -207,19 +212,23 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean deleteActivationKey(int userId, String key) throws DaoException {
+    public Optional<String> selectActivationKey(int userId) throws DaoException {
+        return selectKey(userId, SELECT_ACTIVATION_KEY);
+    }
+
+    @Override
+    public void deleteActivationKey(int userId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_ACTIVATION_KEY)) {
             ps.setInt(1, userId);
-            ps.setString(2, key);
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
     @Override
-    public boolean insertRecoverKey(int userId, String key) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(INSERT_RECOVER_KEY)) {
+    public boolean insertRecoveryKey(int userId, String key) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(INSERT_RECOVERY_KEY)) {
             ps.setInt(1, userId);
             ps.setString(2, key);
             return ps.executeUpdate() != 0;
@@ -229,16 +238,15 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean recoveryKeyExists(int userId) throws DaoException {
-        return existsQuery(RECOVERY_KEY_EXISTS, userId);
+    public Optional<String> selectRecoveryKey(int userId) throws DaoException {
+        return selectKey(userId, SELECT_RECOVERY_KEY);
     }
 
     @Override
-    public boolean deleteRecoverKey(int userId, String key) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_RECOVER_KEY)) {
+    public void deleteRecoveryKey(int userId) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(DELETE_RECOVERY_KEY)) {
             ps.setInt(1, userId);
-            ps.setString(2, key);
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -257,6 +265,21 @@ public class UserDao extends AbstractUserDao {
             throw new DaoException(e);
         }
         return result;
+    }
+
+    @NotNull
+    private Optional<String> selectKey(int userId, String selectActivationKey) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(selectActivationKey)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(rs.getString(1));
+                }
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     private User buildUser(ResultSet rs) throws SQLException {
@@ -286,8 +309,8 @@ public class UserDao extends AbstractUserDao {
                 .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
     }
-
     private static class UserDaoSingleton {
+
         private static final UserDao INSTANCE = new UserDao();
     }
 }

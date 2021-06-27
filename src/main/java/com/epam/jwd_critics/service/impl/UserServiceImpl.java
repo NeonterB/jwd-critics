@@ -240,15 +240,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<String> getActivationKey(int userId) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        Optional<String> key;
+        try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            key = userDao.selectActivationKey(userId);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return key;
+    }
+
+    @Override
     public void deleteActivationKey(int userId, String key) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.deleteActivationKey(userId, key)) {
+            Optional<String> expected = userDao.selectActivationKey(userId);
+            if (!expected.isPresent()) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_HAVE_ACTIVATION_KEY);
+            } else if (!key.equals(expected.get())) {
                 throw new ServiceException(UserServiceCode.WRONG_ACTIVATION_KEY);
             }
+            userDao.deleteActivationKey(userId);
             transaction.commit();
             logger.info("Activation key deleted for user with id {}", userId);
         } catch (DaoException e) {
@@ -266,7 +289,7 @@ public class UserServiceImpl implements UserService {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.insertRecoverKey(userId, key)) {
+            if (!userDao.insertRecoveryKey(userId, key)) {
                 throw new ServiceException(UserServiceCode.RECOVERY_KEY_EXISTS);
             }
             transaction.commit();
@@ -280,15 +303,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<String> getRecoveryKey(int userId) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(userDao);
+        Optional<String> key;
+        try {
+            if (!userDao.idExists(userId)) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
+            }
+            key = userDao.selectRecoveryKey(userId);
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return key;
+    }
+
+    @Override
     public void deleteRecoveryKey(int userId, String key) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.deleteRecoverKey(userId, key)) {
+            Optional<String> expected = userDao.selectRecoveryKey(userId);
+            if (!expected.isPresent()) {
+                throw new ServiceException(UserServiceCode.USER_DOES_NOT_HAVE_RECOVERY_KEY);
+            } else if (!key.equals(expected.get())) {
                 throw new ServiceException(UserServiceCode.WRONG_RECOVERY_KEY);
             }
+            userDao.deleteRecoveryKey(userId);
             transaction.commit();
             logger.info("Recovery key deleted for user with id {}", userId);
         } catch (DaoException e) {

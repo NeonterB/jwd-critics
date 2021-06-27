@@ -31,9 +31,13 @@ public interface UserService {
 
     void createActivationKey(int userId, String key) throws ServiceException;
 
+    Optional<String> getActivationKey(int userId) throws ServiceException;
+
     void deleteActivationKey(int userId, String key) throws ServiceException;
 
     void createRecoveryKey(int userId, String key) throws ServiceException;
+
+    Optional<String> getRecoveryKey(int userId) throws ServiceException;
 
     void deleteRecoveryKey(int userId, String key) throws ServiceException;
 }

@@ -18,11 +18,13 @@ public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
 
     public abstract boolean insertActivationKey(int userId, String key) throws DaoException;
 
-    public abstract boolean deleteActivationKey(int userId, String key) throws DaoException;
+    public abstract Optional<String> selectActivationKey(int userId) throws DaoException;
 
-    public abstract boolean insertRecoverKey(int userId, String key) throws DaoException;
+    public abstract void deleteActivationKey(int userId) throws DaoException;
 
-    public abstract boolean recoveryKeyExists(int userId) throws DaoException;
+    public abstract boolean insertRecoveryKey(int userId, String key) throws DaoException;
 
-    public abstract boolean deleteRecoverKey(int userId, String key) throws DaoException;
+    public abstract Optional<String> selectRecoveryKey(int userId) throws DaoException;
+
+    public abstract void deleteRecoveryKey(int userId) throws DaoException;
 }
