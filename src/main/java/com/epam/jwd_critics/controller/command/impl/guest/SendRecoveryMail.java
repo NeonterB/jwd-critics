@@ -30,8 +30,14 @@ public class SendRecoveryMail implements Command {
         try {
             Optional<User> user = userService.getEntityByEmail(userEmail);
             if (user.isPresent()) {
-                String key = UUID.randomUUID().toString();
-                userService.createRecoveryKey(user.get().getId(), key);
+                Optional<String> currentKey = userService.getRecoveryKey(user.get().getId());
+                String key;
+                if (!currentKey.isPresent()) {
+                    key = UUID.randomUUID().toString();
+                    userService.createRecoveryKey(user.get().getId(), key);
+                } else {
+                    key = currentKey.get();
+                }
                 String lang = (String) req.getSessionAttribute(Attribute.LANG);
                 userService.buildAndSendRecoveryMail(user.get(), key, lang);
                 req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.RECOVERY_MAIL);
