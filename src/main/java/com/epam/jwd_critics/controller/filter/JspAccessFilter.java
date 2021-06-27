@@ -35,16 +35,11 @@ public class JspAccessFilter implements Filter {
         }
         String uri = httpRequest.getRequestURI();
         try {
-            if (uri.contains(ServletDestination.ADMIN_URL) && (userRole != Role.ADMIN)) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                return;
-            } else if (uri.contains(ServletDestination.USER_URL) && (userRole == Role.GUEST)) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                return;
-            } else if (uri.contains(ServletDestination.GUEST_URL) && (userRole != Role.GUEST)) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                return;
-            } else if (uri.contains(ServletDestination.ERROR_URL) || uri.contains(ServletDestination.COMPONENT_URL)) {
+            if ((uri.contains(ServletDestination.ADMIN_URL) && (userRole != Role.ADMIN)) ||
+                    (uri.contains(ServletDestination.USER_URL) && (userRole == Role.GUEST)) ||
+                    (uri.contains(ServletDestination.GUEST_URL) && (userRole != Role.GUEST)) ||
+                    uri.contains(ServletDestination.ERROR_URL) ||
+                    uri.contains(ServletDestination.COMPONENT_URL)) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + page);
                 return;
             }
