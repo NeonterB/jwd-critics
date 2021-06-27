@@ -4,7 +4,7 @@ public enum ServletDestination implements Destination {
     MAIN("/pages/common/main.jsp"),
     SIGN_IN("/pages/guest/sign_in.jsp"),
     FORGOT_PASSWORD("/pages/guest/forgot_password.jsp"),
-    PASSWORD_RECOVERY("/pages/restricted/password_recovery.jsp"),
+    PASSWORD_RECOVERY("/pages/guest/password_recovery.jsp"),
     ALL_MOVIES("/pages/common/all_movies.jsp"),
     ALL_USERS("/pages/admin/all_users.jsp"),
     USER_PROFILE("/pages/common/user_profile.jsp"),
@@ -29,7 +29,6 @@ public enum ServletDestination implements Destination {
     public final static String ADMIN_URL = "/pages/admin";
     public final static String USER_URL = "/pages/user";
     public final static String GUEST_URL = "/pages/guest";
-    public final static String RESTRICTED_URL = "/pages/restricted";
     public final static String ERROR_URL = "/pages/error";
     public final static String COMPONENT_URL = "/pages/components";
 }
