@@ -11,19 +11,15 @@ import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.UserService;
-import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
 import com.epam.jwd_critics.service.impl.UserServiceImpl;
 import com.epam.jwd_critics.tag.ShowAllUsersTag;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class OpenAllUsersPageCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
-    private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
