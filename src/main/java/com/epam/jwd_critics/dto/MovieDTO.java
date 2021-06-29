@@ -140,11 +140,11 @@ public class MovieDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieDTO movieDTO = (MovieDTO) o;
-        return id == movieDTO.id && rating == movieDTO.rating && reviewCount == movieDTO.reviewCount && name.equals(movieDTO.name) && summary.equals(movieDTO.summary) && runtime.equals(movieDTO.runtime) && country.equals(movieDTO.country) && releaseDate.equals(movieDTO.releaseDate) && ageRestriction.equals(movieDTO.ageRestriction);
+        return id == movieDTO.id && rating == movieDTO.rating && reviewCount == movieDTO.reviewCount && name.equals(movieDTO.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction);
+        return Objects.hash(id, name, rating, reviewCount);
     }
 }
