@@ -15,7 +15,7 @@
 <html>
 <head>
     <title>Profile</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user_profile.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>
 <c:import url="/pages/componets/header.jsp"/>
@@ -83,12 +83,18 @@
                 </div>
                 <c:if test="${user.role eq 'ADMIN'}">
                     <div class="col-2">
-                        <p class="text-center mt-5">
-                            <a class="btnRef"
-                               href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
-                                <fmt:message key="button.delete"/>
-                            </a>
-                        </p>
+                        <table style="height: 100px;">
+                            <tbody>
+                            <tr>
+                                <td class="align-middle">
+                                    <a class="btnRef"
+                                       href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
+                                        <fmt:message key="button.delete"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </c:if>
             </div>

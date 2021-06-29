@@ -1,0 +1,40 @@
+.container img {
+    width: 100%;
+}
+
+.btnRef {
+    border-radius: 20px;
+    border: 1px solid #FF4B2B;
+    background-color: #FF4B2B;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 80ms;
+}
+
+.btnRef:hover {
+    color: #FFFFFF;
+}
+
+.btnRef:active {
+    padding: 10px 42px;
+    transition: 80ms;
+}
+
+.page-item button {
+    color: #FF4B2B;
+    border: 1px solid #FF4B2B;
+    margin-right: -1px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+.page-item button:hover {
+    background-color: #FF4B2B;
+    color: white;
+    transition: 0.4s;
+}

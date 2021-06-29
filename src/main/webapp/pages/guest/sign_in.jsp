@@ -72,8 +72,9 @@
                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$"
                        title="<fmt:message key="validation.password"/>"
                        required placeholder="<fmt:message key="label.password"/>"/>
-                <a href="${pageContext.request.contextPath}/controller?command=open_forgot_password">Forgot your
-                    password?</a>
+                <a href="${pageContext.request.contextPath}/controller?command=open_forgot_password">
+                    <fmt:message key="button.forgotPassword"/>
+                </a>
                 <button type="submit"><fmt:message key="button.signIn"/></button>
             </form>
         </div>

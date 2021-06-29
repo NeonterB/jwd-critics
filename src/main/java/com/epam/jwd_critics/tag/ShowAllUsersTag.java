@@ -21,6 +21,8 @@ public class ShowAllUsersTag extends TagSupport {
     private static final int USERS_PER_ROW = 6;
     private static final String ROLE_KEY = "user.role";
     private static final String STATUS_KEY = "user.status";
+    private static final String BAN_KEY = "button.ban";
+    private static final String UNBAN_KEY = "button.unban";
 
 
     @Override
@@ -45,6 +47,8 @@ public class ShowAllUsersTag extends TagSupport {
         List<UserDTO> users = (List<UserDTO>) req.getSessionAttribute(Attribute.USERS_TO_DISPLAY);
         String roleStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ROLE_KEY);
         String statusStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), STATUS_KEY);
+        String banStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), BAN_KEY);
+        String unbanStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), UNBAN_KEY);
 
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
@@ -64,13 +68,15 @@ public class ShowAllUsersTag extends TagSupport {
                     writer.write("<p class=\"text-center\">" + userDTO.getName() + "</p>");
                     writer.write("<p class=\"text-center\">" + roleStr + ": " + userDTO.getRole() + "</p>");
                     writer.write("<p class=\"text-center\">" + statusStr + ": " + userDTO.getStatus() + "</p>");
+                    writer.write("<p class=\"text-center\">");
                     if (user.getId() != userDTO.getId()) {
                         if (userDTO.getStatus().equals(Status.BANNED)) {
-                            writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&previousPage=" + currentPage + "&newStatus=active&userId=" + userDTO.getId() + "\">Unban</a>");
+                            writer.write("<a class=\"btnRef\" href=\"" + contextPath + "/controller?command=update_user_status&previousPage=" + currentPage + "&newStatus=active&userId=" + userDTO.getId() + "\">" + unbanStr + "</a>");
                         } else if (userDTO.getStatus().equals(Status.ACTIVE)) {
-                            writer.write("<a href=\"" + contextPath + "/controller?command=update_user_status&previousPage=" + currentPage + "&newStatus=banned&userId=" + userDTO.getId() + "\">Ban</a>");
+                            writer.write("<a class=\"btnRef\" href=\"" + contextPath + "/controller?command=update_user_status&previousPage=" + currentPage + "&newStatus=banned&userId=" + userDTO.getId() + "\">" + banStr + "</a>");
                         }
                     }
+                    writer.write("</p>");
                     writer.write("</div>");
                     if (j == USERS_PER_ROW - 1 || j == users.size() - 1) {
                         writer.write("</div>");

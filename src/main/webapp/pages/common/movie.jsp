@@ -16,14 +16,15 @@
 <head>
     <title>${movie.name}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/movie.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <body>
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
-<div class="container mt-5">
-    <a href="${pageContext.request.contextPath}/controller?command=open_all_movies"><fmt:message
+<div class="container mt-4">
+    <a class="btnRef" href="${pageContext.request.contextPath}/controller?command=open_all_movies"><fmt:message
             key="button.toMovies"/></a>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-4">
             <img src="${pageContext.request.contextPath}/picture?currentPicture=${movie.imagePath}" alt="${movie.name}"
                  class="img-thumbnail">
@@ -104,7 +105,8 @@
                         </div>
                         <button type="submit"><fmt:message key="button.submit"/></button>
                         <c:if test="${not empty userReview}">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}&previousPage=${currentPage}">
+                            <a class="btnRef ml-4"
+                               href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${userReview.id}&previousPage=${currentPage}">
                                 <fmt:message key="button.delete"/>
                             </a>
                         </c:if>
@@ -131,17 +133,29 @@
                     </div>
                     <c:if test="${user.role eq 'ADMIN'}">
                         <div class="col-1">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
-                                <fmt:message key="button.delete"/>
-                            </a>
+                            <table style="height: 100px;">
+                                <tbody>
+                                <tr>
+                                    <td class="align-middle">
+                                        <a class="btnRef"
+                                           href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
+                                            <fmt:message key="button.delete"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </c:if>
                 </div>
             </c:forEach>
         </div>
-        <a href="${pageContext.request.contextPath}/controller?command=open_movie_reviews&movieId=${movie.id}">
-            <fmt:message key="button.showMore"/>
-        </a>
+        <p class="mt-4 mb-4">
+            <a class="btnRef"
+               href="${pageContext.request.contextPath}/controller?command=open_movie_reviews&movieId=${movie.id}">
+                <fmt:message key="button.showMore"/>
+            </a>
+        </p>
     </c:if>
 </div>
 </body>

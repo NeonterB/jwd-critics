@@ -15,7 +15,7 @@
 <html>
 <head>
     <title>All users</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all_users.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>

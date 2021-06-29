@@ -20,6 +20,7 @@ import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFrom
 public class ShowReviewsTag extends TagSupport {
     public static final int REVIEWS_PER_PAGE = 2;
     private static final String SCORE_KEY = "review.score";
+    private static final String DELETE_KEY = "button.delete";
 
     @Override
     public int doStartTag() throws JspException {
@@ -42,6 +43,7 @@ public class ShowReviewsTag extends TagSupport {
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
         String scoreStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), SCORE_KEY);
+        String deleteStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), DELETE_KEY);
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         Role userRole = Role.GUEST;
@@ -69,9 +71,14 @@ public class ShowReviewsTag extends TagSupport {
 
                     if (userRole.equals(Role.ADMIN)) {
                         writer.write("<div class=\"col-1\">");
-                        writer.write("<a href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "&previousPage=" + currentPage + "\">");
-                        writer.write("Delete");
+                        writer.write("<table style=\"height: 100px;\">");
+                        writer.write("<tbody><tr>");
+                        writer.write("<td class=\"align-middle\">");
+                        writer.write("<a class=\"btnRef\" href=\"" + contextPath + "/controller?command=delete_movie_review&movieReviewId=" + review.getId() + "&previousPage=" + currentPage + "\">");
+                        writer.write(deleteStr);
                         writer.write("</a>");
+                        writer.write("</td>");
+                        writer.write("</tr></tbody></table>");
                         writer.write("</div>");
                     }
 

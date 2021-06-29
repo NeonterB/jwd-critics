@@ -15,15 +15,17 @@
 <html>
 <head>
     <title>Reviews</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
 <body>
 <div class="container mt-2">
-    <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${movie.id}">
-        <fmt:message key="button.toMovie"/>
-    </a>
+    <p class="mt-4 mb-4">
+        <a class="btnRef" href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${movie.id}">
+            <fmt:message key="button.toMovie"/>
+        </a>
+    </p>
     <ctg:reviews/>
 </div>
 </body>
