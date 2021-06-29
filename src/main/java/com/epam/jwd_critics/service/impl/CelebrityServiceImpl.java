@@ -73,6 +73,9 @@ public class CelebrityServiceImpl implements CelebrityService {
         Optional<Celebrity> celebrity;
         try {
             celebrity = celebrityDao.getEntityById(id);
+            if (celebrity.isPresent()) {
+                updateInfo(celebrity.get());
+            }
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -141,7 +144,7 @@ public class CelebrityServiceImpl implements CelebrityService {
     private void updateInfo(Celebrity celebrity) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
-            Map<Movie, List<Position>> jobs = movieDao.getMoviesByCelebrityId(celebrity.getId());
+            Map<Movie, List<Position>> jobs = movieDao.getJobsByCelebrityId(celebrity.getId());
             celebrity.setJobs(jobs);
             transaction.commit();
         } catch (DaoException e) {
