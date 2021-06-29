@@ -7,7 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 
-public class ChangeLocale implements Command {
+public class ChangeLocaleCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
         String lang = req.getParameter(Parameter.LANG);

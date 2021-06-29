@@ -7,7 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePage;
+import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class UpdateUser implements Command {
+public class UpdateUserCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        new UploadPicture().execute(req);
+        new UploadPictureCommand().execute(req);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
         String lastName = req.getParameter(Parameter.LAST_NAME);
@@ -68,7 +68,7 @@ public class UpdateUser implements Command {
                         .collect(Collectors.toList()));
             }
         }
-        new OpenUserProfilePage().execute(req);
+        new OpenUserProfilePageCommand().execute(req);
         return new CommandResponse(ServletDestination.USER_PROFILE, TransferType.REDIRECT);
     }
 }

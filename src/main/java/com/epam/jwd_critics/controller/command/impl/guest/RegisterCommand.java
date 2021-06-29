@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Register implements Command {
+public class RegisterCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override

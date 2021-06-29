@@ -6,7 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 
-public class SignOut implements Command {
+public class SignOutCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
         req.removeSessionAttribute(Attribute.USER);

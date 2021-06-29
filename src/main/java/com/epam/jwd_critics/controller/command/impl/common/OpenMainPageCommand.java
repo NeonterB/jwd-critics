@@ -6,7 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
 
-public class OpenMainPage implements Command {
+public class OpenMainPageCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) {
         return new CommandResponse(ServletDestination.MAIN, TransferType.FORWARD);

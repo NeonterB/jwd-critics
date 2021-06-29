@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class OpenMoviePage implements Command {
+public class OpenMoviePageCommand implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
     private final UserService userService = UserServiceImpl.getInstance();

@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SignIn implements Command {
+public class SignInCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
 

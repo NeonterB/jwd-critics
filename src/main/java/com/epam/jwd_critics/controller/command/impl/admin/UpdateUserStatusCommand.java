@@ -7,7 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePage;
+import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
@@ -20,7 +20,7 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 
 import java.util.Optional;
 
-public class UpdateUserStatus implements Command {
+public class UpdateUserStatusCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -64,9 +64,9 @@ public class UpdateUserStatus implements Command {
         String page = req.getParameter(Parameter.PREVIOUS_PAGE);
         if (page != null) {
             if (page.equals(ServletDestination.USER_PROFILE.getPath())) {
-                new OpenUserProfilePage().execute(req);
+                new OpenUserProfilePageCommand().execute(req);
             } else if (page.equals(ServletDestination.ALL_USERS.getPath())) {
-                new OpenAllUsersPage().execute(req);
+                new OpenAllUsersPageCommand().execute(req);
             }
             resp.setDestination(() -> page);
         }

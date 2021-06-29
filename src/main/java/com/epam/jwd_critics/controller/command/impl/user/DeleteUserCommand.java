@@ -14,7 +14,7 @@ import com.epam.jwd_critics.message.SuccessMessage;
 import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.service.impl.UserServiceImpl;
 
-public class DeleteUser implements Command {
+public class DeleteUserCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -26,7 +26,7 @@ public class DeleteUser implements Command {
         try {
             userService.delete(Integer.parseInt(userIdStr));
             req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_DELETED);
-            return new SignOut().execute(req);
+            return new SignOutCommand().execute(req);
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }

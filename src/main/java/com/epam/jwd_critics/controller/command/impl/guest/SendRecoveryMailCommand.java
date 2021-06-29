@@ -18,7 +18,7 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SendRecoveryMail implements Command {
+public class SendRecoveryMailCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override

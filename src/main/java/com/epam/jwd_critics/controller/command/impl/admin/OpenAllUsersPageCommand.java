@@ -18,7 +18,7 @@ import com.epam.jwd_critics.tag.ShowAllUsersTag;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OpenAllUsersPage implements Command {
+public class OpenAllUsersPageCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override

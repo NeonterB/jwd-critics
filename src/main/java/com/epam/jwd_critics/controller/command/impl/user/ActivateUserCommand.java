@@ -19,7 +19,7 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 
 import java.util.Optional;
 
-public class ActivateUser implements Command {
+public class ActivateUserCommand implements Command {
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override

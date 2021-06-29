@@ -17,7 +17,7 @@ import com.epam.jwd_critics.tag.ShowAllMoviesTag;
 
 import java.util.List;
 
-public class OpenAllMoviesPage implements Command {
+public class OpenAllMoviesPageCommand implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
 
     @Override

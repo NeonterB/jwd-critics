@@ -6,7 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePage;
+import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CreateMovieReview implements Command {
+public class CreateMovieReviewCommand implements Command {
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
 
     @Override
@@ -50,7 +50,7 @@ public class CreateMovieReview implements Command {
                         .collect(Collectors.toList()));
             }
         }
-        new OpenMoviePage().execute(req);
+        new OpenMoviePageCommand().execute(req);
         return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
     }
 }
