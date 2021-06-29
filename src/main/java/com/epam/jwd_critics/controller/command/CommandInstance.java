@@ -1,10 +1,13 @@
 package com.epam.jwd_critics.controller.command;
 
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
 import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllCelebritiesPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
+import com.epam.jwd_critics.controller.command.impl.common.OpenCelebrityProfilePageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMainPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMovieReviewsPageCommand;
@@ -34,29 +37,39 @@ import java.util.List;
 public enum CommandInstance {
     OPEN_MAIN(new OpenMainPageCommand(), Role.values()),
     OPEN_SIGN_IN(new OpenSignInPageCommand(), Role.GUEST),
+    SIGN_IN(new SignInCommand(), Role.GUEST),
+    REGISTER(new RegisterCommand(), Role.GUEST),
+    SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER),
+
     OPEN_FORGOT_PASSWORD(new OpenForgotPasswordPageCommand(), Role.GUEST),
     SEND_RECOVERY_MAIL(new SendRecoveryMailCommand(), Role.GUEST),
     OPEN_PASSWORD_RECOVERY(new OpenPasswordRecoveryPageCommand(), Role.GUEST),
     UPDATE_PASSWORD(new UpdatePasswordCommand(), Role.GUEST),
+
     OPEN_ALL_MOVIES(new OpenAllMoviesPageCommand(), Role.values()),
     OPEN_ALL_CELEBRITIES(new OpenAllCelebritiesPageCommand(), Role.values()),
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
+
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
+
     OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
     OPEN_UPDATE_USER(new OpenUpdateUserPageCommand(), Role.USER, Role.ADMIN),
+    UPDATE_USER(new UpdateUserCommand(), true, Role.ADMIN, Role.USER),
+    UPDATE_USER_STATUS(new UpdateUserStatusCommand(), true, Role.ADMIN),
+    DELETE_USER(new DeleteUserCommand(), Role.USER),
+    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER),
+
+    OPEN_CELEBRITY_PROFILE(new OpenCelebrityProfilePageCommand(), Role.values()),
+    OPEN_UPDATE_CELEBRITY(new OpenUpdateCelebrityPageCommand(), Role.ADMIN),
+    UPDATE_CELEBRITY(new UpdateCelebrityCommand(), Role.ADMIN),
+
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_MOVIE_REVIEW(new UpdateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     DELETE_MOVIE_REVIEW(new DeleteMovieReviewCommand(), true, Role.USER, Role.ADMIN),
-    UPDATE_USER_STATUS(new UpdateUserStatusCommand(), true, Role.ADMIN),
-    UPDATE_USER(new UpdateUserCommand(), true, Role.ADMIN, Role.USER),
+
     UPLOAD_PICTURE(new UploadPictureCommand(), true, Role.USER, Role.ADMIN),
-    CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values()),
-    SIGN_IN(new SignInCommand(), Role.GUEST),
-    REGISTER(new RegisterCommand(), Role.GUEST),
-    SIGN_OUT(new SignOutCommand(), Role.ADMIN, Role.USER),
-    DELETE_USER(new DeleteUserCommand(), Role.USER),
-    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER);
+    CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values());
 
     private final Command command;
     private final List<Role> allowedRoles = new LinkedList<>();
