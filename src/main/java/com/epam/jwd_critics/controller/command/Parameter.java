@@ -14,6 +14,7 @@ public enum Parameter {
     MOVIE_ID("movieId"),
     USER_ID("userId"),
     REVIEW_ID("reviewId"),
+    CELEBRITY_ID("celebrityId"),
 
     MOVIE_REVIEW_TEXT("movieReviewText"),
     MOVIE_REVIEW_SCORE("movieReviewScore"),

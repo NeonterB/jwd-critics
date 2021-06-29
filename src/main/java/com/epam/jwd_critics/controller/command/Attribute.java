@@ -31,6 +31,9 @@ public enum Attribute {
     USER_PROFILE("userProfile"),
     REVIEWS_ON_USER_PROFILE_PAGE("reviewsOnUserProfilePage"),
 
+    CELEBRITY("celebrity"),
+    CELEBRITY_PROFILE("celebrityProfile"),
+
     NEW_IMAGE("newImage"),
 
     VALIDATION_WARNINGS("validationWarnings"),
