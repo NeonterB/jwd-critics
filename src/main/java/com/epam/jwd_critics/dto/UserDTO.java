@@ -1,11 +1,11 @@
 package com.epam.jwd_critics.dto;
 
-import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserDTO {
     private int id;
@@ -94,5 +94,18 @@ public class UserDTO {
 
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return id == userDTO.id && role == userDTO.role && status == userDTO.status && firstName.equals(userDTO.firstName) && lastName.equals(userDTO.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, role, status, firstName, lastName);
     }
 }

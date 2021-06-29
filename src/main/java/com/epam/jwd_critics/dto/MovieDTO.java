@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MovieDTO {
     private int id;
@@ -132,5 +133,18 @@ public class MovieDTO {
 
     public void setStaff(Map<Position, List<Celebrity>> staff) {
         this.staff = staff;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieDTO movieDTO = (MovieDTO) o;
+        return id == movieDTO.id && rating == movieDTO.rating && reviewCount == movieDTO.reviewCount && name.equals(movieDTO.name) && summary.equals(movieDTO.summary) && runtime.equals(movieDTO.runtime) && country.equals(movieDTO.country) && releaseDate.equals(movieDTO.releaseDate) && ageRestriction.equals(movieDTO.ageRestriction);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, summary, runtime, country, rating, reviewCount, releaseDate, ageRestriction);
     }
 }

@@ -2,6 +2,8 @@ package com.epam.jwd_critics.dto;
 
 import com.epam.jwd_critics.entity.MovieReview;
 
+import java.util.Objects;
+
 public class MovieReviewDTO {
     private int score;
     private String text;
@@ -73,5 +75,18 @@ public class MovieReviewDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieReviewDTO that = (MovieReviewDTO) o;
+        return score == that.score && userId == that.userId && movieId == that.movieId && id == that.id && text.equals(that.text) && title.equals(that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(score, text, title, userId, movieId, id);
     }
 }
