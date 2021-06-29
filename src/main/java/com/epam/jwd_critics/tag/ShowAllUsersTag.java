@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Status;
+import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -19,10 +20,7 @@ import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFrom
 public class ShowAllUsersTag extends TagSupport {
     public static final int USERS_PER_PAGE = 2;
     private static final int USERS_PER_ROW = 6;
-    private static final String ROLE_KEY = "user.role";
-    private static final String STATUS_KEY = "user.status";
-    private static final String BAN_KEY = "button.ban";
-    private static final String UNBAN_KEY = "button.unban";
+
 
 
     @Override
@@ -45,10 +43,10 @@ public class ShowAllUsersTag extends TagSupport {
 
     private void writeUsers(JspWriter writer, CommandRequest req) throws JspException {
         List<UserDTO> users = (List<UserDTO>) req.getSessionAttribute(Attribute.USERS_TO_DISPLAY);
-        String roleStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ROLE_KEY);
-        String statusStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), STATUS_KEY);
-        String banStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), BAN_KEY);
-        String unbanStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), UNBAN_KEY);
+        String roleStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.USER_ROLE);
+        String statusStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.USER_STATUS);
+        String banStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.BAN);
+        String unbanStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.UNBAN);
 
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);

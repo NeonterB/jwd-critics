@@ -7,6 +7,7 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
+import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -19,8 +20,6 @@ import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFrom
 
 public class ShowReviewsTag extends TagSupport {
     public static final int REVIEWS_PER_PAGE = 2;
-    private static final String SCORE_KEY = "review.score";
-    private static final String DELETE_KEY = "button.delete";
 
     @Override
     public int doStartTag() throws JspException {
@@ -42,8 +41,8 @@ public class ShowReviewsTag extends TagSupport {
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
-        String scoreStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), SCORE_KEY);
-        String deleteStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), DELETE_KEY);
+        String scoreStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.REVIEW_SCORE);
+        String deleteStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.DELETE);
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         Role userRole = Role.GUEST;

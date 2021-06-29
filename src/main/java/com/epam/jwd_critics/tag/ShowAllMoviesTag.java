@@ -5,6 +5,7 @@ import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.MovieDTO;
+import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -18,7 +19,6 @@ import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFrom
 public class ShowAllMoviesTag extends TagSupport {
     public static final int MOVIES_PER_PAGE = 1;
     private static final int MOVIES_PER_ROW = 4;
-    private static final String RATING_KEY = "movie.rating";
 
     @Override
     public int doStartTag() throws JspException {
@@ -40,7 +40,7 @@ public class ShowAllMoviesTag extends TagSupport {
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieDTO> movies = (List<MovieDTO>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
-        String ratingStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), RATING_KEY);
+        String ratingStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RATING);
         if (movies != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
