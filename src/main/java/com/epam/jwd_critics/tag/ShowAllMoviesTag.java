@@ -4,7 +4,7 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
-import com.epam.jwd_critics.entity.Movie;
+import com.epam.jwd_critics.dto.MovieDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -39,13 +39,13 @@ public class ShowAllMoviesTag extends TagSupport {
     }
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
-        List<Movie> movies = (List<Movie>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
+        List<MovieDTO> movies = (List<MovieDTO>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
         String ratingStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), RATING_KEY);
         if (movies != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
                 for (int i = 0, j = 0; i < movies.size() && i < MOVIES_PER_PAGE; i++) {
-                    Movie movie = movies.get(i);
+                    MovieDTO movie = movies.get(i);
                     if (j == 0) {
                         writer.write("<div class=\"row\">");
                     }

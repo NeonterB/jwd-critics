@@ -7,6 +7,7 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
+import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -16,6 +17,7 @@ import com.epam.jwd_critics.service.impl.MovieServiceImpl;
 import com.epam.jwd_critics.tag.ShowAllMoviesTag;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OpenAllMoviesPageCommand implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
@@ -36,7 +38,8 @@ public class OpenAllMoviesPageCommand implements Command {
         int end = ShowAllMoviesTag.MOVIES_PER_PAGE + begin;
         try {
             List<Movie> moviesToDisplay = movieService.getAllBetween(begin, end);
-            req.setSessionAttribute(Attribute.MOVIES_TO_DISPLAY, moviesToDisplay);
+            List<MovieDTO> movieDTOS = moviesToDisplay.stream().map(MovieDTO::new).collect(Collectors.toList());
+            req.setSessionAttribute(Attribute.MOVIES_TO_DISPLAY, movieDTOS);
             int movieCount = movieService.getCount();
             req.setSessionAttribute(Attribute.MOVIE_COUNT, movieCount);
             if (moviesToDisplay.size() == 0) {

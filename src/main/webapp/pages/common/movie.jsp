@@ -18,9 +18,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/movie.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
-<body>
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
+<body>
 <div class="container mt-4">
     <a class="btnRef" href="${pageContext.request.contextPath}/controller?command=open_all_movies"><fmt:message
             key="button.toMovies"/></a>
@@ -44,7 +44,10 @@
                         <div class="col">
                             <strong>${position.key}</strong>:
                             <c:forEach var="celebrity" items="${position.value}">
-                                ${celebrity.firstName} ${celebrity.lastName},
+                                <a class="link-dark"
+                                   href="${pageContext.request.contextPath}/controller?command=open_celebrity_profile&celebrityId=${celebrity.id}">
+                                        ${celebrity.firstName} ${celebrity.lastName},
+                                </a>
                             </c:forEach>
                         </div>
                     </div>
@@ -99,8 +102,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="reviewTextArea" class="form-label"><fmt:message key="text.yourReview"/></label>
-                            <textarea name="movieReviewText" class="form-control" id="reviewTextArea" minlength="100"
+                            <textarea name="movieReviewText" class="form-control" id="reviewTextArea"
+                                      minlength="100"
                                       maxlength="10000"
+                                      required
                                       rows="7">${userReview.text}</textarea>
                         </div>
                         <button type="submit"><fmt:message key="button.submit"/></button>

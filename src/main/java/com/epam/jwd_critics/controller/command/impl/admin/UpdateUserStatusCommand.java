@@ -4,9 +4,9 @@ import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
+import com.epam.jwd_critics.controller.command.Destination;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -25,8 +25,6 @@ public class UpdateUserStatusCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = new CommandResponse(ServletDestination.ALL_USERS, TransferType.REDIRECT);
-
         String userToUpdateId = req.getParameter(Parameter.USER_ID);
         String newStatusStr = req.getParameter(Parameter.NEW_STATUS);
         if (newStatusStr == null || userToUpdateId == null) {
@@ -37,21 +35,16 @@ public class UpdateUserStatusCommand implements Command {
             if (userToUpdate.isPresent()) {
                 if (userToUpdate.get().getStatus().equals(Status.INACTIVE)) {
                     req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.INACTIVE_USER);
-                    return CommandResponse.redirectToPreviousPageOr(ServletDestination.ALL_USERS, req);
+                    return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
                 }
                 Status newStatus = Status.valueOf(newStatusStr.toUpperCase());
                 userToUpdate.get().setStatus(newStatus);
                 userService.update(userToUpdate.get());
-                String message = null;
-                switch (newStatus){
-                    case BANNED:{
-                        message = SuccessMessage.USER_BANNED;
-                        break;
-                    }
-                    case ACTIVE:{
-                        message = SuccessMessage.USER_UNBANNED;
-                        break;
-                    }
+                String message;
+                if (newStatus.equals(Status.BANNED)) {
+                    message = SuccessMessage.USER_BANNED;
+                } else {
+                    message = SuccessMessage.USER_UNBANNED;
                 }
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, message);
             } else {
@@ -61,14 +54,14 @@ public class UpdateUserStatusCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        String page = req.getParameter(Parameter.PREVIOUS_PAGE);
-        if (page != null) {
-            if (page.equals(ServletDestination.USER_PROFILE.getPath())) {
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        Destination prevPage = resp.getDestination();
+        if (prevPage != ServletDestination.MAIN) {
+            if (prevPage.getPath().equals(ServletDestination.USER_PROFILE.getPath())) {
                 new OpenUserProfilePageCommand().execute(req);
-            } else if (page.equals(ServletDestination.ALL_USERS.getPath())) {
+            } else if (prevPage.getPath().equals(ServletDestination.ALL_USERS.getPath())) {
                 new OpenAllUsersPageCommand().execute(req);
             }
-            resp.setDestination(() -> page);
         }
         return resp;
     }

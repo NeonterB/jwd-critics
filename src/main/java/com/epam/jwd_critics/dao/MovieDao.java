@@ -149,7 +149,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public Map<Movie, List<Position>> getMoviesByCelebrityId(Integer celebrityId) throws DaoException {
+    public Map<Movie, List<Position>> getJobsByCelebrityId(Integer celebrityId) throws DaoException {
         Map<Movie, List<Position>> crew = new HashMap<>();
         try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_CELEBRITY_ID)) {
             ps.setInt(1, celebrityId);

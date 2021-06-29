@@ -7,7 +7,6 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Movie;
@@ -36,11 +35,10 @@ public class OpenMoviePageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
         int movieId;
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         if (movieIdStr == null) {
-            MovieDTO movie = (MovieDTO) req.getSessionAttribute(Attribute.MOVIE);
+            Movie movie = (Movie) req.getSessionAttribute(Attribute.MOVIE);
             if (movie == null) {
                 throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
             }
@@ -51,36 +49,31 @@ public class OpenMoviePageCommand implements Command {
         try {
             Optional<Movie> movie = movieService.getEntityById(movieId);
             if (movie.isPresent()) {
-                req.setSessionAttribute(Attribute.MOVIE, new MovieDTO(movie.get()));
                 UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+                List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, 0, AMOUNT_OF_REVIEWS_ON_PAGE);
+                List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
+                for (MovieReview review : reviews) {
+                    Optional<User> userOfReview = userService.getEntityById(review.getUserId());
+                    userOfReview.ifPresent(value -> reviewDTOS.add(new MovieReviewDTO(review, value)));
+                }
+                req.setSessionAttribute(Attribute.MOVIE, movie.get());
+                req.setSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE, reviewDTOS);
                 if (user != null) {
-                    Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movieId);
-                    if (usersReview.isPresent()) {
-                        req.setSessionAttribute(Attribute.USER_REVIEW, usersReview.get());
+                    Optional<MovieReview> userReview = reviewService.getEntity(user.getId(), movieId);
+                    if (userReview.isPresent()) {
+                        req.setSessionAttribute(Attribute.USER_REVIEW, userReview.get());
                     } else {
                         req.removeSessionAttribute(Attribute.USER_REVIEW);
                     }
                 }
-                List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, 0, AMOUNT_OF_REVIEWS_ON_PAGE);
-                List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
-                for (MovieReview review : reviews) {
-                    MovieReviewDTO reviewDTO = new MovieReviewDTO(review);
-                    Optional<User> userOfReview = userService.getEntityById(reviewDTO.getUserId());
-                    if (userOfReview.isPresent()) {
-                        reviewDTO.setImagePath(userOfReview.get().getImagePath());
-                        reviewDTO.setTitle(userOfReview.get().getFirstName());
-                        reviewDTOS.add(reviewDTO);
-                    }
-                }
-                req.setSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE, reviewDTOS);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
-                resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+                return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+            return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
-        return resp;
+        return new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
     }
 }

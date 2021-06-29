@@ -35,13 +35,13 @@
     <script>Notiflix.Notify.Failure('${fatalNotification}')</script>
 </c:if>
 <c:if test="${not empty commandError}">
-    <script>Notiflix.Report.Failure('${commandError}')</script>
+    <script>Notiflix.Report.Failure('Failure', '${commandError}')</script>
 </c:if>
 <c:if test="${not empty successNotification}">
     <script>Notiflix.Notify.Success('${successNotification}')</script>
 </c:if>
 <c:if test="${not empty infoMessage}">
-    <script>Notiflix.Report.Info('${infoMessage}')</script>
+    <script>Notiflix.Report.Info('Info', '${infoMessage}')</script>
 </c:if>
 </body>
 </html>

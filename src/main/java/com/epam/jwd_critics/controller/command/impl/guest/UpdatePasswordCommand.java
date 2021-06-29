@@ -35,7 +35,7 @@ public class UpdatePasswordCommand implements Command {
         }
         try {
             userService.updatePassword(Integer.parseInt(userIdStr), newPassword.toCharArray());
-            req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.PASSWORD_WAS_UPDATED);
+            req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.PASSWORD_UPDATED);
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
             return resp;

@@ -19,9 +19,9 @@ import com.epam.jwd_critics.service.impl.UserServiceImpl;
 import com.epam.jwd_critics.validation.ConstraintViolation;
 import com.epam.jwd_critics.validation.UserValidator;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UpdateUserCommand implements Command {
@@ -36,39 +36,41 @@ public class UpdateUserCommand implements Command {
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (firstName == null || lastName == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-        } else if (userIdStr == null) {
-            throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
-        } else {
-            UserValidator userValidator = new UserValidator();
-            List<ConstraintViolation> violations = new LinkedList<>();
-            userValidator.validateFirstName(firstName).ifPresent(violations::add);
-            userValidator.validateLastName(lastName).ifPresent(violations::add);
-
-            if (violations.isEmpty()) {
-                try {
-                    Optional<User> userToUpdate = userService.getEntityById(Integer.parseInt(userIdStr));
-                    if (userToUpdate.isPresent()) {
-                        userToUpdate.get().setFirstName(firstName);
-                        userToUpdate.get().setLastName(lastName);
-                        if (newPicture != null && !newPicture.equals("")) {
-                            userToUpdate.get().setImagePath(newPicture);
-                        }
-                        userService.update(userToUpdate.get());
-                        req.setSessionAttribute(Attribute.USER, new UserDTO(userToUpdate.get()));
-                        req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_UPDATED);
-                    } else {
-                        req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
-                    }
-                } catch (ServiceException e) {
-                    req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-                }
-            } else {
-                req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, violations.stream()
-                        .map(ConstraintViolation::getMessage)
-                        .collect(Collectors.toList()));
-            }
+            return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
         }
-        new OpenUserProfilePageCommand().execute(req);
+        if (userIdStr == null) {
+            throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
+        }
+
+        UserValidator userValidator = new UserValidator();
+        Set<ConstraintViolation> violations = new HashSet<>();
+        userValidator.validateName(firstName).ifPresent(violations::add);
+        userValidator.validateName(lastName).ifPresent(violations::add);
+
+        if (violations.isEmpty()) {
+            try {
+                Optional<User> userToUpdate = userService.getEntityById(Integer.parseInt(userIdStr));
+                if (userToUpdate.isPresent()) {
+                    userToUpdate.get().setFirstName(firstName);
+                    userToUpdate.get().setLastName(lastName);
+                    if (newPicture != null && !newPicture.equals("")) {
+                        userToUpdate.get().setImagePath(newPicture);
+                    }
+                    userService.update(userToUpdate.get());
+                    req.setSessionAttribute(Attribute.USER, new UserDTO(userToUpdate.get()));
+                    new OpenUserProfilePageCommand().execute(req);
+                    req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_UPDATED);
+                } else {
+                    req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
+                }
+            } catch (ServiceException e) {
+                req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
+            }
+        } else {
+            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, violations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.toList()));
+        }
         return new CommandResponse(ServletDestination.USER_PROFILE, TransferType.REDIRECT);
     }
 }

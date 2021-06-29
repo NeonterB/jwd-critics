@@ -7,8 +7,8 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
@@ -34,7 +34,7 @@ public class OpenMovieReviewsPageCommand implements Command {
         int movieId;
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         if (movieIdStr == null) {
-            MovieDTO movie = (MovieDTO) req.getSessionAttribute(Attribute.MOVIE);
+            Movie movie = (Movie) req.getSessionAttribute(Attribute.MOVIE);
             if (movie == null) {
                 throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
             }
@@ -61,13 +61,8 @@ public class OpenMovieReviewsPageCommand implements Command {
             List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, begin, end);
             List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
             for (MovieReview review : reviews) {
-                MovieReviewDTO reviewDTO = new MovieReviewDTO(review);
-                Optional<User> user = userService.getEntityById(reviewDTO.getUserId());
-                if (user.isPresent()) {
-                    reviewDTO.setImagePath(user.get().getImagePath());
-                    reviewDTO.setTitle(user.get().getFirstName());
-                    reviewDTOS.add(reviewDTO);
-                }
+                Optional<User> userOfReview = userService.getEntityById(review.getUserId());
+                userOfReview.ifPresent(value -> reviewDTOS.add(new MovieReviewDTO(review, value)));
             }
             req.setSessionAttribute(Attribute.REVIEWS_TO_DISPLAY, reviewDTOS);
             if (reviewDTOS.size() == 0) {

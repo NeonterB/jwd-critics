@@ -38,7 +38,7 @@ public class OpenUserProfilePageCommand implements Command {
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (userIdStr == null) {
             UserDTO userProfile = (UserDTO) req.getSessionAttribute(Attribute.USER_PROFILE);
-            if (userProfile == null){
+            if (userProfile == null) {
                 throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
             }
             userId = userProfile.getId();
@@ -52,17 +52,12 @@ public class OpenUserProfilePageCommand implements Command {
                 List<MovieReview> reviews = reviewService.getMovieReviewsByUserId(userId, 0, reviewCount);
                 List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
                 for (MovieReview review : reviews) {
-                    MovieReviewDTO reviewDTO = new MovieReviewDTO(review);
-                    Optional<Movie> movieOfReview = movieService.getEntityById(reviewDTO.getMovieId());
-                    if (movieOfReview.isPresent()){
-                        reviewDTO.setImagePath(movieOfReview.get().getImagePath());
-                        reviewDTO.setTitle(movieOfReview.get().getName());
-                        reviewDTOS.add(reviewDTO);
-                    }
+                    Optional<Movie> movieOfReview = movieService.getEntityById(review.getUserId());
+                    movieOfReview.ifPresent(value -> reviewDTOS.add(new MovieReviewDTO(review, value)));
                 }
                 UserDTO userDTO = new UserDTO(user.get());
-                userDTO.setReviews(reviewDTOS);
                 req.setSessionAttribute(Attribute.USER_PROFILE, userDTO);
+                req.setSessionAttribute(Attribute.REVIEWS_ON_USER_PROFILE_PAGE, reviewDTOS);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
                 resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);

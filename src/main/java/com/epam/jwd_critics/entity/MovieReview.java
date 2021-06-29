@@ -66,4 +66,15 @@ public class MovieReview extends AbstractBaseEntity {
     public int hashCode() {
         return Objects.hash(userId, movieId, text, score);
     }
+
+    @Override
+    public String toString() {
+        return "MovieReview{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", movieId=" + movieId +
+                ", text='" + text + '\'' +
+                ", score=" + score +
+                '}';
+    }
 }

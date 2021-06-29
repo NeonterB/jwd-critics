@@ -6,8 +6,8 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.dto.MovieDTO;
 import com.epam.jwd_critics.dto.UserDTO;
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -51,15 +51,13 @@ public class SignInCommand implements Command {
                         req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.ACTIVATION_MAIL);
                     }
                     String previousPage = resp.getDestination().getPath();
-                    if (!previousPage.equals(ServletDestination.MAIN.getPath())) {
-                        if (previousPage.equals(ServletDestination.MOVIE.getPath())) {
-                            MovieDTO movie = (MovieDTO) req.getSessionAttribute(Attribute.MOVIE);
-                            if (movie != null) {
-                                Optional<MovieReview> usersReview = reviewService.getEntity(user.getId(), movie.getId());
-                                usersReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
-                            } else {
-                                throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
-                            }
+                    if (previousPage.equals(ServletDestination.MOVIE.getPath())) {
+                        Movie movie = (Movie) req.getSessionAttribute(Attribute.MOVIE);
+                        if (movie != null) {
+                            Optional<MovieReview> userReview = reviewService.getEntity(user.getId(), movie.getId());
+                            userReview.ifPresent(value -> req.setSessionAttribute(Attribute.USER_REVIEW, value));
+                        } else {
+                            throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
                         }
                     }
                     req.removeSessionAttribute(Attribute.PREVIOUS_PAGE);

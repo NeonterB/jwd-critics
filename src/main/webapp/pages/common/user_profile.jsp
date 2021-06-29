@@ -30,7 +30,7 @@
             <h4>${userProfile.firstName} ${userProfile.lastName}</h4>
             <strong><fmt:message key="user.role"/>:</strong> ${userProfile.role}<br>
             <strong><fmt:message key="user.status"/>:</strong> ${userProfile.status}<br>
-            <strong><fmt:message key="user.reviewCount"/>:</strong> ${userProfile.reviewCount}<br>
+            <%--            <strong><fmt:message key="user.reviewCount"/>:</strong> ${reviewsOnUserProfilePage.size}<br>--%>
             <p class="mt-4">
                 <c:choose>
                     <c:when test="${userProfile.id eq user.id}">
@@ -66,8 +66,8 @@
 
         </div>
     </div>
-    <c:if test="${not empty userProfile.reviews}">
-        <c:forEach var="review" items="${userProfile.reviews}">
+    <c:if test="${not empty reviewsOnUserProfilePage}">
+        <c:forEach var="review" items="${reviewsOnUserProfilePage}">
             <div class="row mt-4">
                 <div class="col-1">
                     <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${review.movieId}">
