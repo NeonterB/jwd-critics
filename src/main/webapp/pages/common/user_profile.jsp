@@ -31,58 +31,68 @@
             <strong><fmt:message key="user.role"/>:</strong> ${userProfile.role}<br>
             <strong><fmt:message key="user.status"/>:</strong> ${userProfile.status}<br>
             <strong><fmt:message key="user.reviewCount"/>:</strong> ${userProfile.reviewCount}<br>
-            <c:choose>
-                <c:when test="${userProfile.id eq user.id}">
-                    <a href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&previousPage=${currentPage}">
-                        <fmt:message key="button.edit"/>
-                    </a>
-                    <c:if test="${user.role ne 'ADMIN'}">
-                        <a href="${pageContext.request.contextPath}/controller?command=delete_user&userId=${user.id}">
-                            <fmt:message key="button.delete"/>
+            <p class="mt-4">
+                <c:choose>
+                    <c:when test="${userProfile.id eq user.id}">
+                        <a class="btnRef"
+                           href="${pageContext.request.contextPath}/controller?command=open_update_user&userId=${user.id}&previousPage=${currentPage}">
+                            <fmt:message key="button.edit"/>
                         </a>
-                    </c:if>
-                </c:when>
-                <c:otherwise>
-                    <c:if test="${user.role eq 'ADMIN'}">
-                        <c:if test="${userProfile.status eq 'BANNED'}">
-                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=active&previousPage=${currentPage}">
-                                <fmt:message key="button.unban"/>
+                        <c:if test="${user.role ne 'ADMIN'}">
+                            <a class="btnRef"
+                               href="${pageContext.request.contextPath}/controller?command=delete_user&userId=${user.id}">
+                                <fmt:message key="button.delete"/>
                             </a>
                         </c:if>
-                        <c:if test="${userProfile.status eq 'ACTIVE'}">
-                            <a href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=banned&previousPage=${currentPage}">
-                                <fmt:message key="button.ban"/>
-                            </a>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${user.role eq 'ADMIN'}">
+                            <c:if test="${userProfile.status eq 'BANNED'}">
+                                <a class="btnRef"
+                                   href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=active&previousPage=${currentPage}">
+                                    <fmt:message key="button.unban"/>
+                                </a>
+                            </c:if>
+                            <c:if test="${userProfile.status eq 'ACTIVE'}">
+                                <a class="btnRef"
+                                   href="${pageContext.request.contextPath}/controller?command=update_user_status&userId=${userProfile.id}&newStatus=banned&previousPage=${currentPage}">
+                                    <fmt:message key="button.ban"/>
+                                </a>
+                            </c:if>
                         </c:if>
-                    </c:if>
-                </c:otherwise>
-            </c:choose>
+                    </c:otherwise>
+                </c:choose>
+            </p>
+
         </div>
     </div>
     <c:if test="${not empty userProfile.reviews}">
-        <div class="container mt-5">
-            <c:forEach var="review" items="${userProfile.reviews}">
-                <div class="row mt-4">
-                    <div class="col-1">
-                        <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${review.movieId}">
-                            <img class="img-thumbnail" src="${pageContext.request.contextPath}/picture?currentPicture=${review.imagePath}" alt="${review.title}">
-                        </a>
-                    </div>
-                    <div class="col">
-                            ${review.title}<br>
-                        <fmt:message key="review.score"/>: ${review.score}<br>
-                            ${review.text}
-                    </div>
-                    <c:if test="${user.role eq 'ADMIN'}">
-                        <div class="col-1">
-                            <a href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
+        <c:forEach var="review" items="${userProfile.reviews}">
+            <div class="row mt-4">
+                <div class="col-1">
+                    <a href="${pageContext.request.contextPath}/controller?command=open_movie&movieId=${review.movieId}">
+                        <img class="img-thumbnail"
+                             src="${pageContext.request.contextPath}/picture?currentPicture=${review.imagePath}"
+                             alt="${review.title}">
+                    </a>
+                </div>
+                <div class="col">
+                        ${review.title}<br>
+                    <fmt:message key="review.score"/>: ${review.score}<br>
+                        ${review.text}
+                </div>
+                <c:if test="${user.role eq 'ADMIN'}">
+                    <div class="col-2">
+                        <p class="text-center mt-5">
+                            <a class="btnRef"
+                               href="${pageContext.request.contextPath}/controller?command=delete_movie_review&movieReviewId=${review.id}&previousPage=${currentPage}">
                                 <fmt:message key="button.delete"/>
                             </a>
-                        </div>
-                    </c:if>
-                </div>
-            </c:forEach>
-        </div>
+                        </p>
+                    </div>
+                </c:if>
+            </div>
+        </c:forEach>
     </c:if>
 </div>
 </body>
