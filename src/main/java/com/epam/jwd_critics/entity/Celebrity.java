@@ -41,6 +41,10 @@ public class Celebrity extends AbstractBaseEntity {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public Map<Movie, List<Position>> getJobs() {
         return jobs;
     }
@@ -58,16 +62,16 @@ public class Celebrity extends AbstractBaseEntity {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Celebrity celebrity = (Celebrity) o;
         return firstName.equals(celebrity.firstName) && lastName.equals(celebrity.lastName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName);
     }
 
     @Override
