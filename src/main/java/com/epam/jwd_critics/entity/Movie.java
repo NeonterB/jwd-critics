@@ -149,12 +149,12 @@ public class Movie extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return rating == movie.rating && reviewCount == movie.reviewCount && name.equals(movie.name) && summary.equals(movie.summary) && Objects.equals(runtime, movie.runtime) && country == movie.country && imagePath.equals(movie.imagePath) && Objects.equals(releaseDate, movie.releaseDate) && ageRestriction == movie.ageRestriction;
+        return rating == movie.rating && reviewCount == movie.reviewCount && name.equals(movie.name) && summary.equals(movie.summary) && runtime.equals(movie.runtime) && country == movie.country && imagePath.equals(movie.imagePath) && releaseDate.equals(movie.releaseDate) && ageRestriction == movie.ageRestriction && Objects.equals(genres, movie.genres) && Objects.equals(staff, movie.staff);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, summary, runtime, country, imagePath, rating, reviewCount, releaseDate, ageRestriction);
+        return Objects.hash(name, summary, runtime, country, imagePath, rating, reviewCount, releaseDate, ageRestriction, genres, staff);
     }
 
     @Override
