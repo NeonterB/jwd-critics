@@ -1,50 +1,23 @@
 package com.epam.jwd_critics.dto;
 
-import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.entity.Movie;
-import com.epam.jwd_critics.entity.Position;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class MovieDTO {
     private int id;
     private String name;
-    private String summary;
-    private String runtime;
-    private String country;
-    private String imagePath;
     private int rating;
-    private int reviewCount;
-    private String releaseDate;
-    private String ageRestriction;
-    private Map<Position, List<Celebrity>> staff;
+    private String imagePath;
+
+    public MovieDTO() {
+    }
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
         this.name = movie.getName();
-        this.summary = (movie.getSummary() == null) ? ("Unknown") : (movie.getSummary());
-
-        if (movie.getRuntime() == null) {
-            this.runtime = "Unknown";
-        } else {
-            this.runtime = "";
-            long hours = movie.getRuntime().toHours();
-            this.runtime += (hours > 0) ? ((hours == 1) ? ("1 hour ") : (hours + " hours ")) : ("");
-            long minutes = movie.getRuntime().toMinutes() % 60;
-            this.runtime += (minutes > 0) ? ((minutes == 1) ? ("1 minute") : (minutes + " minutes")) : ("");
-        }
-
-        this.country = (movie.getCountry() == null) ? ("Unknown") : (movie.getCountry().name());
-        this.imagePath = movie.getImagePath();
         this.rating = movie.getRating();
-        this.reviewCount = movie.getReviewCount();
-        this.ageRestriction = (movie.getAgeRestriction() == null) ? ("Unknown") : (movie.getAgeRestriction().name().replace("_", "-"));
-        this.releaseDate = (movie.getReleaseDate() == null) ? ("Unknown") : (movie.getReleaseDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
-        this.staff = movie.getStaff();
+        this.imagePath = movie.getImagePath();
     }
 
     public int getId() {
@@ -63,28 +36,12 @@ public class MovieDTO {
         this.name = name;
     }
 
-    public String getSummary() {
-        return summary;
+    public int getRating() {
+        return rating;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getRuntime() {
-        return runtime;
-    }
-
-    public void setRuntime(String runtime) {
-        this.runtime = runtime;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public String getImagePath() {
@@ -95,56 +52,16 @@ public class MovieDTO {
         this.imagePath = imagePath;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getReviewCount() {
-        return reviewCount;
-    }
-
-    public void setReviewCount(int reviewCount) {
-        this.reviewCount = reviewCount;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getAgeRestriction() {
-        return ageRestriction;
-    }
-
-    public void setAgeRestriction(String ageRestriction) {
-        this.ageRestriction = ageRestriction;
-    }
-
-    public Map<Position, List<Celebrity>> getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Map<Position, List<Celebrity>> staff) {
-        this.staff = staff;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieDTO movieDTO = (MovieDTO) o;
-        return id == movieDTO.id && rating == movieDTO.rating && reviewCount == movieDTO.reviewCount && name.equals(movieDTO.name);
+        return id == movieDTO.id && rating == movieDTO.rating && name.equals(movieDTO.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, rating, reviewCount);
+        return Objects.hash(id, name, rating);
     }
 }

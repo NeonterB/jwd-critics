@@ -1,11 +1,7 @@
 package com.epam.jwd_critics.dto;
 
 import com.epam.jwd_critics.entity.Celebrity;
-import com.epam.jwd_critics.entity.Movie;
-import com.epam.jwd_critics.entity.Position;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class CelebrityDTO {
@@ -13,8 +9,6 @@ public class CelebrityDTO {
     private String firstName;
     private String lastName;
     private String imagePath;
-
-    private Map<Movie, List<Position>> jobs;
 
     public CelebrityDTO(Celebrity celebrity) {
         this.id = celebrity.getId();
@@ -59,12 +53,9 @@ public class CelebrityDTO {
         this.imagePath = imagePath;
     }
 
-    public Map<Movie, List<Position>> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(Map<Movie, List<Position>> jobs) {
-        this.jobs = jobs;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName);
     }
 
     @Override
@@ -73,10 +64,5 @@ public class CelebrityDTO {
         if (o == null || getClass() != o.getClass()) return false;
         CelebrityDTO that = (CelebrityDTO) o;
         return id == that.id && firstName.equals(that.firstName) && lastName.equals(that.lastName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName);
     }
 }

@@ -1,6 +1,8 @@
 package com.epam.jwd_critics.dto;
 
+import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
+import com.epam.jwd_critics.entity.User;
 
 import java.util.Objects;
 
@@ -13,12 +15,24 @@ public class MovieReviewDTO {
     private int movieId;
     private int id;
 
-    public MovieReviewDTO(MovieReview review){
+    public MovieReviewDTO(MovieReview review) {
         this.score = review.getScore();
         this.text = review.getText();
         this.userId = review.getUserId();
         this.movieId = review.getMovieId();
         this.id = review.getId();
+    }
+
+    public MovieReviewDTO(MovieReview review, User user) {
+        this(review);
+        this.imagePath = user.getImagePath();
+        this.title = user.getFirstName();
+    }
+
+    public MovieReviewDTO(MovieReview review, Movie movie) {
+        this(review);
+        this.imagePath = movie.getImagePath();
+        this.title = movie.getName();
     }
 
     public int getScore() {

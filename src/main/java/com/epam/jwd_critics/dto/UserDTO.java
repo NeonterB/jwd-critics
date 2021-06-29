@@ -4,19 +4,15 @@ import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
 
-import java.util.List;
 import java.util.Objects;
 
 public class UserDTO {
     private int id;
-    private int reviewCount;
-    private Role role;
-    private Status status;
     private String firstName;
     private String lastName;
+    private Role role;
+    private Status status;
     private String imagePath;
-
-    private List<MovieReviewDTO> reviews;
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -77,23 +73,6 @@ public class UserDTO {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public List<MovieReviewDTO> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<MovieReviewDTO> reviews) {
-        reviewCount = reviews.size();
-        this.reviews = reviews;
-    }
-
-    public int getReviewCount() {
-        return reviewCount;
-    }
-
-    public void setReviewCount(int reviewCount) {
-        this.reviewCount = reviewCount;
     }
 
     @Override
