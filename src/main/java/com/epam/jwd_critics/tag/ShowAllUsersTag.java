@@ -55,7 +55,6 @@ public class ShowAllUsersTag extends TagSupport {
         if (users != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                writer.write("<div class=\"container mt-5\">");
                 for (int i = 0, j = 0; i < users.size() && i < USERS_PER_PAGE; i++) {
                     UserDTO userDTO = users.get(i);
                     if (j == 0) {
@@ -85,7 +84,6 @@ public class ShowAllUsersTag extends TagSupport {
                         j++;
                     }
                 }
-                writer.write("</div>");
             } catch (IOException e) {
                 throw new JspException(e);
             }

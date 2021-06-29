@@ -7,6 +7,7 @@ public enum Attribute {
 
     ALL_MOVIES_CURRENT_PAGE("allMoviesCurrentPage"),
     ALL_USERS_CURRENT_PAGE("allUsersCurrentPage"),
+    ALL_CELEBRITIES_CURRENT_PAGE("allCelebritiesCurrentPage"),
     REVIEWS_CURRENT_PAGE("reviewsCurrentPage"),
     NEW_PAGE("newPage"),
 
@@ -16,10 +17,12 @@ public enum Attribute {
     MOVIES_TO_DISPLAY("moviesToDisplay"),
     REVIEWS_TO_DISPLAY("reviewsToDisplay"),
     USERS_TO_DISPLAY("usersToDisplay"),
+    CELEBRITIES_TO_DISPLAY("celebritiesToDisplay"),
 
     MOVIE_COUNT("movieCount"),
     REVIEW_COUNT("reviewCount"),
     USER_COUNT("userCount"),
+    CELEBRITY_COUNT("celebrityCount"),
 
     MOVIE("movie"),
     REVIEWS_ON_MOVIE_PAGE("reviewsOnMoviePage"),

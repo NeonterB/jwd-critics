@@ -9,6 +9,7 @@ public enum Parameter {
     NEW_MOVIES_PAGE("newMoviesPage"),
     NEW_REVIEWS_PAGE("newReviewsPage"),
     NEW_USERS_PAGE("newUsersPage"),
+    NEW_CELEBRITIES_PAGE("newCelebritiesPage"),
 
     MOVIE_ID("movieId"),
     USER_ID("userId"),

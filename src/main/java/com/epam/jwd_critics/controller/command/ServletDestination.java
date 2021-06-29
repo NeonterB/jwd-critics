@@ -6,6 +6,7 @@ public enum ServletDestination implements Destination {
     FORGOT_PASSWORD("/pages/guest/forgot_password.jsp"),
     PASSWORD_RECOVERY("/pages/guest/password_recovery.jsp"),
     ALL_MOVIES("/pages/common/all_movies.jsp"),
+    ALL_CELEBRITIES("/pages/common/all_celebrities.jsp"),
     ALL_USERS("/pages/admin/all_users.jsp"),
     USER_PROFILE("/pages/common/user_profile.jsp"),
     UPDATE_USER("/pages/user/update_user.jsp"),

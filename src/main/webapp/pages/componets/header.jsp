@@ -32,7 +32,10 @@
                        href="${pageContext.request.contextPath}/controller"><fmt:message key="button.home"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#"><fmt:message key="button.celebrities"/></a>
+                    <a class="nav-link text-white"
+                       href="${pageContext.request.contextPath}/controller?command=open_all_celebrities">
+                        <fmt:message key="button.celebrities"/>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white"
