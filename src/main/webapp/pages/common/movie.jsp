@@ -24,40 +24,9 @@
 <div class="container mt-4">
     <a class="btnRef" href="${pageContext.request.contextPath}/controller?command=open_all_movies"><fmt:message
             key="button.toMovies"/></a>
-    <div class="row mt-4">
-        <div class="col-4">
-            <img src="${pageContext.request.contextPath}/picture?currentPicture=${movie.imagePath}" alt="${movie.name}"
-                 class="img-thumbnail">
-        </div>
-        <div class="col-4">
-            <h4>${movie.name}</h4>
-            <strong><fmt:message key="movie.releaseDate"/>:</strong> ${movie.releaseDate}<br>
-            <strong><fmt:message key="movie.runtime"/>:</strong> ${movie.runtime}<br>
-            <strong><fmt:message key="movie.country"/>:</strong> ${movie.country}<br>
-            <strong><fmt:message key="movie.ageRestriction"/>:</strong> ${movie.ageRestriction}<br>
-            <strong><fmt:message key="movie.rating"/>:</strong> ${movie.rating}<br>
-            <strong><fmt:message key="movie.reviewCount"/>:</strong> ${movie.reviewCount}
-            <hr/>
-            <c:if test="${not empty movie.staff}">
-                <c:forEach var="position" items="${movie.staff}">
-                    <div class="row">
-                        <div class="col">
-                            <strong>${position.key}</strong>:
-                            <c:forEach var="celebrity" items="${position.value}">
-                                <a class="link-dark"
-                                   href="${pageContext.request.contextPath}/controller?command=open_celebrity_profile&celebrityId=${celebrity.id}">
-                                        ${celebrity.firstName} ${celebrity.lastName},
-                                </a>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </c:forEach>
-            </c:if>
-        </div>
-        <div class="col-4">
-            <strong><fmt:message key="movie.summary"/>:</strong> ${movie.summary}
-        </div>
-    </div>
+
+    <ctg:movie/>
+
     <c:choose>
         <c:when test="${empty user}">
             <p class="mt-2"><fmt:message key="text.signInToReview"/></p>
