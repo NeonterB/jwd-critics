@@ -139,7 +139,7 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     private void updateInfo(Celebrity celebrity) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(celebrityDao, movieDao);
+        EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             Map<Movie, List<Position>> jobs = movieDao.getMoviesByCelebrityId(celebrity.getId());
             celebrity.setJobs(jobs);
