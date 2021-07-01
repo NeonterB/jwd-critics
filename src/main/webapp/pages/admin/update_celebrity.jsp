@@ -27,19 +27,11 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <c:choose>
-                <c:when test="${not empty newImage}">
-                    <img src="${pageContext.request.contextPath}/picture?currentPicture=${newImage}" alt="new image"
-                         class="img-thumbnail">
-                </c:when>
-                <c:otherwise>
-                    <img src="${pageContext.request.contextPath}/picture?currentPicture=${celebrity.imagePath}"
-                         alt="${celebrity.firstName}" id="user-image" class="img-thumbnail">
-                </c:otherwise>
-            </c:choose>
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${celebrity.imagePath}"
+                 alt="${celebrity.firstName}" id="user-image" class="img-thumbnail">
         </div>
         <div class="col-4">
-            <form method="POST" id="updateForm" enctype="multipart/form-data"
+            <form method="POST" enctype="multipart/form-data"
                   action="<c:url value="/controller?command=update_celebrity"/>">
                 <input type="hidden" name="celebrityId" value="${celebrity.id}">
                 <label for="firstNameInput" class="form-label"><fmt:message key="label.firstName"/></label>
@@ -63,7 +55,7 @@
                 <label for="input-file" class="form-label mt-2"><fmt:message key="label.profilePicture"/></label>
                 <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content"
                        id="input-file">
-                <button type="submit" class="mt-2"><fmt:message key="button.submit"/></button>
+                <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
                 <input type="hidden" name="previousPage" value="${currentPage}">
             </form>
         </div>

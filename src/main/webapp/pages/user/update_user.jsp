@@ -27,17 +27,12 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <c:choose>
-                <c:when test="${not empty newImage}">
-                    <img src="${pageContext.request.contextPath}/picture?currentPicture=${newImage}" alt="new image" class="img-thumbnail">
-                </c:when>
-                <c:otherwise>
-                    <img src="${pageContext.request.contextPath}/picture?currentPicture=${user.imagePath}" alt="${user.firstName}" id="user-image" class="img-thumbnail">
-                </c:otherwise>
-            </c:choose>
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${user.imagePath}"
+                 alt="${user.firstName}" id="user-image" class="img-thumbnail">
         </div>
         <div class="col-4">
-            <form method="POST" id="updateForm" enctype="multipart/form-data" action="<c:url value="/controller?command=update_user"/>">
+            <form method="POST" id="updateForm" enctype="multipart/form-data"
+                  action="<c:url value="/controller?command=update_user"/>">
                 <input type="hidden" name="userId" value="${user.id}">
                 <label for="firstNameInput" class="form-label"><fmt:message key="label.firstName"/></label>
                 <input type="text"
@@ -45,7 +40,8 @@
                        id="firstNameInput"
                        value="${user.firstName}"
                        name="firstName"
-                       pattern="^[A-Z][a-z]{1,14}"
+                       maxLength="14"
+                       pattern="^[A-Z][a-z]"
                        title="<fmt:message key="validation.firstName"/>"
                        required/>
                 <label for="lastNameInput" class="form-label mt-2"><fmt:message key="label.lastName"/></label>
@@ -54,13 +50,14 @@
                        id="lastNameInput"
                        value="${user.lastName}"
                        name="lastName"
-                       pattern="^[A-Z][a-z]{1,14}"
+                       maxLength="14"
+                       pattern="^[A-Z][a-z]"
                        title="<fmt:message key="validation.lastName"/>"
                        required/>
                 <label for="input-file" class="form-label mt-2"><fmt:message key="label.profilePicture"/></label>
                 <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content"
                        id="input-file">
-                <button type="submit" class="mt-2"><fmt:message key="button.submit"/></button>
+                <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
                 <input type="hidden" name="previousPage" value="${currentPage}">
             </form>
         </div>

@@ -28,7 +28,9 @@
                 <input type="password"
                        id="password"
                        name="newPassword"
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$"
+                       minLength="8"
+                       maxLength="20"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$"
                        required placeholder="<fmt:message key="label.newPassword"/>"/>
                 <input type="password"
                        id="confirm_password"
