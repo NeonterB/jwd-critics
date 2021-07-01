@@ -2,6 +2,7 @@ package com.epam.jwd_critics.controller.command;
 
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
@@ -52,25 +53,26 @@ public enum CommandInstance {
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
 
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
-    UPDATE_MOVIE(new UpdateMovieCommand(), Role.ADMIN),
+    OPEN_UPDATE_MOVIE(new OpenUpdateMoviePageCommand(), true, Role.ADMIN),
+    UPDATE_MOVIE(new UpdateMovieCommand(), true, Role.ADMIN),
 
     OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
     OPEN_UPDATE_USER(new OpenUpdateUserPageCommand(), Role.USER, Role.ADMIN),
     UPDATE_USER(new UpdateUserCommand(), true, Role.ADMIN, Role.USER),
     UPDATE_USER_STATUS(new UpdateUserStatusCommand(), true, Role.ADMIN),
     DELETE_USER(new DeleteUserCommand(), Role.USER),
-    ACTIVATE_USER(new ActivateUserCommand(), false, Role.USER),
+    ACTIVATE_USER(new ActivateUserCommand(), Role.USER),
 
     OPEN_CELEBRITY_PROFILE(new OpenCelebrityProfilePageCommand(), Role.values()),
-    OPEN_UPDATE_CELEBRITY(new OpenUpdateCelebrityPageCommand(), Role.ADMIN),
-    UPDATE_CELEBRITY(new UpdateCelebrityCommand(), Role.ADMIN),
+    OPEN_UPDATE_CELEBRITY(new OpenUpdateCelebrityPageCommand(), true, Role.ADMIN),
+    UPDATE_CELEBRITY(new UpdateCelebrityCommand(), true, Role.ADMIN),
 
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     UPDATE_MOVIE_REVIEW(new UpdateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
     DELETE_MOVIE_REVIEW(new DeleteMovieReviewCommand(), true, Role.USER, Role.ADMIN),
 
-    UPLOAD_PICTURE(new UploadPictureCommand(), true, Role.USER, Role.ADMIN),
+    UPLOAD_PICTURE(new UploadPictureCommand(), Role.USER, Role.ADMIN),
     CHANGE_LANGUAGE(new ChangeLocaleCommand(), Role.values());
 
     private final Command command;
