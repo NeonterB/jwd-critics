@@ -44,7 +44,7 @@
                        required placeholder="<fmt:message key="label.email"/>"/>
                 <input type="text"
                        name="login"
-                       pattern="^[a-zA-Z0-9._-]{3,25}$"
+                       pattern="^[a-zA-Z0-9._-]{3,15}$"
                        title="<fmt:message key="validation.login"/>"
                        required placeholder="<fmt:message key="label.login"/>"/>
                 <input type="password"
@@ -64,7 +64,7 @@
                 </c:if>
                 <input type="text"
                        name="login"
-                       pattern="^[a-zA-Z0-9._-]{3,25}$"
+                       pattern="^[a-zA-Z0-9._-]{3,15}$"
                        title="<fmt:message key="validation.login"/>"
                        required placeholder="<fmt:message key="label.login"/>"/>
                 <input type="password"
