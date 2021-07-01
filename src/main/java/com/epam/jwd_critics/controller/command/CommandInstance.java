@@ -3,6 +3,7 @@ package com.epam.jwd_critics.controller.command;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.UpdateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
 import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllCelebritiesPageCommand;
@@ -51,6 +52,7 @@ public enum CommandInstance {
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
 
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
+    UPDATE_MOVIE(new UpdateMovieCommand(), Role.ADMIN),
 
     OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
     OPEN_UPDATE_USER(new OpenUpdateUserPageCommand(), Role.USER, Role.ADMIN),

@@ -11,6 +11,7 @@ public class ContentPropertiesKeys {
     public static final String MOVIE_RELEASE_DATE = "movie.releaseDate";
     public static final String MOVIE_RUNTIME = "movie.runtime";
     public static final String MOVIE_COUNTRY = "movie.country";
+    public static final String MOVIE_GENRES = "movie.genres";
     public static final String MOVIE_AGE_RESTRICTION = "movie.ageRestriction";
     public static final String MOVIE_REVIEW_COUNT = "movie.reviewCount";
     public static final String MOVIE_SUMMARY = "movie.summary";

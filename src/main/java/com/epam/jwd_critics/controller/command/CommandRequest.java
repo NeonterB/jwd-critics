@@ -2,28 +2,12 @@ package com.epam.jwd_critics.controller.command;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 public interface CommandRequest {
-    Object getAttribute(Attribute attribute);
-
-    void setAttribute(Attribute attribute, Object value);
-
-    String getParameter(Parameter parameter);
-
-    Object getSessionAttribute(Attribute attribute);
-
-    void setSessionAttribute(Attribute attribute, Object value);
-
-    void removeSessionAttribute(Attribute attribute);
-
-    Collection<Part> getFileParts() throws ServletException, IOException;
-
-    static CommandRequest from(HttpServletRequest req){
+    static CommandRequest from(HttpServletRequest req) {
         return new CommandRequest() {
             @Override
             public Object getAttribute(Attribute attribute) {
@@ -38,6 +22,11 @@ public interface CommandRequest {
             @Override
             public String getParameter(Parameter parameter) {
                 return req.getParameter(parameter.getName());
+            }
+
+            @Override
+            public String[] getParameters(Parameter parameter) {
+                return req.getParameterMap().get(parameter.getName());
             }
 
             @Override
@@ -61,4 +50,20 @@ public interface CommandRequest {
             }
         };
     }
+
+    Object getAttribute(Attribute attribute);
+
+    void setAttribute(Attribute attribute, Object value);
+
+    String getParameter(Parameter parameter);
+
+    String[] getParameters(Parameter parameter);
+
+    Object getSessionAttribute(Attribute attribute);
+
+    void setSessionAttribute(Attribute attribute, Object value);
+
+    void removeSessionAttribute(Attribute attribute);
+
+    Collection<Part> getFileParts() throws ServletException, IOException;
 }

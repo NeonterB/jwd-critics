@@ -26,6 +26,14 @@ public enum Parameter {
     NEW_PASSWORD("newPassword"),
     CONFIRM_NEW_PASSWORD("confirmedNewPassword"),
 
+    MOVIE_NAME("movieName"),
+    MOVIE_RELEASE_DATE("movieReleaseDate"),
+    MOVIE_RUNTIME("movieRuntime"),
+    MOVIE_COUNTRY("movieCountry"),
+    MOVIE_AGE_RESTRICTION("movieAgeRestriction"),
+    MOVIE_SUMMARY("movieSummary"),
+    GENRES("movieGenres"),
+
     ACTIVATION_KEY("activationKey"),
     RECOVERY_KEY("recoveryKey"),
     FIRST_NAME("firstName"),

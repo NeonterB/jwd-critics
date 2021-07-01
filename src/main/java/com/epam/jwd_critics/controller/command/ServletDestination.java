@@ -12,7 +12,7 @@ public enum ServletDestination implements Destination {
     CELEBRITY_PROFILE("/pages/common/celebrity_profile.jsp"),
     UPDATE_USER("/pages/user/update_user.jsp"),
     UPDATE_CELEBRITY("/pages/admin/update_celebrity.jsp"),
-    UPDATE_MOVIE("/pages/user/update_movie.jsp"),
+    UPDATE_MOVIE("/pages/admin/update_movie.jsp"),
     REVIEWS("/pages/common/reviews.jsp"),
     MOVIE("/pages/common/movie.jsp"),
     ERROR_404("/pages/error/404.jsp"),

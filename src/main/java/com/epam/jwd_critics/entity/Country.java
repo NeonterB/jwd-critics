@@ -1,5 +1,8 @@
 package com.epam.jwd_critics.entity;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @Column(name = "country_id")
 public enum Country implements BaseEntity {
     USA(1),
@@ -18,9 +21,12 @@ public enum Country implements BaseEntity {
         this.id = id;
     }
 
+    public static Optional<Country> resolveCountryByName(String name) {
+        return Arrays.stream(Country.values()).filter(c -> c.name().equalsIgnoreCase(name)).findFirst();
+    }
+
     @Override
     public int getId() {
         return id;
     }
-
 }
