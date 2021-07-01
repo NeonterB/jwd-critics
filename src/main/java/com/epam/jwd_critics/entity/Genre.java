@@ -1,5 +1,8 @@
 package com.epam.jwd_critics.entity;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @Column(name = "genre_id")
 public enum Genre implements BaseEntity {
     ACTION(1),
@@ -11,17 +14,20 @@ public enum Genre implements BaseEntity {
     DRAMA(7),
     FANTASY(8),
     HORROR(9),
-    ROMANCE(10),
-    THRILLER(11);
+    THRILLER(10),
+    ROMANCE(11);
     private final int id;
 
     Genre(int id) {
         this.id = id;
     }
 
+    public static Optional<Genre> resolveGenreById(int id) {
+        return Arrays.stream(Genre.values()).filter(g -> g.id == id).findFirst();
+    }
+
     @Override
     public int getId() {
         return id;
     }
-
 }

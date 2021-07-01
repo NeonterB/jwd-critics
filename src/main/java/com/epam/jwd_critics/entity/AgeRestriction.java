@@ -1,6 +1,9 @@
 package com.epam.jwd_critics.entity;
 
 
+import java.util.Arrays;
+import java.util.Optional;
+
 @Column(name = "age_restriction_id")
 public enum AgeRestriction implements BaseEntity {
     G(1),
@@ -19,4 +22,7 @@ public enum AgeRestriction implements BaseEntity {
         return id;
     }
 
+    public static Optional<AgeRestriction> resolveAgeRestrictionByName(String name) {
+        return Arrays.stream(AgeRestriction.values()).filter(c -> c.name().equalsIgnoreCase(name)).findFirst();
+    }
 }
