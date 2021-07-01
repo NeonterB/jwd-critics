@@ -3,6 +3,7 @@ package com.epam.jwd_critics.tag;
 import com.epam.jwd_critics.controller.command.Attribute;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.entity.Celebrity;
+import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.util.ContentPropertiesKeys;
@@ -40,22 +41,18 @@ public class MovieTag extends TagSupport {
         String releaseDateLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RELEASE_DATE);
         String runtimeLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RUNTIME);
         String countryLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_COUNTRY);
+        String genresLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_GENRES);
         String ageRestrictionLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_AGE_RESTRICTION);
         String reviewCountLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_REVIEW_COUNT);
         String summaryLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_SUMMARY);
 
-        String releaseDate = (movie.getReleaseDate() == null) ? ("Unknown") : (movie.getReleaseDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
-        String ageRestriction = (movie.getAgeRestriction() == null) ? ("Unknown") : (movie.getAgeRestriction().name().replace("_", "-"));
-        String runtime;
-        if (movie.getRuntime() == null) {
-            runtime = "Unknown";
-        } else {
-            runtime = "";
-            long hours = movie.getRuntime().toHours();
-            runtime += (hours > 0) ? ((hours == 1) ? ("1 hour ") : (hours + " hours ")) : ("");
-            long minutes = movie.getRuntime().toMinutes() % 60;
-            runtime += (minutes > 0) ? ((minutes == 1) ? ("1 minute") : (minutes + " minutes")) : ("");
-        }
+        String releaseDate = movie.getReleaseDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        String ageRestriction = movie.getAgeRestriction().name().replace("_", "-");
+        String runtime = "";
+        long hours = movie.getRuntime().toHours();
+        runtime += (hours > 0) ? ((hours == 1) ? ("1 hour ") : (hours + " hours ")) : ("");
+        long minutes = movie.getRuntime().toMinutes() % 60;
+        runtime += (minutes > 0) ? ((minutes == 1) ? ("1 minute") : (minutes + " minutes")) : ("");
         String contextPath = pageContext.getServletContext().getContextPath();
         try {
             writer.write("<div class=\"row mt-4\">");
@@ -68,6 +65,15 @@ public class MovieTag extends TagSupport {
             writer.write("<strong>" + releaseDateLabel + ":</strong> " + releaseDate + "<br>");
             writer.write("<strong>" + runtimeLabel + ":</strong> " + runtime + "<br>");
             writer.write("<strong>" + countryLabel + ":</strong> " + movie.getCountry() + "<br>");
+            writer.write("<strong>" + genresLabel + ":</strong> ");
+            if (movie.getGenres() == null || movie.getGenres().size() == 0) {
+                writer.write("Unknown");
+            } else {
+                for (Genre genre : movie.getGenres()) {
+                    writer.write(genre.name() + ", ");
+                }
+            }
+            writer.write("<br>");
             writer.write("<strong>" + ageRestrictionLabel + ":</strong> " + ageRestriction + "<br>");
             writer.write("<strong>" + ratingLabel + ":</strong> " + movie.getRating() + "<br>");
             writer.write("<strong>" + reviewCountLabel + ":</strong> " + movie.getReviewCount());
