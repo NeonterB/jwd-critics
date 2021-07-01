@@ -27,7 +27,12 @@
     <c:if test="${user.role eq 'ADMIN'}">
         <a class="btnRef ml-2"
            href="${pageContext.request.contextPath}/controller?command=open_update_movie&movieId=${movie.id}"><fmt:message
-                key="button.edit"/></a>
+                key="button.edit"/>
+        </a>
+        <a class="btnRef ml-2"
+           href="${pageContext.request.contextPath}/controller?command=delete_movie&movieId=${movie.id}"><fmt:message
+                key="button.delete"/>
+        </a>
     </c:if>
     <ctg:movie/>
 
