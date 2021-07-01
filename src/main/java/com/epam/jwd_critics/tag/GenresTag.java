@@ -8,22 +8,18 @@ import com.epam.jwd_critics.entity.Movie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 
-public class GenresTag extends TagSupport {
+public class GenresTag extends SimpleTagSupport {
     @Override
-    public int doStartTag() throws JspException {
+    public void doTag() throws JspException {
+        PageContext pageContext = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeGenres(writer, req);
-        return SKIP_BODY;
-    }
-
-    @Override
-    public int doEndTag() {
-        return EVAL_PAGE;
     }
 
     private void writeGenres(JspWriter writer, CommandRequest req) throws JspException {

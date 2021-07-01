@@ -11,7 +11,8 @@ import com.epam.jwd_critics.util.ContentPropertiesKeys;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -20,19 +21,16 @@ import java.util.Map;
 
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
-public class MovieTag extends TagSupport {
+public class MovieTag extends SimpleTagSupport {
+    private PageContext pageContext;
+
     @Override
-    public int doStartTag() throws JspException {
+    public void doTag() throws JspException {
+        pageContext = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeMovie(writer, req);
-        return SKIP_BODY;
-    }
-
-    @Override
-    public int doEndTag() {
-        return EVAL_PAGE;
     }
 
     private void writeMovie(JspWriter writer, CommandRequest req) throws JspException {

@@ -12,17 +12,20 @@ import com.epam.jwd_critics.util.ContentPropertiesKeys;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
-public class ShowReviewsTag extends TagSupport {
+public class ShowReviewsTag extends SimpleTagSupport {
     public static final int REVIEWS_PER_PAGE = 2;
+    PageContext pageContext;
 
     @Override
-    public int doStartTag() throws JspException {
+    public void doTag() throws JspException {
+        pageContext = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
@@ -31,12 +34,6 @@ public class ShowReviewsTag extends TagSupport {
         int pageCount = reviewCount % REVIEWS_PER_PAGE == 0 ? (reviewCount / REVIEWS_PER_PAGE) : (reviewCount / REVIEWS_PER_PAGE + 1);
         String commandName = CommandInstance.OPEN_MOVIE_REVIEWS.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_REVIEWS_PAGE);
-        return SKIP_BODY;
-    }
-
-    @Override
-    public int doEndTag() {
-        return EVAL_PAGE;
     }
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {

@@ -10,18 +10,21 @@ import com.epam.jwd_critics.util.ContentPropertiesKeys;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
-public class ShowAllMoviesTag extends TagSupport {
+public class ShowAllMoviesTag extends SimpleTagSupport {
     public static final int MOVIES_PER_PAGE = 1;
     private static final int MOVIES_PER_ROW = 4;
+    private PageContext pageContext;
 
     @Override
-    public int doStartTag() throws JspException {
+    public void doTag() throws JspException {
+        pageContext = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
@@ -30,19 +33,13 @@ public class ShowAllMoviesTag extends TagSupport {
         int pageCount = movieCount % MOVIES_PER_PAGE == 0 ? (movieCount / MOVIES_PER_PAGE) : (movieCount / MOVIES_PER_PAGE + 1);
         String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIES_PAGE);
-        return SKIP_BODY;
-    }
-
-    @Override
-    public int doEndTag() {
-        return EVAL_PAGE;
     }
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieDTO> movies = (List<MovieDTO>) req.getSessionAttribute(Attribute.MOVIES_TO_DISPLAY);
         String ratingStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RATING);
         if (movies != null) {
-            String contextPath = pageContext.getServletContext().getContextPath();
+            String contextPath = pageContext.getRequest().getServletContext().getContextPath();
             try {
                 for (int i = 0, j = 0; i < movies.size() && i < MOVIES_PER_PAGE; i++) {
                     MovieDTO movie = movies.get(i);

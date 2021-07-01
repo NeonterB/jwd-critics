@@ -11,20 +11,21 @@ import com.epam.jwd_critics.util.ContentPropertiesKeys;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
-public class ShowAllUsersTag extends TagSupport {
+public class ShowAllUsersTag extends SimpleTagSupport {
     public static final int USERS_PER_PAGE = 2;
     private static final int USERS_PER_ROW = 6;
-
-
+    private PageContext pageContext;
 
     @Override
-    public int doStartTag() throws JspException {
+    public void doTag() throws JspException {
+        pageContext = (PageContext) getJspContext();
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
@@ -33,12 +34,6 @@ public class ShowAllUsersTag extends TagSupport {
         int pageCount = userCount % USERS_PER_PAGE == 0 ? (userCount / USERS_PER_PAGE) : (userCount / USERS_PER_PAGE + 1);
         String commandName = CommandInstance.OPEN_ALL_USERS.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_USERS_PAGE);
-        return SKIP_BODY;
-    }
-
-    @Override
-    public int doEndTag() {
-        return EVAL_PAGE;
     }
 
     private void writeUsers(JspWriter writer, CommandRequest req) throws JspException {
