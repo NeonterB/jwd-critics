@@ -67,7 +67,7 @@
                 <input class="form-control html-duration-picker"
                        data-hide-seconds
                        id="runtimeInput"
-                       value="${movie.runtime}"
+                       value="<ctg:duration>${movie.runtime}</ctg:duration>"
                        name="movieRuntime"
                        required/>
                 <label for="countryInput" class="form-label mt-2"><fmt:message key="label.country"/></label>

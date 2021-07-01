@@ -10,6 +10,11 @@
     <uri>customtag</uri>
 
     <tag>
+        <name>duration</name>
+        <tag-class>com.epam.jwd_critics.tag.DurationTag</tag-class>
+        <body-content>scriptless</body-content>
+    </tag>
+    <tag>
         <name>all_movies</name>
         <tag-class>com.epam.jwd_critics.tag.ShowAllMoviesTag</tag-class>
         <body-content>empty</body-content>
