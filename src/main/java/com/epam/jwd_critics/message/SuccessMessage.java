@@ -9,6 +9,7 @@ public class SuccessMessage {
 
     public static final String MOVIE_UPDATED = "Movie has been updated";
     public static final String MOVIE_DELETED = "Movie has been deleted";
+    public static final String MOVIE_CREATED = "Movie has been created";
 
     public static final String PASSWORD_UPDATED = "Password was updated";
     public static final String CELEBRITY_UPDATED = "Celebrity was updated";
