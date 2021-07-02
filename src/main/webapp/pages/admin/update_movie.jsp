@@ -44,69 +44,91 @@
             <img src="${pageContext.request.contextPath}/picture?currentPicture=${imagePath}"
                  id="user-image" class="img-thumbnail">
         </div>
-        <div class="col-4">
+        <div class="col-8">
             <form method="POST" enctype="multipart/form-data" action="<c:url value="${formAction}"/>">
-                <input type="hidden" name="previousPage" value="${currentPage}"/>
-                <label for="movieNameInput" class="form-label"><fmt:message key="label.title"/></label>
-                <input type="text"
-                       class="form-control"
-                       id="movieNameInput"
-                       value="${movie.name}"
-                       name="movieName"
-                       pattern="[\w\s.,?!@'#$:;*+-=%]{1,150}"
-                       title="<fmt:message key="validation.movieName"/>"
-                       required/>
-                <label for="releaseDateInput" class="form-label mt-2"><fmt:message key="label.releaseDate"/></label>
-                <input type="date"
-                       class="form-control"
-                       id="releaseDateInput"
-                       value="${movie.releaseDate}"
-                       name="movieReleaseDate"
-                       required/>
-                <label for="runtimeInput" class="form-label mt-2"><fmt:message key="label.runtime"/></label>
-                <input class="form-control html-duration-picker"
-                       data-hide-seconds
-                       id="runtimeInput"
-                       value="<ctg:duration>${movie.runtime}</ctg:duration>"
-                       name="movieRuntime"
-                       required/>
-                <label for="countryInput" class="form-label mt-2"><fmt:message key="label.country"/></label>
-                <input type="text"
-                       class="form-control"
-                       id="countryInput"
-                       pattern="[A-Za-z]{3,56}"
-                       title="<fmt:message key="validation.country"/>"
-                       value="${movie.country}"
-                       name="movieCountry"
-                       required/>
-                <label for="ageRestrictionInput" class="form-label mt-2">
-                    <fmt:message key="label.ageRestriction"/></label>
-                <input type="text"
-                       class="form-control"
-                       id="ageRestrictionInput"
-                       pattern="[\w_-]{1,10}"
-                       title="<fmt:message key="validation.ageRestriction"/>"
-                       value="${movie.ageRestriction}"
-                       name="movieAgeRestriction"
-                       required/>
-                <label for="summaryInput" class="form-label mt-2">
-                    <fmt:message key="label.summary"/></label>
-                <textarea minLength="100"
-                          maxLength="10000"
-                          class="form-control"
-                          id="summaryInput"
-                          rows="7"
-                          name="movieSummary"
-                          required>${movie.summary}</textarea>
-                <label for="genresInput" class="form-label mt-2"><fmt:message key="label.genres"/></label>
-                <div class="form-group" id="genresInput">
-                    <ctg:genres/>
-                </div>
+                <div class="row">
 
-                <label for="fileInput" class="form-label mt-2"><fmt:message key="label.movieBanner"/></label>
-                <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content"
-                       id="fileInput">
-                <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
+                    <div class="col-5">
+                        <input type="hidden" name="previousPage" value="${currentPage}"/>
+                        <label for="movieNameInput" class="form-label"><fmt:message key="label.title"/></label>
+                        <input type="text"
+                               class="form-control"
+                               id="movieNameInput"
+                               value="${movie.name}"
+                               name="movieName"
+                               pattern="[\w\s.,?!@'#$:;*+-=%]{1,150}"
+                               title="<fmt:message key="validation.movieName"/>"
+                               required/>
+                        <div class="row">
+                            <div class="col">
+                                <label for="releaseDateInput" class="form-label mt-2"><fmt:message
+                                        key="label.releaseDate"/></label>
+                                <input type="date"
+                                       class="form-control"
+                                       id="releaseDateInput"
+                                       value="${movie.releaseDate}"
+                                       name="movieReleaseDate"
+                                       required/>
+                            </div>
+                            <div class="col">
+                                <label for="runtimeInput" class="form-label mt-2"><fmt:message
+                                        key="label.runtime"/></label>
+                                <input class="form-control html-duration-picker"
+                                       data-hide-seconds
+                                       id="runtimeInput"
+                                       value="<ctg:duration>${movie.runtime}</ctg:duration>"
+                                       name="movieRuntime"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="countryInput" class="form-label mt-2"><fmt:message
+                                        key="label.country"/></label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="countryInput"
+                                       pattern="[A-Za-z]{3,56}"
+                                       title="<fmt:message key="validation.country"/>"
+                                       value="${movie.country}"
+                                       name="movieCountry"
+                                       required/>
+                            </div>
+                            <div class="col">
+                                <label for="ageRestrictionInput" class="form-label mt-2">
+                                    <fmt:message key="label.ageRestriction"/></label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="ageRestrictionInput"
+                                       pattern="[\w_-]{1,10}"
+                                       title="<fmt:message key="validation.ageRestriction"/>"
+                                       value="${movie.ageRestriction}"
+                                       name="movieAgeRestriction"
+                                       required/>
+                            </div>
+                        </div>
+
+                        <label for="summaryInput" class="form-label mt-2">
+                            <fmt:message key="label.summary"/></label>
+                        <textarea minLength="100"
+                                  maxLength="10000"
+                                  class="form-control"
+                                  id="summaryInput"
+                                  rows="7"
+                                  name="movieSummary"
+                                  required>${movie.summary}</textarea>
+                        <label for="fileInput" class="form-label mt-2"><fmt:message key="label.movieBanner"/></label>
+                        <input class="form-control" type="file" onchange="readURL(this)" accept="image/*" name="content"
+                               id="fileInput">
+                        <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
+                    </div>
+                    <div class="col-3">
+                        <label for="genresInput" class="form-label mt-2"><fmt:message key="label.genres"/></label>
+                        <div class="form-group" id="genresInput">
+                            <ctg:genres/>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

@@ -16,6 +16,7 @@
 <head>
     <title>All Movies</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all_movies.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 </head>
 
 <c:import url="/pages/componets/header.jsp"/>

@@ -1,7 +1,9 @@
 package com.epam.jwd_critics.controller.command;
 
+import com.epam.jwd_critics.controller.command.impl.admin.CreateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.DeleteMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.OpenCreateMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand;
@@ -54,9 +56,11 @@ public enum CommandInstance {
     OPEN_ALL_USERS(new OpenAllUsersPageCommand(), true, Role.ADMIN),
 
     OPEN_MOVIE(new OpenMoviePageCommand(), Role.values()),
+    DELETE_MOVIE(new DeleteMovieCommand(), true, Role.ADMIN),
     OPEN_UPDATE_MOVIE(new OpenUpdateMoviePageCommand(), true, Role.ADMIN),
     UPDATE_MOVIE(new UpdateMovieCommand(), true, Role.ADMIN),
-    DELETE_MOVIE(new DeleteMovieCommand(), true, Role.ADMIN),
+    OPEN_CREATE_MOVIE(new OpenCreateMoviePageCommand(), true, Role.ADMIN),
+    CREATE_MOVIE(new CreateMovieCommand(), true, Role.ADMIN),
 
     OPEN_USER_PROFILE(new OpenUserProfilePageCommand(), Role.values()),
     OPEN_UPDATE_USER(new OpenUpdateUserPageCommand(), Role.USER, Role.ADMIN),

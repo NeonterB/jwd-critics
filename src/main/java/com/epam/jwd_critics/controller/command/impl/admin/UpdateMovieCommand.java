@@ -91,7 +91,7 @@ public class UpdateMovieCommand implements Command {
                     req.setSessionAttribute(Attribute.MOVIE, movieToUpdate.get());
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_UPDATED);
                 } else {
-                    req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
+                    req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
                 }
             } catch (ServiceException e) {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());

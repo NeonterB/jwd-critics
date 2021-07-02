@@ -183,6 +183,9 @@ public class MovieServiceImpl implements MovieService {
         Movie createdMovie;
         try {
             createdMovie = movieDao.create(movie);
+            for (Genre genre : movie.getGenres()) {
+                movieDao.addGenre(movie.getId(), genre);
+            }
             transaction.commit();
             logger.info("{} created", createdMovie);
         } catch (DaoException e) {

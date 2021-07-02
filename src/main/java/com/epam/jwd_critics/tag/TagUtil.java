@@ -20,7 +20,6 @@ public class TagUtil {
                 createButton(writer, i + 1, newPage.getName());
             }
             writer.write("</ul>");
-            writer.write("</div>");
             writer.write("</form>");
         } catch (IOException e) {
             //logger.error(e);

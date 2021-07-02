@@ -25,11 +25,11 @@
     <a class="btnRef" href="${pageContext.request.contextPath}/controller?command=open_all_movies"><fmt:message
             key="button.toMovies"/></a>
     <c:if test="${user.role eq 'ADMIN'}">
-        <a class="btnRef ml-2"
+        <a class="btnRef"
            href="${pageContext.request.contextPath}/controller?command=open_update_movie&movieId=${movie.id}"><fmt:message
                 key="button.edit"/>
         </a>
-        <a class="btnRef ml-2"
+        <a class="btnRef"
            href="${pageContext.request.contextPath}/controller?command=delete_movie&movieId=${movie.id}"><fmt:message
                 key="button.delete"/>
         </a>
