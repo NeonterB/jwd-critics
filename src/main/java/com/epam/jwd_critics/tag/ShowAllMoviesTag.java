@@ -5,6 +5,8 @@ import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.MovieDTO;
+import com.epam.jwd_critics.dto.UserDTO;
+import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,10 +31,22 @@ public class ShowAllMoviesTag extends SimpleTagSupport {
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeMovies(writer, req);
-        int movieCount = (int) req.getSessionAttribute(Attribute.MOVIE_COUNT);
-        int pageCount = movieCount % MOVIES_PER_PAGE == 0 ? (movieCount / MOVIES_PER_PAGE) : (movieCount / MOVIES_PER_PAGE + 1);
-        String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
-        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIES_PAGE);
+        try {
+            int movieCount = (int) req.getSessionAttribute(Attribute.MOVIE_COUNT);
+            int pageCount = movieCount % MOVIES_PER_PAGE == 0 ? (movieCount / MOVIES_PER_PAGE) : (movieCount / MOVIES_PER_PAGE + 1);
+            String commandName = CommandInstance.OPEN_ALL_MOVIES.toString().toLowerCase();
+            TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_MOVIES_PAGE);
+
+            UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+            if (user != null && user.getRole().equals(Role.ADMIN)) {
+                writer.write("<p class=\"mt-4\"><a class=\"btnRef mt-2\"" +
+                        " href=\"" + pageContext.getRequest().getServletContext().getContextPath() + "/controller?command=open_create_movie\">" +
+                        "Create" +
+                        "</a></p>");
+            }
+        } catch (IOException e) {
+            throw new JspException(e);
+        }
     }
 
     private void writeMovies(JspWriter writer, CommandRequest req) throws JspException {
