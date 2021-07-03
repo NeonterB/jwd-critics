@@ -128,6 +128,8 @@ public class CelebrityServiceImpl implements CelebrityService {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
         Celebrity createdCelebrity;
         try {
+            if (celebrityDao.celebrityExists(celebrity.getFirstName(), celebrity.getLastName()))
+                throw new ServiceException(CelebrityServiceCode.CELEBRITY_EXISTS);
             createdCelebrity = celebrityDao.create(celebrity);
             updateInfo(createdCelebrity);
             transaction.commit();
