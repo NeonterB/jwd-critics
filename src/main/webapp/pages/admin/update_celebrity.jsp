@@ -12,6 +12,19 @@
     </c:otherwise>
 </c:choose>
 <fmt:setBundle basename="properties/content"/>
+<c:choose>
+    <c:when test="${not empty celebrity}">
+        <c:set var="imagePath" value="${celebrity.imagePath}" scope="page"/>
+        <c:set var="formAction"
+               value="${pageContext.request.contextPath}/controller?command=update_celebrity&celebrityId=${celebrity.id}"
+               scope="page"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="imagePath" value="celebrity-icons/default_celebrity.jpg" scope="page"/>
+        <c:set var="formAction" value="${pageContext.request.contextPath}/controller?command=create_celebrity"
+               scope="page"/>
+    </c:otherwise>
+</c:choose>
 <html>
 <head>
     <title>Update Celebrity</title>
@@ -27,13 +40,12 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <img src="${pageContext.request.contextPath}/picture?currentPicture=${celebrity.imagePath}"
-                 alt="${celebrity.firstName}" id="user-image" class="img-thumbnail">
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${imagePath}" id="image"
+                 class="img-thumbnail">
         </div>
         <div class="col-4">
             <form method="POST" enctype="multipart/form-data"
-                  action="<c:url value="/controller?command=update_celebrity"/>">
-                <input type="hidden" name="celebrityId" value="${celebrity.id}">
+                  action="<c:url value="${formAction}"/>">
                 <label for="firstNameInput" class="form-label"><fmt:message key="label.firstName"/></label>
                 <input type="text"
                        class="form-control"

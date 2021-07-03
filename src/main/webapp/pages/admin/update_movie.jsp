@@ -42,12 +42,11 @@
     <div class="row mt-4">
         <div class="col-4">
             <img src="${pageContext.request.contextPath}/picture?currentPicture=${imagePath}"
-                 id="user-image" class="img-thumbnail">
+                 id="image" class="img-thumbnail">
         </div>
         <div class="col-8">
             <form method="POST" enctype="multipart/form-data" action="<c:url value="${formAction}"/>">
                 <div class="row">
-
                     <div class="col-5">
                         <input type="hidden" name="previousPage" value="${currentPage}"/>
                         <label for="movieNameInput" class="form-label"><fmt:message key="label.title"/></label>
@@ -60,7 +59,7 @@
                                title="<fmt:message key="validation.movieName"/>"
                                required/>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-8">
                                 <label for="releaseDateInput" class="form-label mt-2"><fmt:message
                                         key="label.releaseDate"/></label>
                                 <input type="date"
@@ -70,7 +69,7 @@
                                        name="movieReleaseDate"
                                        required/>
                             </div>
-                            <div class="col">
+                            <div class="col-4">
                                 <label for="runtimeInput" class="form-label mt-2"><fmt:message
                                         key="label.runtime"/></label>
                                 <input class="form-control html-duration-picker"

@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-4">
             <img src="${pageContext.request.contextPath}/picture?currentPicture=${user.imagePath}"
-                 alt="${user.firstName}" id="user-image" class="img-thumbnail">
+                 alt="${user.firstName}" id="image" class="img-thumbnail">
         </div>
         <div class="col-4">
             <form method="POST" id="updateForm" enctype="multipart/form-data"
