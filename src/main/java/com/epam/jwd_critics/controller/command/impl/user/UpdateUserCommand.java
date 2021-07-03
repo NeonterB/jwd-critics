@@ -44,8 +44,8 @@ public class UpdateUserCommand implements Command {
 
         UserValidator userValidator = new UserValidator();
         Set<ConstraintViolation> violations = new HashSet<>();
-        userValidator.validateName(firstName).ifPresent(violations::add);
-        userValidator.validateName(lastName).ifPresent(violations::add);
+        userValidator.validateFirstName(firstName).ifPresent(violations::add);
+        userValidator.validateLastName(lastName).ifPresent(violations::add);
 
         if (violations.isEmpty()) {
             try {

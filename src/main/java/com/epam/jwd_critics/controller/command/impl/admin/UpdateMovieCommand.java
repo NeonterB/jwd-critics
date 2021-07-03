@@ -53,7 +53,7 @@ public class UpdateMovieCommand implements Command {
         }
 
         MovieValidator movieValidator = new MovieValidator();
-        Set<ConstraintViolation> violations = movieValidator.validateMovieData(name, releaseDate, runtime, country, ageRestriction, summary, genreIds);
+        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, country, ageRestrictionIdStr, summary, genreIds);
 
         if (violations.isEmpty()) {
             try {

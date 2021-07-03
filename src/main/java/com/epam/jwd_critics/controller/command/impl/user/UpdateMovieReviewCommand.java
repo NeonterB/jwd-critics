@@ -35,7 +35,7 @@ public class UpdateMovieReviewCommand implements Command {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         } else {
             MovieReviewValidator reviewValidator = new MovieReviewValidator();
-            Set<ConstraintViolation> violations = reviewValidator.validateReview(reviewText, reviewScore);
+            Set<ConstraintViolation> violations = reviewValidator.validateData(reviewText, reviewScore);
 
             if (violations.isEmpty()) {
                 try {
