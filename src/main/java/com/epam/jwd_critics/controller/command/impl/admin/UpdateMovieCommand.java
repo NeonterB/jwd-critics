@@ -40,13 +40,13 @@ public class UpdateMovieCommand implements Command {
         String releaseDate = req.getParameter(Parameter.MOVIE_RELEASE_DATE);
         String runtime = req.getParameter(Parameter.MOVIE_RUNTIME);
         String country = req.getParameter(Parameter.MOVIE_COUNTRY);
-        String ageRestriction = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
+        String ageRestrictionIdStr = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
         String summary = req.getParameter(Parameter.MOVIE_SUMMARY);
-        String[] genreIds = req.getParameters(Parameter.GENRES);
+        String[] genreIds = req.getParameters(Parameter.MOVIE_GENRES);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
-        if (name == null || releaseDate == null || runtime == null || country == null || ageRestriction == null || summary == null || genreIds == null) {
+        if (name == null || releaseDate == null || runtime == null || country == null || ageRestrictionIdStr == null || summary == null || genreIds == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
+            return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
         }
         if (movieIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -67,7 +67,7 @@ public class UpdateMovieCommand implements Command {
                     movieToUpdate.get().setRuntime(duration);
 
                     movieToUpdate.get().setCountry(Country.valueOf(country.toUpperCase()));
-                    movieToUpdate.get().setAgeRestriction(AgeRestriction.valueOf(ageRestriction.toUpperCase().replace("-", "_")));
+                    movieToUpdate.get().setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(Integer.parseInt(ageRestrictionIdStr)).get());
                     movieToUpdate.get().setSummary(summary);
                     if (newPicture != null && !newPicture.equals("")) {
                         movieToUpdate.get().setImagePath(newPicture);

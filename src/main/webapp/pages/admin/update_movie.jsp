@@ -93,18 +93,6 @@
                                        name="movieCountry"
                                        required/>
                             </div>
-                            <div class="col">
-                                <label for="ageRestrictionInput" class="form-label mt-2">
-                                    <fmt:message key="label.ageRestriction"/></label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="ageRestrictionInput"
-                                       pattern="[\w_-]{1,10}"
-                                       title="<fmt:message key="validation.ageRestriction"/>"
-                                       value="${movie.ageRestriction}"
-                                       name="movieAgeRestriction"
-                                       required/>
-                            </div>
                         </div>
 
                         <label for="summaryInput" class="form-label mt-2">
@@ -125,6 +113,13 @@
                         <label for="genresInput" class="form-label mt-2"><fmt:message key="label.genres"/></label>
                         <div class="form-group" id="genresInput">
                             <ctg:genres/>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <label for="restrictionInput" class="form-label mt-2"><fmt:message
+                                key="label.ageRestriction"/></label>
+                        <div class="form-group" id="restrictionInput">
+                            <ctg:ageRestrictions/>
                         </div>
                     </div>
                 </div>
