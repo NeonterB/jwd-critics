@@ -20,11 +20,19 @@ public class UserValidator {
     private static final String LOGIN_MESSAGE = "Minimum 3 and maximum 25 characters, can contain letters, numbers, and special characters \"._-\"";
     private static final String PASSWORD_MESSAGE = "Minimum 8 and maximum 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character \"@$!%*?&\"";
 
-    public Optional<ConstraintViolation> validateName(String name) {
+    public Optional<ConstraintViolation> validateFirstName(String name) {
+        return validateName(name, Parameter.FIRST_NAME);
+    }
+
+    public Optional<ConstraintViolation> validateLastName(String name) {
+        return validateName(name, Parameter.LAST_NAME);
+    }
+
+    private Optional<ConstraintViolation> validateName(String name, Parameter parameter) {
         if (name.matches(NAME_REGEX)) {
             return Optional.empty();
         } else {
-            return Optional.of(new ConstraintViolation(Parameter.FIRST_NAME, NAME_MESSAGE));
+            return Optional.of(new ConstraintViolation(parameter, NAME_MESSAGE));
         }
     }
 
@@ -61,8 +69,8 @@ public class UserValidator {
 
     public Set<ConstraintViolation> validateRegistrationData(String firstName, String lastName, String email, String login, String password) {
         Set<ConstraintViolation> violations = new HashSet<>();
-        validateName(firstName).ifPresent(violations::add);
-        validateName(lastName).ifPresent(violations::add);
+        validateFirstName(firstName).ifPresent(violations::add);
+        validateLastName(lastName).ifPresent(violations::add);
         validateEmail(email).ifPresent(violations::add);
         validateLogin(login).ifPresent(violations::add);
         validatePassword(password).ifPresent(violations::add);

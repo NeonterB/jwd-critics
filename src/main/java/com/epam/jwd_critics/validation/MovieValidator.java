@@ -5,7 +5,6 @@ import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Country;
 import com.epam.jwd_critics.entity.Genre;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -25,8 +24,8 @@ public class MovieValidator {
     private static final String RUNTIME_MESSAGE = "Movie runtime must be of pattern hh:mm";
     private static final String COUNTRY_DOES_NOT_EXIST_MESSAGE = "Country %s does no exist";
     private static final String COUNTRY_MESSAGE = "Country name must be 3-56 characters. Country name must be a word";
-    private static final String AGE_RESTRICTION_DOES_NOT_EXIST_MESSAGE = "Age restriction %s does no exist";
-    private static final String AGE_RESTRICTION_MESSAGE = "Age restriction name must be 1-10 characters. Age restriction must be a sequence of characters and symbols -_";
+    private static final String AGE_RESTRICTION_DOES_NOT_EXIST_MESSAGE = "Age restriction with id %s does not exist";
+    private static final String AGE_RESTRICTION_MESSAGE = "Age restriction id must be an integer";
     private static final String SUMMARY_MESSAGE = "Summary must be 100-10000 characters";
     private static final String GENRE_MESSAGE = "GenreId must be and integer";
     private static final String GENRE_DOES_NOT_EXIST_MESSAGE = "Genre with id %s does not exist";
@@ -68,15 +67,16 @@ public class MovieValidator {
         }
     }
 
-    public Optional<ConstraintViolation> validateAgeRestriction(String ageRestriction) {
-        if (ageRestriction.matches(AGE_RESTRICTION_REGEX)) {
-            try {
-                AgeRestriction.valueOf(ageRestriction.toUpperCase().replace("-", "_"));
+    public Optional<ConstraintViolation> validateAgeRestrictionId(String ageRestrictionIdStr) {
+        try {
+            int ageRestrictionId = Integer.parseInt(ageRestrictionIdStr);
+            Optional<AgeRestriction> ageRestriction = AgeRestriction.resolveAgeRestrictionById(ageRestrictionId);
+            if (ageRestriction.isPresent())
                 return Optional.empty();
-            } catch (IllegalArgumentException e) {
-                return Optional.of(new ConstraintViolation(Parameter.MOVIE_AGE_RESTRICTION, String.format(AGE_RESTRICTION_DOES_NOT_EXIST_MESSAGE, ageRestriction)));
-            }
-        } else {
+            else
+                return Optional.of(new ConstraintViolation(Parameter.MOVIE_AGE_RESTRICTION, String.format(AGE_RESTRICTION_DOES_NOT_EXIST_MESSAGE, ageRestrictionIdStr)));
+
+        } catch (NumberFormatException e) {
             return Optional.of(new ConstraintViolation(Parameter.MOVIE_AGE_RESTRICTION, AGE_RESTRICTION_MESSAGE));
         }
     }
@@ -92,24 +92,24 @@ public class MovieValidator {
     public Optional<ConstraintViolation> validateGenreId(String genreIdStr) {
         try {
             int genreId = Integer.parseInt(genreIdStr);
-            Optional<Genre> genre = Arrays.stream(Genre.values()).filter(g -> g.getId() == genreId).findFirst();
+            Optional<Genre> genre = Genre.resolveGenreById(genreId);
             if (genre.isPresent())
                 return Optional.empty();
             else
-                return Optional.of(new ConstraintViolation(Parameter.GENRES, String.format(GENRE_DOES_NOT_EXIST_MESSAGE, genreIdStr)));
+                return Optional.of(new ConstraintViolation(Parameter.MOVIE_GENRES, String.format(GENRE_DOES_NOT_EXIST_MESSAGE, genreIdStr)));
 
         } catch (NumberFormatException e) {
-            return Optional.of(new ConstraintViolation(Parameter.GENRES, GENRE_MESSAGE));
+            return Optional.of(new ConstraintViolation(Parameter.MOVIE_GENRES, GENRE_MESSAGE));
         }
     }
 
-    public Set<ConstraintViolation> validateMovieData(String name, String releaseDate, String runtime, String country, String ageRestriction, String summary, String[] genreIds) {
+    public Set<ConstraintViolation> validateData(String name, String releaseDate, String runtime, String country, String ageRestriction, String summary, String[] genreIds) {
         Set<ConstraintViolation> violations = new HashSet<>();
         validateName(name).ifPresent(violations::add);
         validateReleaseDate(releaseDate).ifPresent(violations::add);
         validateRuntime(runtime).ifPresent(violations::add);
         validateCountry(country).ifPresent(violations::add);
-        validateAgeRestriction(ageRestriction).ifPresent(violations::add);
+        validateAgeRestrictionId(ageRestriction).ifPresent(violations::add);
         validateSummary(summary).ifPresent(violations::add);
         for (String genreId : genreIds) {
             validateGenreId(genreId).ifPresent(violations::add);

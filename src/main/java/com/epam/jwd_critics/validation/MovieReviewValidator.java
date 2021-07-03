@@ -30,7 +30,7 @@ public class MovieReviewValidator {
         return Optional.of(new ConstraintViolation(Parameter.MOVIE_REVIEW_SCORE, SCORE_MESSAGE));
     }
 
-    public Set<ConstraintViolation> validateReview(String text, String score) {
+    public Set<ConstraintViolation> validateData(String text, String score) {
         Set<ConstraintViolation> violations = new HashSet<>();
         validateText(text).ifPresent(violations::add);
         validateScore(score).ifPresent(violations::add);
