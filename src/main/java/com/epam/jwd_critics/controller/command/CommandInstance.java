@@ -1,8 +1,11 @@
 package com.epam.jwd_critics.controller.command;
 
+import com.epam.jwd_critics.controller.command.impl.admin.CreateCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.CreateMovieCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.DeleteCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.DeleteMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenAllUsersPageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.OpenCreateCelebrityPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenCreateMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateMoviePageCommand;
@@ -72,6 +75,9 @@ public enum CommandInstance {
     OPEN_CELEBRITY_PROFILE(new OpenCelebrityProfilePageCommand(), Role.values()),
     OPEN_UPDATE_CELEBRITY(new OpenUpdateCelebrityPageCommand(), true, Role.ADMIN),
     UPDATE_CELEBRITY(new UpdateCelebrityCommand(), true, Role.ADMIN),
+    OPEN_CREATE_CELEBRITY(new OpenCreateCelebrityPageCommand(), true, Role.ADMIN),
+    CREATE_CELEBRITY(new CreateCelebrityCommand(), true, Role.ADMIN),
+    DELETE_CELEBRITY(new DeleteCelebrityCommand(), true, Role.ADMIN),
 
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
@@ -104,7 +110,7 @@ public enum CommandInstance {
         return userMustBeActive;
     }
 
-    public static Command commandOf(String commandName) {
+    public static Command getCommandByName(String commandName) {
         for (CommandInstance v : values()) {
             if (v.name().equalsIgnoreCase(commandName)) {
                 return v.command;

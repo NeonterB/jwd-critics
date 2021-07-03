@@ -11,10 +11,13 @@ public class SuccessMessage {
     public static final String MOVIE_DELETED = "Movie has been deleted";
     public static final String MOVIE_CREATED = "Movie has been created";
 
-    public static final String PASSWORD_UPDATED = "Password was updated";
     public static final String CELEBRITY_UPDATED = "Celebrity was updated";
+    public static final String CELEBRITY_CREATED = "Celebrity was created";
+    public static final String CELEBRITY_DELETED = "Celebrity was deleted";
 
     public static final String MOVIE_REVIEW_CREATED = "Movie review has been created";
     public static final String MOVIE_REVIEW_DELETED = "Movie review has been deleted";
     public static final String MOVIE_REVIEW_UPDATED = "Movie review has been updated";
+
+    public static final String PASSWORD_UPDATED = "Password was updated";
 }

@@ -5,6 +5,8 @@ import com.epam.jwd_critics.controller.command.CommandInstance;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.CelebrityDTO;
+import com.epam.jwd_critics.dto.UserDTO;
+import com.epam.jwd_critics.entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -15,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShowAllCelebritiesTag extends SimpleTagSupport {
-    public static final int CELEBRITIES_PER_PAGE = 2;
+    public static final int CELEBRITIES_PER_PAGE = 12;
     private static final int CELEBRITIES_PER_ROW = 6;
     private PageContext pageContext;
 
@@ -27,10 +29,22 @@ public class ShowAllCelebritiesTag extends SimpleTagSupport {
         CommandRequest req = CommandRequest.from(request);
         JspWriter writer = pageContext.getOut();
         writeCelebrities(writer, req);
-        int celebrityCount = (int) req.getSessionAttribute(Attribute.CELEBRITY_COUNT);
-        int pageCount = celebrityCount % CELEBRITIES_PER_PAGE == 0 ? (celebrityCount / CELEBRITIES_PER_PAGE) : (celebrityCount / CELEBRITIES_PER_PAGE + 1);
-        String commandName = CommandInstance.OPEN_ALL_CELEBRITIES.toString().toLowerCase();
-        TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_CELEBRITIES_PAGE);
+        try {
+            int celebrityCount = (int) req.getSessionAttribute(Attribute.CELEBRITY_COUNT);
+            int pageCount = celebrityCount % CELEBRITIES_PER_PAGE == 0 ? (celebrityCount / CELEBRITIES_PER_PAGE) : (celebrityCount / CELEBRITIES_PER_PAGE + 1);
+            String commandName = CommandInstance.OPEN_ALL_CELEBRITIES.toString().toLowerCase();
+            TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_CELEBRITIES_PAGE);
+
+            UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
+            if (user != null && user.getRole().equals(Role.ADMIN)) {
+                writer.write("<p class=\"mt-4\"><a class=\"btnRef mt-2\"" +
+                        " href=\"" + pageContext.getRequest().getServletContext().getContextPath() + "/controller?command=open_create_celebrity\">" +
+                        "Create" +
+                        "</a></p>");
+            }
+        } catch (IOException e) {
+            throw new JspException(e);
+        }
     }
 
     private void writeCelebrities(JspWriter writer, CommandRequest req) throws JspException {

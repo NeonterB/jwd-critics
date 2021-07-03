@@ -16,6 +16,7 @@
 <head>
     <title>All celebrities</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/update.css">
 </head>
 <body>
 <c:import url="/pages/componets/header.jsp"/>
