@@ -15,10 +15,11 @@ public enum Parameter {
     USER_ID("userId"),
     REVIEW_ID("reviewId"),
     CELEBRITY_ID("celebrityId"),
+    POSITION_ID("celebrityId"),
+    MOVIE_REVIEW_ID("movieReviewId"),
 
     MOVIE_REVIEW_TEXT("movieReviewText"),
     MOVIE_REVIEW_SCORE("movieReviewScore"),
-    MOVIE_REVIEW_ID("movieReviewId"),
 
     IMAGE_PATH("imagePath"),
 
