@@ -32,7 +32,6 @@ public enum Attribute {
     REVIEWS_ON_USER_PROFILE_PAGE("reviewsOnUserProfilePage"),
 
     CELEBRITY("celebrity"),
-    CELEBRITY_PROFILE("celebrityProfile"),
 
     NEW_IMAGE("newImage"),
 

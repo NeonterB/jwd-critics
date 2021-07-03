@@ -23,16 +23,20 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4">
-            <img src="${pageContext.request.contextPath}/picture?currentPicture=${celebrityProfile.imagePath}"
-                 alt="${celebrityProfile.firstName}" class="img-thumbnail">
+            <img src="${pageContext.request.contextPath}/picture?currentPicture=${celebrity.imagePath}"
+                 alt="${celebrity.firstName}" class="img-thumbnail">
         </div>
         <div class="col-4">
-            <h4>${celebrityProfile.firstName} ${celebrityProfile.lastName}</h4>
+            <h4>${celebrity.firstName} ${celebrity.lastName}</h4>
             <c:if test="${user.role eq 'ADMIN'}">
                 <p class="mt-4">
                     <a class="btnRef"
-                       href="${pageContext.request.contextPath}/controller?command=open_update_celebrity&celebrityId=${celebrityProfile.id}&previousPage=${currentPage}">
+                       href="${pageContext.request.contextPath}/controller?command=open_update_celebrity&celebrityId=${celebrity.id}&previousPage=${currentPage}">
                         <fmt:message key="button.edit"/>
+                    </a>
+                    <a class="btnRef"
+                       href="${pageContext.request.contextPath}/controller?command=delete_celebrity&celebrityId=${celebrity.id}"><fmt:message
+                            key="button.delete"/>
                     </a>
                 </p>
             </c:if>
@@ -40,8 +44,8 @@
     </div>
     <div class="row mt-4">
         <h1>Known For</h1>
-        <c:if test="${not empty celebrityProfile.jobs}">
-            <c:forEach var="job" items="${celebrityProfile.jobs}">
+        <c:if test="${not empty celebrity.jobs}">
+            <c:forEach var="job" items="${celebrity.jobs}">
                 <c:set var="movie" value="${job.key}" scope="page"/>
                 <c:set var="positions" value="${job.value}" scope="page"/>
 
