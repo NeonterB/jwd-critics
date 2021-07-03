@@ -8,25 +8,27 @@ import java.util.Optional;
 import java.util.Set;
 
 public class CelebrityValidator {
-    private static final String NAME_REGEX = "^[A-Z][a-z]{1,14}";
+    private static final String FIRST_NAME_REGEX = "^[A-Z][a-z]{1,14}";
+    private static final String LAST_NAME_REGEX = "^([A-Z][a-z ,.'-]+)+$";
 
-    private static final String NAME_MESSAGE = "First and last names must contain letters only, must start with an uppercase letter";
+    private static final String FIRST_NAME_MESSAGE = "First name can contain letters, must start with an uppercase letter";
+    private static final String LAST_NAME_MESSAGE = "FLast names can contain letters and special characters \"., '-\", must start with an uppercase letter";
     private static final String POSITION_MESSAGE = "PositionId must be and integer";
     private static final String POSITION_DOES_NOT_EXIST_MESSAGE = "Position with id %s does not exist";
 
     public Optional<ConstraintViolation> validateFirstName(String name) {
-        return validateName(name, Parameter.FIRST_NAME);
+        if (name.matches(FIRST_NAME_REGEX)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new ConstraintViolation(Parameter.FIRST_NAME, FIRST_NAME_MESSAGE));
+        }
     }
 
     public Optional<ConstraintViolation> validateLastName(String name) {
-        return validateName(name, Parameter.LAST_NAME);
-    }
-
-    private Optional<ConstraintViolation> validateName(String name, Parameter parameter) {
-        if (name.matches(NAME_REGEX)) {
+        if (name.matches(LAST_NAME_REGEX)) {
             return Optional.empty();
         } else {
-            return Optional.of(new ConstraintViolation(parameter, NAME_MESSAGE));
+            return Optional.of(new ConstraintViolation(Parameter.LAST_NAME, LAST_NAME_MESSAGE));
         }
     }
 

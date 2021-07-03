@@ -35,7 +35,7 @@
                        required placeholder="<fmt:message key="label.firstName"/>"/>
                 <input type="text"
                        name="lastName"
-                       pattern="^[A-Z][a-z]{1,14}"
+                       pattern="^([A-Z][a-z ,.'-]+)+$"
                        title="<fmt:message key="validation.lastName"/>"
                        required placeholder="<fmt:message key="label.lastName"/>"/>
                 <input type="email"

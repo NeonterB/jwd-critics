@@ -61,7 +61,7 @@
                        id="lastNameInput"
                        value="${celebrity.lastName}"
                        name="lastName"
-                       pattern="^[A-Z][a-z]{1,14}"
+                       pattern="^([A-Z][a-z ,.'-]+)+$"
                        title="<fmt:message key="validation.lastName"/>"
                        required/>
                 <label for="input-file" class="form-label mt-2"><fmt:message key="label.profilePicture"/></label>

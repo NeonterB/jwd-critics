@@ -7,7 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public class UserValidator {
-    private static final String NAME_REGEX = "^[A-Z][a-z]{1,14}";
+    private static final String FIRST_NAME_REGEX = "^[A-Z][a-z]{1,14}";
+    private static final String LAST_NAME_REGEX = "^([A-Z][a-z ,.'-]+)+$";
     private static final String EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"" +
             "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@" +
             "(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
@@ -15,24 +16,25 @@ public class UserValidator {
     private static final String LOGIN_REGEX = "^[a-zA-Z0-9._-]{3,15}$";
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$";
 
-    private static final String NAME_MESSAGE = "First and last names must contain letters only, must start with an uppercase letter";
+    private static final String FIRST_NAME_MESSAGE = "First name can contain letters, must start with an uppercase letter";
+    private static final String LAST_NAME_MESSAGE = "FLast names can contain letters and special characters \"., '-\", must start with an uppercase letter";
     private static final String EMAIL_MESSAGE = "Invalid email";
     private static final String LOGIN_MESSAGE = "Minimum 3 and maximum 25 characters, can contain letters, numbers, and special characters \"._-\"";
     private static final String PASSWORD_MESSAGE = "Minimum 8 and maximum 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character \"@$!%*?&\"";
 
     public Optional<ConstraintViolation> validateFirstName(String name) {
-        return validateName(name, Parameter.FIRST_NAME);
+        if (name.matches(FIRST_NAME_REGEX)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new ConstraintViolation(Parameter.FIRST_NAME, FIRST_NAME_MESSAGE));
+        }
     }
 
     public Optional<ConstraintViolation> validateLastName(String name) {
-        return validateName(name, Parameter.LAST_NAME);
-    }
-
-    private Optional<ConstraintViolation> validateName(String name, Parameter parameter) {
-        if (name.matches(NAME_REGEX)) {
+        if (name.matches(LAST_NAME_REGEX)) {
             return Optional.empty();
         } else {
-            return Optional.of(new ConstraintViolation(parameter, NAME_MESSAGE));
+            return Optional.of(new ConstraintViolation(Parameter.LAST_NAME, LAST_NAME_MESSAGE));
         }
     }
 

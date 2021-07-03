@@ -157,7 +157,7 @@
                     <input type="text"
                            class="form-control"
                            id="celebrityLastNameInput"
-                           pattern="^[A-Z][a-z]{1,14}"
+                           pattern="^([A-Z][a-z ,.'-]+)+$"
                            title="<fmt:message key="validation.lastName"/>"
                            name="lastName"
                            required/>
