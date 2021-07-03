@@ -17,12 +17,12 @@ public enum AgeRestriction implements BaseEntity {
         this.id = id;
     }
 
+    public static Optional<AgeRestriction> resolveAgeRestrictionById(int id) {
+        return Arrays.stream(AgeRestriction.values()).filter(c -> c.getId() == id).findFirst();
+    }
+
     @Override
     public int getId() {
         return id;
-    }
-
-    public static Optional<AgeRestriction> resolveAgeRestrictionByName(String name) {
-        return Arrays.stream(AgeRestriction.values()).filter(c -> c.name().equalsIgnoreCase(name)).findFirst();
     }
 }
