@@ -15,7 +15,8 @@ public enum Genre implements BaseEntity {
     FANTASY(8),
     HORROR(9),
     THRILLER(10),
-    ROMANCE(11);
+    ROMANCE(11),
+    SCI_FI(12);
     private final int id;
 
     Genre(int id) {
