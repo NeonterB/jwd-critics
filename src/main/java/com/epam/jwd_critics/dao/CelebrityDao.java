@@ -33,6 +33,8 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String SELECT_CELEBRITY_BY_ID = "SELECT * FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")
+    private static final String SELECT_CELEBRITY_BY_FULL_NAME = "SELECT * FROM jwd_critics.celebrity WHERE first_name = ? and last_name = ?";
+    @Language("SQL")
     private static final String DELETE_CELEBRITY_BY_ID = "DELETE FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")
     private static final String INSERT_CELEBRITY = "INSERT INTO jwd_critics.celebrity (first_name, last_name, image_path) VALUES (?, ?, ?)";
@@ -70,6 +72,19 @@ public class CelebrityDao extends AbstractCelebrityDao {
     public Optional<Celebrity> getEntityById(Integer celebrityId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_ID)) {
             ps.setInt(1, celebrityId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return Optional.ofNullable(buildCelebrity(rs));
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Optional<Celebrity> getEntityByFullName(String firstName, String lastName) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(SELECT_CELEBRITY_BY_FULL_NAME)) {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
             try (ResultSet rs = ps.executeQuery()) {
                 return Optional.ofNullable(buildCelebrity(rs));
             }

@@ -1,7 +1,7 @@
 package com.epam.jwd_critics.service;
 
-import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.entity.Celebrity;
+import com.epam.jwd_critics.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +12,8 @@ public interface CelebrityService {
     int getCount() throws ServiceException;
 
     Optional<Celebrity> getEntityById(int id) throws ServiceException;
+
+    Optional<Celebrity> getEntityByFullName(String firstName, String lastName) throws ServiceException;
 
     void update(Celebrity celebrity) throws ServiceException;
 

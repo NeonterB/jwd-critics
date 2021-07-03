@@ -87,6 +87,25 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
+    public Optional<Celebrity> getEntityByFullName(String firstName, String lastName) throws ServiceException {
+        EntityTransaction transaction = new EntityTransaction(celebrityDao);
+        Optional<Celebrity> celebrity;
+        try {
+            celebrity = celebrityDao.getEntityByFullName(firstName, lastName);
+            if (celebrity.isPresent()) {
+                updateInfo(celebrity.get());
+            }
+            transaction.commit();
+        } catch (DaoException e) {
+            transaction.rollback();
+            throw new ServiceException(e);
+        } finally {
+            transaction.close();
+        }
+        return celebrity;
+    }
+
+    @Override
     public void update(Celebrity celebrity) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(celebrityDao);
         try {
