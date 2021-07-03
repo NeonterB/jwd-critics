@@ -1,6 +1,7 @@
 package com.epam.jwd_critics.validation;
 
 import com.epam.jwd_critics.controller.command.Parameter;
+import com.epam.jwd_critics.entity.Position;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -10,6 +11,8 @@ public class CelebrityValidator {
     private static final String NAME_REGEX = "^[A-Z][a-z]{1,14}";
 
     private static final String NAME_MESSAGE = "First and last names must contain letters only, must start with an uppercase letter";
+    private static final String POSITION_MESSAGE = "PositionId must be and integer";
+    private static final String POSITION_DOES_NOT_EXIST_MESSAGE = "Position with id %s does not exist";
 
     public Optional<ConstraintViolation> validateFirstName(String name) {
         return validateName(name, Parameter.FIRST_NAME);
@@ -24,6 +27,20 @@ public class CelebrityValidator {
             return Optional.empty();
         } else {
             return Optional.of(new ConstraintViolation(parameter, NAME_MESSAGE));
+        }
+    }
+
+    public Optional<ConstraintViolation> validatePositionId(String positionIdStr) {
+        try {
+            int positionId = Integer.parseInt(positionIdStr);
+            Optional<Position> position = Position.resolvePositionById(positionId);
+            if (position.isPresent())
+                return Optional.empty();
+            else
+                return Optional.of(new ConstraintViolation(Parameter.MOVIE_GENRES, String.format(POSITION_DOES_NOT_EXIST_MESSAGE, positionId)));
+
+        } catch (NumberFormatException e) {
+            return Optional.of(new ConstraintViolation(Parameter.MOVIE_GENRES, POSITION_MESSAGE));
         }
     }
 
