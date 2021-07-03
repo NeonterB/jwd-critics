@@ -145,14 +145,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException {
+    public void addCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             if (!celebrityDao.idExists(celebrityId))
                 throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
-            movieDao.addCelebrityAndPosition(movieId, celebrityId, position);
+            movieDao.addCelebrityOnPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was added to movie with id {} on position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {
@@ -164,14 +164,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void removeCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException {
+    public void removeCelebrityFromPosition(int movieId, int celebrityId, Position position) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao, celebrityDao);
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             if (!celebrityDao.idExists(celebrityId))
                 throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
-            movieDao.removeCelebrityAndPosition(movieId, celebrityId, position);
+            movieDao.removeCelebrityFromPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was removed from movie with id {} from position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {

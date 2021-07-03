@@ -97,11 +97,11 @@ class MovieDaoTest {
     @Test
     public void testStaff() {
         try {
-            Assertions.assertTrue(movieDao.addCelebrityAndPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertTrue(movieDao.addCelebrityAndPosition(movie.getId(), 1, Position.DIRECTOR));
-            Assertions.assertFalse(movieDao.addCelebrityAndPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertTrue(movieDao.removeCelebrityAndPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertFalse(movieDao.removeCelebrityAndPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.DIRECTOR));
+            Assertions.assertFalse(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertFalse(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
         } catch (DaoException e) {
             logger.error(e.getMessage(), e);
         }

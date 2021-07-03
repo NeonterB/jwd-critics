@@ -1,9 +1,9 @@
 package com.epam.jwd_critics.service;
 
-import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.entity.Genre;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
+import com.epam.jwd_critics.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +21,9 @@ public interface MovieService {
 
     void removeGenre(int movieId, Genre genre) throws ServiceException;
 
-    void addCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException;
+    void addCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 
-    void removeCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException;
+    void removeCelebrityFromPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 
     Movie create(Movie movie) throws ServiceException;
 
