@@ -126,6 +126,48 @@
             </form>
         </div>
     </div>
+
+    <c:if test="${not empty movie}">
+        <div class="row mt-4">
+            <div class="col-6">
+                <c:forEach var="position" items="${movie.staff}">
+                    <strong>${position.key}: </strong>
+                    <c:forEach var="celebrity" items="${position.value}">
+                        <a class="dark-link"
+                           href="${pageContext.request.contextPath}/controller?command=remove_celebrity_from_position&movieId=${movie.id}&celebrityId=${celebrity.id}&positionId=${position.key.id}">
+                                ${celebrity.firstName} ${celebrity.lastName},
+                        </a>
+                    </c:forEach><br>
+                </c:forEach>
+            </div>
+            <div class="col-6">
+                <form method="post" action="<c:url value="/controller?command=assign_celebrity_on_position"/>">
+                    <input type="hidden" name="movieId" value="${movie.id}"/>
+                    <label for="celebrityFirstNameInput" class="form-label mt-2"><fmt:message
+                            key="label.firstName"/></label>
+                    <input type="text"
+                           class="form-control"
+                           id="celebrityFirstNameInput"
+                           pattern="^[A-Z][a-z]{1,14}"
+                           title="<fmt:message key="validation.firstName"/>"
+                           name="firstName"
+                           required/>
+                    <label for="celebrityLastNameInput" class="form-label mt-2"><fmt:message
+                            key="label.lastName"/></label>
+                    <input type="text"
+                           class="form-control"
+                           id="celebrityLastNameInput"
+                           pattern="^[A-Z][a-z]{1,14}"
+                           title="<fmt:message key="validation.lastName"/>"
+                           name="lastName"
+                           required/>
+                    <ctg:positions/>
+                    <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
+                </form>
+            </div>
+        </div>
+    </c:if>
+
 </div>
 </body>
 </html>

@@ -15,7 +15,7 @@ public enum Parameter {
     USER_ID("userId"),
     REVIEW_ID("reviewId"),
     CELEBRITY_ID("celebrityId"),
-    POSITION_ID("celebrityId"),
+    POSITION_ID("positionId"),
     MOVIE_REVIEW_ID("movieReviewId"),
 
     MOVIE_REVIEW_TEXT("movieReviewText"),
@@ -26,6 +26,8 @@ public enum Parameter {
     NEW_STATUS("newStatus"),
     NEW_PASSWORD("newPassword"),
     CONFIRM_NEW_PASSWORD("confirmedNewPassword"),
+
+    CELEBRITY_POSITIONS("celebrityPositions"),
 
     MOVIE_NAME("movieName"),
     MOVIE_RELEASE_DATE("movieReleaseDate"),

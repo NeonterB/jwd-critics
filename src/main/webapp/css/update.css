@@ -14,3 +14,17 @@
     text-transform: uppercase;
     transition: transform 80ms ease-in;
 }
+
+.dark-link:link {
+    color: black;
+    text-decoration: none;
+}
+
+.dark-link:visited {
+    color: black;
+    text-decoration: none;
+}
+
+.dark-link:hover {
+    text-decoration: line-through;
+}

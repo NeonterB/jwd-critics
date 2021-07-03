@@ -14,6 +14,8 @@ public class SuccessMessage {
     public static final String CELEBRITY_UPDATED = "Celebrity was updated";
     public static final String CELEBRITY_CREATED = "Celebrity was created";
     public static final String CELEBRITY_DELETED = "Celebrity was deleted";
+    public static final String CELEBRITY_REMOVED_FROM_POSITION = "Celebrity was removed from position";
+    public static final String CELEBRITY_ASSIGNED_ON_POSITION = "Celebrity was assigned on position";
 
     public static final String MOVIE_REVIEW_CREATED = "Movie review has been created";
     public static final String MOVIE_REVIEW_DELETED = "Movie review has been deleted";

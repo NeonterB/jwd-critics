@@ -1,5 +1,6 @@
 package com.epam.jwd_critics.controller.command;
 
+import com.epam.jwd_critics.controller.command.impl.admin.AssignCelebrityOnPosition;
 import com.epam.jwd_critics.controller.command.impl.admin.CreateCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.CreateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.DeleteCelebrityCommand;
@@ -9,6 +10,7 @@ import com.epam.jwd_critics.controller.command.impl.admin.OpenCreateCelebrityPag
 import com.epam.jwd_critics.controller.command.impl.admin.OpenCreateMoviePageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateCelebrityPageCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.OpenUpdateMoviePageCommand;
+import com.epam.jwd_critics.controller.command.impl.admin.RemoveCelebrityFromPosition;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
@@ -78,6 +80,9 @@ public enum CommandInstance {
     OPEN_CREATE_CELEBRITY(new OpenCreateCelebrityPageCommand(), true, Role.ADMIN),
     CREATE_CELEBRITY(new CreateCelebrityCommand(), true, Role.ADMIN),
     DELETE_CELEBRITY(new DeleteCelebrityCommand(), true, Role.ADMIN),
+
+    REMOVE_CELEBRITY_FROM_POSITION(new RemoveCelebrityFromPosition(), true, Role.ADMIN),
+    ASSIGN_CELEBRITY_ON_POSITION(new AssignCelebrityOnPosition(), true, Role.ADMIN),
 
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),
