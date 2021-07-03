@@ -52,7 +52,7 @@ public class OpenUserProfilePageCommand implements Command {
                 List<MovieReview> reviews = reviewService.getMovieReviewsByUserId(userId, 0, reviewCount);
                 List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
                 for (MovieReview review : reviews) {
-                    Optional<Movie> movieOfReview = movieService.getEntityById(review.getUserId());
+                    Optional<Movie> movieOfReview = movieService.getEntityById(review.getMovieId());
                     movieOfReview.ifPresent(value -> reviewDTOS.add(new MovieReviewDTO(review, value)));
                 }
                 UserDTO userDTO = new UserDTO(user.get());
