@@ -15,7 +15,7 @@ public interface MovieService {
 
     Optional<Movie> getEntityById(int id) throws ServiceException;
 
-    List<Movie> getMoviesByName(String name) throws ServiceException;
+    List<Movie> getMoviesByNamePart(String namePart) throws ServiceException;
 
     void addGenre(int movieId, Genre genre) throws ServiceException;
 

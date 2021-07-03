@@ -41,7 +41,7 @@ public class MovieDao extends AbstractMovieDao {
     @Language("SQL")
     private static final String SELECT_MOVIE_BY_ID = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.id = ?";
     @Language("SQL")
-    private static final String SELECT_MOVIES_BY_NAME = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE M.name = ?";
+    private static final String SELECT_MOVIES_BY_NAME_PART = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id WHERE UPPER(M.name) LIKE ?";
     @Language("SQL")
     private static final String DELETE_MOVIE_BY_ID = "DELETE FROM jwd_critics.movie WHERE id = ?";
     @Language("SQL")
@@ -232,10 +232,11 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public List<Movie> getMoviesByName(String name) throws DaoException {
+    public List<Movie> getMoviesByNamePart(String namePart) throws DaoException {
         List<Movie> list = new LinkedList<>();
-        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME)) {
-            ps.setString(1, name);
+        namePart = namePart.toUpperCase();
+        try (PreparedStatement ps = getPreparedStatement(SELECT_MOVIES_BY_NAME_PART)) {
+            ps.setString(1, "%" + namePart + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 Movie movie = buildMovie(rs);
                 while (movie != null) {

@@ -92,11 +92,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getMoviesByName(String name) throws ServiceException {
+    public List<Movie> getMoviesByNamePart(String namePart) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         List<Movie> movies;
         try {
-            movies = movieDao.getMoviesByName(name);
+            movies = movieDao.getMoviesByNamePart(namePart);
             for (Movie movie : movies) {
                 updateInfo(movie);
             }
