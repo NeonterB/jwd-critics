@@ -64,10 +64,6 @@ public class UserDao extends AbstractUserDao {
     @Language("SQL")
     private static final String DELETE_RECOVERY_KEY = "DELETE FROM jwd_critics.user_recovery_key where user_id = ?";
 
-    public static UserDao getInstance() {
-        return UserDaoSingleton.INSTANCE;
-    }
-
     @Override
     public List<User> getAllBetween(int begin, int end) throws DaoException {
         List<User> list = new ArrayList<>();
@@ -308,9 +304,5 @@ public class UserDao extends AbstractUserDao {
                 .setRole(Role.valueOf(rs.getString(columnNames.get("role")).toUpperCase()))
                 .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
-    }
-    private static class UserDaoSingleton {
-
-        private static final UserDao INSTANCE = new UserDao();
     }
 }

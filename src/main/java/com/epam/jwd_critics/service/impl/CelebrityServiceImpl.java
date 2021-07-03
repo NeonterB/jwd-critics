@@ -21,8 +21,8 @@ import java.util.Optional;
 
 public class CelebrityServiceImpl implements CelebrityService {
     private static final Logger logger = LoggerFactory.getLogger(CelebrityServiceImpl.class);
-    private final AbstractMovieDao movieDao = MovieDao.getInstance();
-    private final AbstractCelebrityDao celebrityDao = CelebrityDao.getInstance();
+    private final AbstractMovieDao movieDao = new MovieDao();
+    private final AbstractCelebrityDao celebrityDao = new CelebrityDao();
 
     private CelebrityServiceImpl() {
 

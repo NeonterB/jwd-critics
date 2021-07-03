@@ -24,8 +24,8 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final AbstractMovieReviewDao reviewDao = MovieReviewDao.getInstance();
-    private final AbstractUserDao userDao = UserDao.getInstance();
+    private final AbstractMovieReviewDao reviewDao = new MovieReviewDao();
+    private final AbstractUserDao userDao = new UserDao();
     private final PasswordAuthenticator passwordAuthenticator = new PasswordAuthenticator();
 
     private UserServiceImpl() {

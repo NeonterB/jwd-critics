@@ -50,10 +50,6 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
     @Language("SQL")
     private static final String REVIEW_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.review WHERE user_id = ? and movie_id = ?)";
 
-    public static MovieReviewDao getInstance() {
-        return MovieReviewDaoSingleton.INSTANCE;
-    }
-
     @Override
     public List<MovieReview> getAllBetween(int begin, int end) throws DaoException {
         List<MovieReview> list = new ArrayList<>();
@@ -244,10 +240,5 @@ public class MovieReviewDao extends AbstractMovieReviewDao {
                 rs.getInt(columnNames.get("userId")),
                 rs.getInt(columnNames.get("movieId"))
         );
-    }
-
-    private static class MovieReviewDaoSingleton {
-
-        private static final MovieReviewDao INSTANCE = new MovieReviewDao();
     }
 }

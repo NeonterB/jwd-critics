@@ -24,9 +24,9 @@ import java.util.Optional;
 
 public class MovieServiceImpl implements MovieService {
     private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
-    private final AbstractMovieReviewDao reviewDao = MovieReviewDao.getInstance();
-    private final AbstractMovieDao movieDao = MovieDao.getInstance();
-    private final AbstractCelebrityDao celebrityDao = CelebrityDao.getInstance();
+    private final AbstractMovieReviewDao reviewDao = new MovieReviewDao();
+    private final AbstractMovieDao movieDao = new MovieDao();
+    private final AbstractCelebrityDao celebrityDao = new CelebrityDao();
 
     private MovieServiceImpl() {
 

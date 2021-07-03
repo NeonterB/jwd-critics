@@ -1,12 +1,12 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.DaoException;
-import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.codes.MovieReviewServiceCode;
 import com.epam.jwd_critics.dao.AbstractMovieReviewDao;
 import com.epam.jwd_critics.dao.EntityTransaction;
 import com.epam.jwd_critics.dao.MovieReviewDao;
 import com.epam.jwd_critics.entity.MovieReview;
+import com.epam.jwd_critics.exception.DaoException;
+import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.MovieReviewServiceCode;
 import com.epam.jwd_critics.service.MovieReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class MovieReviewServiceImpl implements MovieReviewService {
     private static final Logger logger = LoggerFactory.getLogger(MovieReviewServiceImpl.class);
-    private final AbstractMovieReviewDao movieReviewDao = MovieReviewDao.getInstance();
+    private final AbstractMovieReviewDao movieReviewDao = new MovieReviewDao();
 
     private MovieReviewServiceImpl() {
 

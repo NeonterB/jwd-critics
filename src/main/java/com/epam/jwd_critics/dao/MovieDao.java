@@ -59,10 +59,6 @@ public class MovieDao extends AbstractMovieDao {
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.movie WHERE id = ?)";
 
-    public static MovieDao getInstance() {
-        return MovieDaoSingleton.INSTANCE;
-    }
-
     @Override
     public List<Movie> getAllBetween(int begin, int end) throws DaoException {
         List<Movie> list = new ArrayList<>();
@@ -180,7 +176,7 @@ public class MovieDao extends AbstractMovieDao {
             try (ResultSet rs = ps.executeQuery()) {
                 List<Genre> genres = new ArrayList<>();
                 while (rs.next()) {
-                    genres.add(Genre.valueOf(rs.getString(1).toUpperCase()));
+                    genres.add(Genre.valueOf(rs.getString(1).toUpperCase().replaceAll("[/s-]", "_")));
                 }
                 return genres;
             }
@@ -281,9 +277,5 @@ public class MovieDao extends AbstractMovieDao {
                 .setAgeRestriction(AgeRestriction.valueOf(rs.getString(columnNames.get("ageRestriction")).toUpperCase()))
                 .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
-    }
-
-    private static class MovieDaoSingleton {
-        private static final MovieDao INSTANCE = new MovieDao();
     }
 }

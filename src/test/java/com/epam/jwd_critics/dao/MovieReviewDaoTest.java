@@ -1,6 +1,5 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Country;
 import com.epam.jwd_critics.entity.Movie;
@@ -8,6 +7,7 @@ import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.DaoException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,9 +40,9 @@ class MovieReviewDaoTest {
 
     @BeforeAll
     public static void initialize() {
-        movieReviewDao = MovieReviewDao.getInstance();
-        movieDao = MovieDao.getInstance();
-        userDao = UserDao.getInstance();
+        movieReviewDao = new MovieReviewDao();
+        movieDao = new MovieDao();
+        userDao = new UserDao();
         transaction = new EntityTransaction(movieReviewDao, movieDao, userDao);
         movie1 = Movie.newBuilder()
                 .setName("Test Movie 1")

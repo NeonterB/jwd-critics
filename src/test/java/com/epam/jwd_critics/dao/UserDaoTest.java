@@ -1,9 +1,9 @@
 package com.epam.jwd_critics.dao;
 
-import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.DaoException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +22,7 @@ class UserDaoTest {
 
     @BeforeAll
     public static void initialize() {
-        userDao = UserDao.getInstance();
+        userDao = new UserDao();
         transaction = new EntityTransaction(userDao);
         user = User.newBuilder()
                 .setFirstName("Test")

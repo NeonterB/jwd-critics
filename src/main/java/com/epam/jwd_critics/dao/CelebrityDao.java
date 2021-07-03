@@ -43,10 +43,6 @@ public class CelebrityDao extends AbstractCelebrityDao {
     @Language("SQL")
     private static final String ID_EXISTS = "SELECT EXISTS(SELECT id FROM jwd_critics.celebrity WHERE id = ?)";
 
-    public static CelebrityDao getInstance() {
-        return CelebrityDaoSingleton.INSTANCE;
-    }
-
     @Override
     public List<Celebrity> getAllBetween(int begin, int end) throws DaoException {
         List<Celebrity> list = new ArrayList<>();
@@ -187,9 +183,5 @@ public class CelebrityDao extends AbstractCelebrityDao {
                 .setLastName(rs.getString(columnNames.get("lastName")))
                 .setImagePath(rs.getString(columnNames.get("imagePath")))
                 .build();
-    }
-
-    private static class CelebrityDaoSingleton {
-        private static final CelebrityDao INSTANCE = new CelebrityDao();
     }
 }
