@@ -13,6 +13,7 @@ import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.Position;
 import com.epam.jwd_critics.exception.DaoException;
 import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.CelebrityServiceCode;
 import com.epam.jwd_critics.exception.codes.MovieServiceCode;
 import com.epam.jwd_critics.service.MovieService;
 import org.slf4j.Logger;
@@ -149,7 +150,7 @@ public class MovieServiceImpl implements MovieService {
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
-            movieDao.addStaffAndPosition(movieId, celebrityId, position);
+            movieDao.addCelebrityAndPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was added to movie with id {} on position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {
@@ -162,11 +163,13 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void removeCelebrityAndPosition(int movieId, int celebrityId, Position position) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(movieDao);
+        EntityTransaction transaction = new EntityTransaction(movieDao, celebrityDao);
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
-            movieDao.removeStaffAndPosition(movieId, celebrityId, position);
+            if (!celebrityDao.idExists(celebrityId))
+                throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
+            movieDao.removeCelebrityAndPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was removed from movie with id {} from position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {
