@@ -150,6 +150,8 @@ public class MovieServiceImpl implements MovieService {
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
+            if (!celebrityDao.idExists(celebrityId))
+                throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
             movieDao.addCelebrityAndPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was added to movie with id {} on position {}", celebrityId, movieId, position);
             transaction.commit();
