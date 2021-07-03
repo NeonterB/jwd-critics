@@ -1,8 +1,7 @@
 package com.epam.jwd_critics.entity;
 
-import com.epam.jwd_critics.exception.UnknownEntityException;
-
 import java.util.Arrays;
+import java.util.Optional;
 
 @Column(name = "position")
 public enum Position implements BaseEntity {
@@ -16,11 +15,10 @@ public enum Position implements BaseEntity {
         this.id = id;
     }
 
-    public static Position resolvePositionById(int id) {
+    public static Optional<Position> resolvePositionById(int id) {
         return Arrays.stream(Position.values())
                 .filter(rank -> rank.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new UnknownEntityException("AgeRestriction", id));
+                .findFirst();
     }
 
     @Override
