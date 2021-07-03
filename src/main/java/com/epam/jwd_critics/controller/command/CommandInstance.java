@@ -15,6 +15,7 @@ import com.epam.jwd_critics.controller.command.impl.admin.UpdateCelebrityCommand
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateMovieCommand;
 import com.epam.jwd_critics.controller.command.impl.admin.UpdateUserStatusCommand;
 import com.epam.jwd_critics.controller.command.impl.common.ChangeLocaleCommand;
+import com.epam.jwd_critics.controller.command.impl.common.FindMoviesCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllCelebritiesPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
 import com.epam.jwd_critics.controller.command.impl.common.OpenCelebrityProfilePageCommand;
@@ -83,6 +84,8 @@ public enum CommandInstance {
 
     REMOVE_CELEBRITY_FROM_POSITION(new RemoveCelebrityFromPosition(), true, Role.ADMIN),
     ASSIGN_CELEBRITY_ON_POSITION(new AssignCelebrityOnPosition(), true, Role.ADMIN),
+
+    FIND_MOVIES(new FindMoviesCommand(), Role.values()),
 
     OPEN_MOVIE_REVIEWS(new OpenMovieReviewsPageCommand(), Role.values()),
     CREATE_MOVIE_REVIEW(new CreateMovieReviewCommand(), true, Role.USER, Role.ADMIN),

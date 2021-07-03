@@ -25,6 +25,7 @@ public enum Attribute {
     CELEBRITY_COUNT("celebrityCount"),
 
     MOVIE("movie"),
+    FOUND_MOVIES("foundMovies"),
     REVIEWS_ON_MOVIE_PAGE("reviewsOnMoviePage"),
     USER_REVIEW("userReview"),
 
