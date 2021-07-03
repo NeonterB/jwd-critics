@@ -13,6 +13,7 @@ public class EntityTransaction {
     private final AbstractBaseDao<?, ? extends BaseEntity>[] daos;
     private static final Logger logger = LoggerFactory.getLogger(EntityTransaction.class);
 
+    @SafeVarargs
     public EntityTransaction(AbstractBaseDao<?, ? extends BaseEntity>... daos) {
         this.daos = daos;
         try {

@@ -10,21 +10,21 @@ public abstract class AbstractUserDao extends AbstractBaseDao<Integer, User> {
 
     public abstract Optional<User> getEntityByEmail(String email) throws DaoException;
 
-    public abstract boolean updatePassword(int id, String password) throws DaoException;
+    public abstract boolean updatePassword(Integer id, String password) throws DaoException;
 
     public abstract boolean loginExists(String login) throws DaoException;
 
     public abstract boolean emailExists(String email) throws DaoException;
 
-    public abstract boolean insertActivationKey(int userId, String key) throws DaoException;
+    public abstract boolean insertActivationKey(Integer userId, String key) throws DaoException;
 
-    public abstract Optional<String> selectActivationKey(int userId) throws DaoException;
+    public abstract Optional<String> selectActivationKey(Integer userId) throws DaoException;
 
-    public abstract void deleteActivationKey(int userId) throws DaoException;
+    public abstract void deleteActivationKey(Integer userId) throws DaoException;
 
-    public abstract boolean insertRecoveryKey(int userId, String key) throws DaoException;
+    public abstract boolean insertRecoveryKey(Integer userId, String key) throws DaoException;
 
-    public abstract Optional<String> selectRecoveryKey(int userId) throws DaoException;
+    public abstract Optional<String> selectRecoveryKey(Integer userId) throws DaoException;
 
-    public abstract void deleteRecoveryKey(int userId) throws DaoException;
+    public abstract void deleteRecoveryKey(Integer userId) throws DaoException;
 }

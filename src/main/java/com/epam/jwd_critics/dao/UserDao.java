@@ -176,7 +176,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean updatePassword(int id, String password) throws DaoException {
+    public boolean updatePassword(Integer id, String password) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
             ps.setString(1, password);
             ps.setInt(2, id);
@@ -197,7 +197,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean insertActivationKey(int userId, String key) throws DaoException {
+    public boolean insertActivationKey(Integer userId, String key) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(INSERT_ACTIVATION_KEY)) {
             ps.setInt(1, userId);
             ps.setString(2, key);
@@ -208,12 +208,12 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public Optional<String> selectActivationKey(int userId) throws DaoException {
+    public Optional<String> selectActivationKey(Integer userId) throws DaoException {
         return selectKey(userId, SELECT_ACTIVATION_KEY);
     }
 
     @Override
-    public void deleteActivationKey(int userId) throws DaoException {
+    public void deleteActivationKey(Integer userId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_ACTIVATION_KEY)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
@@ -223,7 +223,7 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean insertRecoveryKey(int userId, String key) throws DaoException {
+    public boolean insertRecoveryKey(Integer userId, String key) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(INSERT_RECOVERY_KEY)) {
             ps.setInt(1, userId);
             ps.setString(2, key);
@@ -234,12 +234,12 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public Optional<String> selectRecoveryKey(int userId) throws DaoException {
+    public Optional<String> selectRecoveryKey(Integer userId) throws DaoException {
         return selectKey(userId, SELECT_RECOVERY_KEY);
     }
 
     @Override
-    public void deleteRecoveryKey(int userId) throws DaoException {
+    public void deleteRecoveryKey(Integer userId) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_RECOVERY_KEY)) {
             ps.setInt(1, userId);
             ps.executeUpdate();

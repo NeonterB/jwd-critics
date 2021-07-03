@@ -57,6 +57,6 @@ public class CreateCelebrityCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.REDIRECT);
+        return new CommandResponse(ServletDestination.CELEBRITY_PROFILE, TransferType.REDIRECT);
     }
 }
