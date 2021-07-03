@@ -30,6 +30,11 @@
         <body-content>empty</body-content>
     </tag>
     <tag>
+        <name>positions</name>
+        <tag-class>com.epam.jwd_critics.tag.PositionsTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
         <name>ageRestrictions</name>
         <tag-class>com.epam.jwd_critics.tag.AgeRestrictionsTag</tag-class>
         <body-content>empty</body-content>
