@@ -19,7 +19,7 @@ import java.util.List;
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
 public class ShowAllUsersTag extends SimpleTagSupport {
-    public static final int USERS_PER_PAGE = 2;
+    public static final int USERS_PER_PAGE = 12;
     private static final int USERS_PER_ROW = 6;
     private PageContext pageContext;
 

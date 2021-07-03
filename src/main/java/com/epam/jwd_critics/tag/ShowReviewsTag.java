@@ -20,7 +20,7 @@ import java.util.List;
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
 public class ShowReviewsTag extends SimpleTagSupport {
-    public static final int REVIEWS_PER_PAGE = 2;
+    public static final int REVIEWS_PER_PAGE = 5;
     PageContext pageContext;
 
     @Override

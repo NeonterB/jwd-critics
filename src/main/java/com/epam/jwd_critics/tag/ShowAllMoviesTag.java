@@ -20,7 +20,7 @@ import java.util.List;
 import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
 public class ShowAllMoviesTag extends SimpleTagSupport {
-    public static final int MOVIES_PER_PAGE = 1;
+    public static final int MOVIES_PER_PAGE = 8;
     private static final int MOVIES_PER_ROW = 4;
     private PageContext pageContext;
 
