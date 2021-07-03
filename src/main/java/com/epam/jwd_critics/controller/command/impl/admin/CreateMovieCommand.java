@@ -41,14 +41,14 @@ public class CreateMovieCommand implements Command {
         String country = req.getParameter(Parameter.MOVIE_COUNTRY);
         String ageRestriction = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
         String summary = req.getParameter(Parameter.MOVIE_SUMMARY);
-        String[] genreIds = req.getParameters(Parameter.GENRES);
+        String[] genreIds = req.getParameters(Parameter.MOVIE_GENRES);
         if (name == null || releaseDate == null || runtime == null || country == null || ageRestriction == null || summary == null || genreIds == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
             return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
         }
 
         MovieValidator movieValidator = new MovieValidator();
-        Set<ConstraintViolation> violations = movieValidator.validateMovieData(name, releaseDate, runtime, country, ageRestriction, summary, genreIds);
+        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, country, ageRestriction, summary, genreIds);
 
         if (violations.isEmpty()) {
             try {
@@ -68,7 +68,7 @@ public class CreateMovieCommand implements Command {
                         .setImagePath(newPicture)
                         .setGenres(genres)
                         .build();
-                movieService.create(movie);
+                movie = movieService.create(movie);
 
                 req.setSessionAttribute(Attribute.MOVIE, movie);
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_CREATED);
