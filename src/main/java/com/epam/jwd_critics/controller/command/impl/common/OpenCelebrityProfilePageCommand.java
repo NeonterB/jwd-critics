@@ -31,7 +31,7 @@ public class OpenCelebrityProfilePageCommand implements Command {
         try {
             Optional<Celebrity> celebrity = celebrityService.getEntityById(celebrityId);
             if (celebrity.isPresent()) {
-                req.setSessionAttribute(Attribute.CELEBRITY_PROFILE, celebrity.get());
+                req.setSessionAttribute(Attribute.CELEBRITY, celebrity.get());
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.CELEBRITY_DOES_NOT_EXIST);
                 resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
