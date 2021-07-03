@@ -50,4 +50,14 @@ public class CelebrityValidator {
         validateLastName(lastName).ifPresent(violations::add);
         return violations;
     }
+
+    public Set<ConstraintViolation> validateData(String firstName, String lastName, String[] positionIds) {
+        Set<ConstraintViolation> violations = new HashSet<>();
+        validateFirstName(firstName).ifPresent(violations::add);
+        validateLastName(lastName).ifPresent(violations::add);
+        for (String positionId : positionIds) {
+            validatePositionId(positionId).ifPresent(violations::add);
+        }
+        return violations;
+    }
 }
