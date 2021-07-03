@@ -32,7 +32,7 @@ public enum Parameter {
     MOVIE_COUNTRY("movieCountry"),
     MOVIE_AGE_RESTRICTION("movieAgeRestriction"),
     MOVIE_SUMMARY("movieSummary"),
-    GENRES("movieGenres"),
+    MOVIE_GENRES("movieGenres"),
 
     ACTIVATION_KEY("activationKey"),
     RECOVERY_KEY("recoveryKey"),
