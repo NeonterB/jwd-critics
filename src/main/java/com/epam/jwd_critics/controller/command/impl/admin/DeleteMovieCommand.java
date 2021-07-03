@@ -5,8 +5,7 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
-import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.TransferType;
+import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.message.ErrorMessage;
@@ -31,6 +30,6 @@ public class DeleteMovieCommand implements Command {
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
-        return new CommandResponse(ServletDestination.ALL_MOVIES, TransferType.REDIRECT);
+        return new OpenAllMoviesPageCommand().execute(req);
     }
 }
