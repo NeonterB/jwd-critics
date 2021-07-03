@@ -21,7 +21,7 @@ public interface MovieService {
 
     void removeGenre(int movieId, Genre genre) throws ServiceException;
 
-    void addCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException;
+    void assignCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 
     void removeCelebrityFromPosition(int movieId, int celebrityId, Position position) throws ServiceException;
 

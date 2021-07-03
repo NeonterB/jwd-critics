@@ -97,9 +97,9 @@ class MovieDaoTest {
     @Test
     public void testStaff() {
         try {
-            Assertions.assertTrue(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertTrue(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.DIRECTOR));
-            Assertions.assertFalse(movieDao.addCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+            Assertions.assertTrue(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.DIRECTOR));
+            Assertions.assertFalse(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
             Assertions.assertTrue(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
             Assertions.assertFalse(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
         } catch (DaoException e) {

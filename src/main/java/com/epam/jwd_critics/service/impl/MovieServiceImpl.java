@@ -145,14 +145,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException {
+    public void assignCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(movieDao);
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);
             if (!celebrityDao.idExists(celebrityId))
                 throw new ServiceException(CelebrityServiceCode.CELEBRITY_DOES_NOT_EXIST);
-            movieDao.addCelebrityOnPosition(movieId, celebrityId, position);
+            movieDao.assignCelebrityOnPosition(movieId, celebrityId, position);
             logger.info("Celebrity with id {} was added to movie with id {} on position {}", celebrityId, movieId, position);
             transaction.commit();
         } catch (DaoException e) {

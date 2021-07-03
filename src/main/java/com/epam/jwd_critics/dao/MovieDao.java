@@ -208,7 +208,7 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public boolean addCelebrityOnPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
+    public boolean assignCelebrityOnPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(ADD_STAFF)) {
             ps.setInt(1, movieId);
             ps.setInt(2, celebrityId);
