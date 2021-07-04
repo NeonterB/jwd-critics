@@ -7,7 +7,7 @@ import java.util.Optional;
 public enum Genre implements BaseEntity {
     ACTION(1),
     ADVENTURE(2),
-    CARTOON(3),
+    ANIMATION(3),
     COMEDY(4),
     CRIME(5),
     DOCUMENTARY(6),
@@ -16,7 +16,9 @@ public enum Genre implements BaseEntity {
     HORROR(9),
     THRILLER(10),
     ROMANCE(11),
-    SCI_FI(12);
+    SCI_FI(12),
+    HISTORICAL(13),
+    WESTERN(14);
     private final int id;
 
     Genre(int id) {
