@@ -34,26 +34,27 @@ public class UpdateMovieCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
         new UploadPictureCommand().execute(req);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String name = req.getParameter(Parameter.MOVIE_NAME);
         String releaseDate = req.getParameter(Parameter.MOVIE_RELEASE_DATE);
         String runtime = req.getParameter(Parameter.MOVIE_RUNTIME);
-        String country = req.getParameter(Parameter.MOVIE_COUNTRY);
+        String countryIdStr = req.getParameter(Parameter.MOVIE_COUNTRY);
         String ageRestrictionIdStr = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
         String summary = req.getParameter(Parameter.MOVIE_SUMMARY);
         String[] genreIds = req.getParameters(Parameter.MOVIE_GENRES);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
-        if (name == null || releaseDate == null || runtime == null || country == null || ageRestrictionIdStr == null || summary == null || genreIds == null) {
+        if (name == null || releaseDate == null || runtime == null || countryIdStr == null || ageRestrictionIdStr == null || summary == null || genreIds == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+            return resp;
         }
         if (movieIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         }
 
         MovieValidator movieValidator = new MovieValidator();
-        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, country, ageRestrictionIdStr, summary, genreIds);
+        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, countryIdStr, ageRestrictionIdStr, summary, genreIds);
 
         if (violations.isEmpty()) {
             try {
@@ -66,7 +67,7 @@ public class UpdateMovieCommand implements Command {
                     Duration duration = Duration.ofHours(Long.parseLong(split[0])).plusMinutes(Long.parseLong(split[1]));
                     movieToUpdate.get().setRuntime(duration);
 
-                    movieToUpdate.get().setCountry(Country.valueOf(country.toUpperCase()));
+                    movieToUpdate.get().setCountry(Country.resolveCountryById(Integer.parseInt(countryIdStr)).get());
                     movieToUpdate.get().setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(Integer.parseInt(ageRestrictionIdStr)).get());
                     movieToUpdate.get().setSummary(summary);
                     if (newPicture != null && !newPicture.equals("")) {
@@ -90,6 +91,7 @@ public class UpdateMovieCommand implements Command {
                     movieToUpdate.get().setGenres(newGenres);
                     req.setSessionAttribute(Attribute.MOVIE, movieToUpdate.get());
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_UPDATED);
+                    resp.setDestination(ServletDestination.MOVIE);
                 } else {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
                 }
@@ -101,6 +103,6 @@ public class UpdateMovieCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+        return resp;
     }
 }

@@ -29,10 +29,6 @@
 <head>
     <title>Update Movie</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/update.css">
-    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
-          rel="stylesheet" type="text/css"/>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
     <script src="${pageContext.request.contextPath}/scripts/html-duration-picker.min.js"></script>
 </head>
 <c:import url="/pages/componets/header.jsp"/>
@@ -84,14 +80,16 @@
                             <div class="col">
                                 <label for="countryInput" class="form-label mt-2"><fmt:message
                                         key="label.country"/></label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="countryInput"
-                                       pattern="[A-Za-z]{3,56}"
-                                       title="<fmt:message key="validation.country"/>"
-                                       value="${movie.country}"
-                                       name="movieCountry"
-                                       required/>
+                                <select id="countryInput" name="movieCountryId" class="form-select">
+                                    <ctg:countries/>
+                                </select>
+                                <%--                                <input type="text"--%>
+                                <%--                                       class="form-control"--%>
+                                <%--                                       pattern="[A-Za-z]{3,56}"--%>
+                                <%--                                       title="<fmt:message key="validation.country"/>"--%>
+                                <%--                                       value="${movie.country}"--%>
+                                <%--                                       name="movieCountry"--%>
+                                <%--                                       required/>--%>
                             </div>
                         </div>
 
@@ -183,6 +181,15 @@
     </c:if>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 </body>
 </html>
 <c:remove var="newImage"/>

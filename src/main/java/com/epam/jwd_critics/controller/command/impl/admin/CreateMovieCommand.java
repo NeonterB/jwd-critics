@@ -34,21 +34,22 @@ public class CreateMovieCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         new UploadPictureCommand().execute(req);
+        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String name = req.getParameter(Parameter.MOVIE_NAME);
         String releaseDate = req.getParameter(Parameter.MOVIE_RELEASE_DATE);
         String runtime = req.getParameter(Parameter.MOVIE_RUNTIME);
-        String country = req.getParameter(Parameter.MOVIE_COUNTRY);
-        String ageRestriction = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
+        String countryIdStr = req.getParameter(Parameter.MOVIE_COUNTRY);
+        String ageRestrictionIdStr = req.getParameter(Parameter.MOVIE_AGE_RESTRICTION);
         String summary = req.getParameter(Parameter.MOVIE_SUMMARY);
         String[] genreIds = req.getParameters(Parameter.MOVIE_GENRES);
-        if (name == null || releaseDate == null || runtime == null || country == null || ageRestriction == null || summary == null || genreIds == null) {
+        if (name == null || releaseDate == null || runtime == null || countryIdStr == null || ageRestrictionIdStr == null || summary == null || genreIds == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
+            return resp;
         }
 
         MovieValidator movieValidator = new MovieValidator();
-        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, country, ageRestriction, summary, genreIds);
+        Set<ConstraintViolation> violations = movieValidator.validateData(name, releaseDate, runtime, countryIdStr, ageRestrictionIdStr, summary, genreIds);
 
         if (violations.isEmpty()) {
             try {
@@ -62,8 +63,8 @@ public class CreateMovieCommand implements Command {
                 Movie movie = Movie.newBuilder().setName(name)
                         .setReleaseDate(LocalDate.parse(releaseDate))
                         .setRuntime(duration)
-                        .setCountry(Country.valueOf(country.toUpperCase()))
-                        .setAgeRestriction(AgeRestriction.valueOf(ageRestriction.toUpperCase().replace("-", "_")))
+                        .setCountry(Country.resolveCountryById(Integer.parseInt(countryIdStr)).get())
+                        .setAgeRestriction(AgeRestriction.resolveAgeRestrictionById(Integer.parseInt(ageRestrictionIdStr)).get())
                         .setSummary(summary)
                         .setImagePath(newPicture)
                         .setGenres(genres)
@@ -72,6 +73,7 @@ public class CreateMovieCommand implements Command {
 
                 req.setSessionAttribute(Attribute.MOVIE, movie);
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_CREATED);
+                resp.setDestination(ServletDestination.MOVIE);
             } catch (ServiceException e) {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
             }
@@ -80,6 +82,6 @@ public class CreateMovieCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+        return resp;
     }
 }

@@ -40,6 +40,11 @@
         <body-content>empty</body-content>
     </tag>
     <tag>
+        <name>countries</name>
+        <tag-class>com.epam.jwd_critics.tag.CountriesTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
         <name>all_celebrities</name>
         <tag-class>com.epam.jwd_critics.tag.ShowAllCelebritiesTag</tag-class>
         <body-content>empty</body-content>

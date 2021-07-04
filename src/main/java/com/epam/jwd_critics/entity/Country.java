@@ -21,8 +21,8 @@ public enum Country implements BaseEntity {
         this.id = id;
     }
 
-    public static Optional<Country> resolveCountryByName(String name) {
-        return Arrays.stream(Country.values()).filter(c -> c.name().equalsIgnoreCase(name)).findFirst();
+    public static Optional<Country> resolveCountryById(int id) {
+        return Arrays.stream(Country.values()).filter(c -> c.getId() == id).findFirst();
     }
 
     @Override
