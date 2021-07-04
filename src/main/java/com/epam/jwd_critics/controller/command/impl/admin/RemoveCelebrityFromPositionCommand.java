@@ -40,7 +40,7 @@ public class RemoveCelebrityFromPositionCommand implements Command {
                         Integer.parseInt(celebrityIdStr),
                         Position.resolvePositionById(Integer.parseInt(positionIdStr)).get()
                 );
-                req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.CELEBRITY_ASSIGNED_ON_POSITION);
+                req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.CELEBRITY_REMOVED_FROM_POSITION);
                 new OpenUpdateMoviePageCommand().execute(req);
             } catch (ServiceException e) {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
