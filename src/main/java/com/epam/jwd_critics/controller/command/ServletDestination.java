@@ -8,6 +8,7 @@ public enum ServletDestination implements Destination {
     ALL_MOVIES("/pages/common/all_movies.jsp"),
     ALL_CELEBRITIES("/pages/common/all_celebrities.jsp"),
     ALL_USERS("/pages/admin/all_users.jsp"),
+    FOUND_MOVIES("/pages/common/found_movies.jsp"),
     USER_PROFILE("/pages/common/user_profile.jsp"),
     CELEBRITY_PROFILE("/pages/common/celebrity_profile.jsp"),
     UPDATE_USER("/pages/user/update_user.jsp"),
