@@ -17,13 +17,12 @@ public class MovieValidator {
             + "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$";
     private static final String RUNTIME_REGEX = "^[0-9]+:[0-5][0-9]$";
     private static final String COUNTRY_REGEX = "^[A-Za-z]{3,56}$";
-    private static final String AGE_RESTRICTION_REGEX = "^[\\w_-]{1,10}$";
 
     private static final String NAME_MESSAGE = "Movie name must be 1-150 characters. Can contain letters, numbers and special characters .,?!@'#$:;*+-=%";
     private static final String RELEASE_DATE_MESSAGE = "Movie release date must be of pattern mm-dd-yyyy";
     private static final String RUNTIME_MESSAGE = "Movie runtime must be of pattern hh:mm";
-    private static final String COUNTRY_DOES_NOT_EXIST_MESSAGE = "Country %s does no exist";
-    private static final String COUNTRY_MESSAGE = "Country name must be 3-56 characters. Country name must be a word";
+    private static final String COUNTRY_DOES_NOT_EXIST_MESSAGE = "Country with id %s does no exist";
+    private static final String COUNTRY_MESSAGE = "CountryId must be and integer";
     private static final String AGE_RESTRICTION_DOES_NOT_EXIST_MESSAGE = "Age restriction with id %s does not exist";
     private static final String AGE_RESTRICTION_MESSAGE = "Age restriction id must be an integer";
     private static final String SUMMARY_MESSAGE = "Summary must be 100-10000 characters";
@@ -54,15 +53,16 @@ public class MovieValidator {
         }
     }
 
-    public Optional<ConstraintViolation> validateCountry(String country) {
-        if (country.matches(COUNTRY_REGEX)) {
-            try {
-                Country.valueOf(country.toUpperCase());
+    public Optional<ConstraintViolation> validateCountryId(String countryIdStr) {
+        try {
+            int countryId = Integer.parseInt(countryIdStr);
+            Optional<Country> country = Country.resolveCountryById(countryId);
+            if (country.isPresent())
                 return Optional.empty();
-            } catch (IllegalArgumentException e) {
-                return Optional.of(new ConstraintViolation(Parameter.MOVIE_COUNTRY, String.format(COUNTRY_DOES_NOT_EXIST_MESSAGE, country)));
-            }
-        } else {
+            else
+                return Optional.of(new ConstraintViolation(Parameter.MOVIE_COUNTRY, String.format(COUNTRY_DOES_NOT_EXIST_MESSAGE, countryIdStr)));
+
+        } catch (NumberFormatException e) {
             return Optional.of(new ConstraintViolation(Parameter.MOVIE_COUNTRY, COUNTRY_MESSAGE));
         }
     }
@@ -103,13 +103,13 @@ public class MovieValidator {
         }
     }
 
-    public Set<ConstraintViolation> validateData(String name, String releaseDate, String runtime, String country, String ageRestriction, String summary, String[] genreIds) {
+    public Set<ConstraintViolation> validateData(String name, String releaseDate, String runtime, String countryId, String ageRestrictionId, String summary, String[] genreIds) {
         Set<ConstraintViolation> violations = new HashSet<>();
         validateName(name).ifPresent(violations::add);
         validateReleaseDate(releaseDate).ifPresent(violations::add);
         validateRuntime(runtime).ifPresent(violations::add);
-        validateCountry(country).ifPresent(violations::add);
-        validateAgeRestrictionId(ageRestriction).ifPresent(violations::add);
+        validateCountryId(countryId).ifPresent(violations::add);
+        validateAgeRestrictionId(ageRestrictionId).ifPresent(violations::add);
         validateSummary(summary).ifPresent(violations::add);
         for (String genreId : genreIds) {
             validateGenreId(genreId).ifPresent(violations::add);
