@@ -12,6 +12,6 @@ public class OpenCreateMoviePageCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         req.removeSessionAttribute(Attribute.MOVIE);
-        return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+        return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.FORWARD);
     }
 }

@@ -35,6 +35,7 @@ public class OpenMoviePageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         int movieId;
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         if (movieIdStr == null) {
@@ -66,14 +67,13 @@ public class OpenMoviePageCommand implements Command {
                         req.removeSessionAttribute(Attribute.USER_REVIEW);
                     }
                 }
+                resp = new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
-                return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
-        return new CommandResponse(ServletDestination.MOVIE, TransferType.FORWARD);
+        return resp;
     }
 }

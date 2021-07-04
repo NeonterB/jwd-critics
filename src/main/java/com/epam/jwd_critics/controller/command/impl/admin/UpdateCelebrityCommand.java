@@ -7,7 +7,6 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.command.impl.common.OpenCelebrityProfilePageCommand;
 import com.epam.jwd_critics.controller.command.impl.user.UploadPictureCommand;
 import com.epam.jwd_critics.entity.Celebrity;
 import com.epam.jwd_critics.exception.CommandException;
@@ -28,6 +27,7 @@ public class UpdateCelebrityCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.REDIRECT);
         new UploadPictureCommand().execute(req);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
@@ -35,7 +35,7 @@ public class UpdateCelebrityCommand implements Command {
         String celebrityIdStr = req.getParameter(Parameter.CELEBRITY_ID);
         if (firstName == null || lastName == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.REDIRECT);
+            return resp;
         }
         if (celebrityIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -54,8 +54,9 @@ public class UpdateCelebrityCommand implements Command {
                         celebrityToUpdate.get().setImagePath(newPicture);
                     }
                     celebrityService.update(celebrityToUpdate.get());
+                    req.setSessionAttribute(Attribute.CELEBRITY, celebrityToUpdate.get());
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.CELEBRITY_UPDATED);
-                    new OpenCelebrityProfilePageCommand().execute(req);
+                    resp.setDestination(ServletDestination.CELEBRITY_PROFILE);
                 } else {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.CELEBRITY_DOES_NOT_EXIST);
                 }
@@ -67,6 +68,6 @@ public class UpdateCelebrityCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.CELEBRITY_PROFILE, TransferType.REDIRECT);
+        return resp;
     }
 }

@@ -5,6 +5,8 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
+import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenAllMoviesPageCommand;
 import com.epam.jwd_critics.exception.CommandException;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -18,6 +20,7 @@ public class DeleteMovieCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = new CommandResponse(ServletDestination.MOVIE, TransferType.REDIRECT);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         if (movieIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -27,9 +30,11 @@ public class DeleteMovieCommand implements Command {
             req.removeSessionAttribute(Attribute.MOVIE);
             req.removeSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE);
             req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_DELETED);
+            new OpenAllMoviesPageCommand().execute(req);
+            resp.setDestination(ServletDestination.ALL_MOVIES);
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
-        return new OpenAllMoviesPageCommand().execute(req);
+        return resp;
     }
 }

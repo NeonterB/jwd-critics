@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AssignCelebrityOnPosition implements Command {
+public class AssignCelebrityOnPositionCommand implements Command {
     private final MovieService movieService = MovieServiceImpl.getInstance();
     private final CelebrityService celebrityService = CelebrityServiceImpl.getInstance();
 
@@ -34,9 +34,12 @@ public class AssignCelebrityOnPosition implements Command {
         String celebrityLastName = req.getParameter(Parameter.LAST_NAME);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         String[] positionIds = req.getParameters(Parameter.CELEBRITY_POSITIONS);
-        if (celebrityFirstName == null || celebrityLastName == null || movieIdStr == null || positionIds == null) {
+        if (celebrityFirstName == null || celebrityLastName == null || positionIds == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
             return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+        }
+        if (movieIdStr == null) {
+            throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         }
         CelebrityValidator validator = new CelebrityValidator();
         Set<ConstraintViolation> violations = validator.validateData(celebrityFirstName, celebrityLastName, positionIds);
@@ -52,6 +55,7 @@ public class AssignCelebrityOnPosition implements Command {
                         );
                     }
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.CELEBRITY_REMOVED_FROM_POSITION);
+                    new OpenUpdateMoviePageCommand().execute(req);
                 } else {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.CELEBRITY_DOES_NOT_EXIST);
                 }
@@ -65,6 +69,6 @@ public class AssignCelebrityOnPosition implements Command {
                     .collect(Collectors.toList()));
         }
 
-        return new OpenUpdateMoviePageCommand().execute(req);
+        return new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
     }
 }

@@ -6,7 +6,6 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
-import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
@@ -53,6 +52,6 @@ public class ActivateUserCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        return new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
+        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
     }
 }

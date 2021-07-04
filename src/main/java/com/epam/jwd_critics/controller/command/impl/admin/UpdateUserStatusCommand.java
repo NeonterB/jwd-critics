@@ -25,6 +25,7 @@ public class UpdateUserStatusCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         String userToUpdateId = req.getParameter(Parameter.USER_ID);
         String newStatusStr = req.getParameter(Parameter.NEW_STATUS);
         if (newStatusStr == null || userToUpdateId == null) {
@@ -47,6 +48,14 @@ public class UpdateUserStatusCommand implements Command {
                     message = SuccessMessage.USER_UNBANNED;
                 }
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, message);
+                Destination prevPage = resp.getDestination();
+                if (prevPage != ServletDestination.MAIN) {
+                    if (prevPage.getPath().equals(ServletDestination.USER_PROFILE.getPath())) {
+                        new OpenUserProfilePageCommand().execute(req);
+                    } else if (prevPage.getPath().equals(ServletDestination.ALL_USERS.getPath())) {
+                        new OpenAllUsersPageCommand().execute(req);
+                    }
+                }
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
             }
@@ -54,15 +63,6 @@ public class UpdateUserStatusCommand implements Command {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
 
-        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
-        Destination prevPage = resp.getDestination();
-        if (prevPage != ServletDestination.MAIN) {
-            if (prevPage.getPath().equals(ServletDestination.USER_PROFILE.getPath())) {
-                new OpenUserProfilePageCommand().execute(req);
-            } else if (prevPage.getPath().equals(ServletDestination.ALL_USERS.getPath())) {
-                new OpenAllUsersPageCommand().execute(req);
-            }
-        }
         return resp;
     }
 }

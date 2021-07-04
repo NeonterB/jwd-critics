@@ -209,26 +209,12 @@ public class MovieDao extends AbstractMovieDao {
 
     @Override
     public boolean assignCelebrityOnPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(ADD_STAFF)) {
-            ps.setInt(1, movieId);
-            ps.setInt(2, celebrityId);
-            ps.setInt(3, position.getId());
-            return ps.executeUpdate() != 0;
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
+        return celebrityAndPositionAction(movieId, celebrityId, position, ADD_STAFF);
     }
 
     @Override
     public boolean removeCelebrityFromPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
-        try (PreparedStatement ps = getPreparedStatement(DELETE_STAFF)) {
-            ps.setInt(1, movieId);
-            ps.setInt(2, celebrityId);
-            ps.setInt(3, position.getId());
-            return ps.executeUpdate() != 0;
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
+        return celebrityAndPositionAction(movieId, celebrityId, position, DELETE_STAFF);
     }
 
     @Override
@@ -248,6 +234,17 @@ public class MovieDao extends AbstractMovieDao {
             throw new DaoException(e);
         }
         return list;
+    }
+
+    private boolean celebrityAndPositionAction(Integer movieId, Integer celebrityId, Position position, String query) throws DaoException {
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ps.setInt(1, movieId);
+            ps.setInt(2, celebrityId);
+            ps.setInt(3, position.getId());
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     private Movie buildMovie(ResultSet rs) throws SQLException {

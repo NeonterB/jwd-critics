@@ -21,24 +21,22 @@ public class OpenCelebrityProfilePageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = new CommandResponse(ServletDestination.CELEBRITY_PROFILE, TransferType.FORWARD);
-        int celebrityId;
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         String celebrityIdStr = req.getParameter(Parameter.CELEBRITY_ID);
         if (celebrityIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
         }
-        celebrityId = Integer.parseInt(celebrityIdStr);
+        int celebrityId = Integer.parseInt(celebrityIdStr);
         try {
             Optional<Celebrity> celebrity = celebrityService.getEntityById(celebrityId);
             if (celebrity.isPresent()) {
                 req.setSessionAttribute(Attribute.CELEBRITY, celebrity.get());
+                resp = new CommandResponse(ServletDestination.CELEBRITY_PROFILE, TransferType.FORWARD);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.CELEBRITY_DOES_NOT_EXIST);
-                resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
         return resp;
     }

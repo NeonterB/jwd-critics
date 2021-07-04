@@ -7,7 +7,6 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-import com.epam.jwd_critics.controller.command.impl.common.OpenUserProfilePageCommand;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.CommandException;
@@ -29,6 +28,7 @@ public class UpdateUserCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
         new UploadPictureCommand().execute(req);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
@@ -36,7 +36,7 @@ public class UpdateUserCommand implements Command {
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (firstName == null || lastName == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
+            return resp;
         }
         if (userIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -58,8 +58,8 @@ public class UpdateUserCommand implements Command {
                     }
                     userService.update(userToUpdate.get());
                     req.setSessionAttribute(Attribute.USER, new UserDTO(userToUpdate.get()));
-                    new OpenUserProfilePageCommand().execute(req);
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_UPDATED);
+                    resp.setDestination(ServletDestination.USER_PROFILE);
                 } else {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
                 }
@@ -71,6 +71,6 @@ public class UpdateUserCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.USER_PROFILE, TransferType.REDIRECT);
+        return resp;
     }
 }

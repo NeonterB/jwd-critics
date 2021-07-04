@@ -18,6 +18,7 @@ public class OpenPasswordRecoveryPageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         String userIdStr = req.getParameter(Parameter.USER_ID);
         String activationKey = req.getParameter(Parameter.RECOVERY_KEY);
         if (userIdStr == null || activationKey == null) {
@@ -27,10 +28,10 @@ public class OpenPasswordRecoveryPageCommand implements Command {
             int userId = Integer.parseInt(userIdStr);
             userService.deleteRecoveryKey(userId, activationKey);
             req.setSessionAttribute(Attribute.USER_ID, userId);
-            return new CommandResponse(ServletDestination.PASSWORD_RECOVERY, TransferType.REDIRECT);
+            resp = new CommandResponse(ServletDestination.PASSWORD_RECOVERY, TransferType.REDIRECT);
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
-        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        return resp;
     }
 }

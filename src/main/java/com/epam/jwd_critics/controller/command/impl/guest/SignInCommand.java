@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Movie;
 import com.epam.jwd_critics.entity.MovieReview;
@@ -33,13 +34,12 @@ public class SignInCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        CommandResponse resp = new CommandResponse(ServletDestination.SIGN_IN, TransferType.REDIRECT);
 
         String login = req.getParameter(Parameter.LOGIN);
         String password = req.getParameter(Parameter.PASSWORD);
         if (login == null || password == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
-            resp.setDestination(ServletDestination.SIGN_IN);
         } else {
             UserValidator userValidator = new UserValidator();
             Set<ConstraintViolation> violations = userValidator.validateLogInData(login, password);
@@ -50,6 +50,7 @@ public class SignInCommand implements Command {
                     if (user.getStatus().equals(Status.INACTIVE)) {
                         req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.ACTIVATION_MAIL);
                     }
+                    resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
                     String previousPage = resp.getDestination().getPath();
                     if (previousPage.equals(ServletDestination.MOVIE.getPath())) {
                         Movie movie = (Movie) req.getSessionAttribute(Attribute.MOVIE);
@@ -64,13 +65,11 @@ public class SignInCommand implements Command {
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
                     req.setSessionAttribute(Attribute.PREVIOUS_PAGE, resp.getDestination().getPath());
-                    resp.setDestination(ServletDestination.SIGN_IN);
                 }
             } else {
                 req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, violations.stream()
                         .map(ConstraintViolation::getMessage)
                         .collect(Collectors.toList()));
-                resp.setDestination(ServletDestination.SIGN_IN);
             }
         }
         return resp;

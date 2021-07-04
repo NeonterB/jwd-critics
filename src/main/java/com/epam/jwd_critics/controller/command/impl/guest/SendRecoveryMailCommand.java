@@ -47,7 +47,6 @@ public class SendRecoveryMailCommand implements Command {
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
-
         return new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
     }
 }

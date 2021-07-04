@@ -21,7 +21,7 @@ public class OpenUpdateMoviePageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.REDIRECT);
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         String movieIdStr = req.getParameter(Parameter.MOVIE_ID);
         if (movieIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -30,13 +30,12 @@ public class OpenUpdateMoviePageCommand implements Command {
             Optional<Movie> movie = movieService.getEntityById(Integer.parseInt(movieIdStr));
             if (movie.isPresent()) {
                 req.setSessionAttribute(Attribute.MOVIE, movie.get());
+                resp = new CommandResponse(ServletDestination.UPDATE_MOVIE, TransferType.FORWARD);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_DOES_NOT_EXIST);
-                return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
         return resp;
     }

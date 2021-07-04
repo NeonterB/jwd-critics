@@ -12,6 +12,6 @@ public class OpenCreateCelebrityPageCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         req.removeSessionAttribute(Attribute.CELEBRITY);
-        return new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.REDIRECT);
+        return new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.FORWARD);
     }
 }

@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.User;
 import com.epam.jwd_critics.exception.ServiceException;
@@ -26,7 +27,7 @@ public class RegisterCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) {
-        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+        CommandResponse resp = new CommandResponse(ServletDestination.SIGN_IN, TransferType.REDIRECT);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
         String lastName = req.getParameter(Parameter.LAST_NAME);
         String email = req.getParameter(Parameter.EMAIL);
@@ -34,7 +35,6 @@ public class RegisterCommand implements Command {
         String password = req.getParameter(Parameter.PASSWORD);
         if (firstName == null || lastName == null || email == null || login == null || password == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
-            resp.setDestination(ServletDestination.SIGN_IN);
         } else {
             UserValidator userValidator = new UserValidator();
             Set<ConstraintViolation> violations = userValidator.validateRegistrationData(firstName, lastName, email, login, password);
@@ -46,17 +46,16 @@ public class RegisterCommand implements Command {
                     userService.createActivationKey(user.getId(), key);
                     String lang = (String) req.getSessionAttribute(Attribute.LANG);
                     userService.buildAndSendActivationMail(user, key, lang);
-                    req.removeSessionAttribute(Attribute.PREVIOUS_PAGE);
                     req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.ACTIVATION_MAIL);
+                    resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+                    req.removeSessionAttribute(Attribute.PREVIOUS_PAGE);
                 } catch (ServiceException e) {
                     req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-                    resp.setDestination(ServletDestination.SIGN_IN);
                 }
             } else {
                 req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, violations.stream()
                         .map(ConstraintViolation::getMessage)
                         .collect(Collectors.toList()));
-                resp.setDestination(ServletDestination.SIGN_IN);
             }
         }
         return resp;

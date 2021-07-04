@@ -19,6 +19,7 @@ public class DeleteUserCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
+        CommandResponse resp = new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (userIdStr == null) {
             throw new CommandException(ErrorMessage.MISSING_ARGUMENTS);
@@ -26,10 +27,10 @@ public class DeleteUserCommand implements Command {
         try {
             userService.delete(Integer.parseInt(userIdStr));
             req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_DELETED);
-            return new SignOutCommand().execute(req);
+            resp = new SignOutCommand().execute(req);
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
         }
-        return new CommandResponse(ServletDestination.MAIN, TransferType.REDIRECT);
+        return resp;
     }
 }

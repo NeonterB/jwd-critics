@@ -27,20 +27,18 @@ public class UpdatePasswordCommand implements Command {
         String confirmNewPassword = req.getParameter(Parameter.CONFIRM_NEW_PASSWORD);
         if (newPassword == null || confirmNewPassword == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, Collections.singletonList(ErrorMessage.EMPTY_FIELDS));
-            return resp;
+        } else {
+            if (!newPassword.equals(confirmNewPassword)) {
+                req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.PASSWORDS_DO_NOT_MATCH);
+            }
+            try {
+                userService.updatePassword(Integer.parseInt(userIdStr), newPassword.toCharArray());
+                req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.PASSWORD_UPDATED);
+                resp.setDestination(ServletDestination.SIGN_IN);
+            } catch (ServiceException e) {
+                req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
+            }
         }
-        if (!newPassword.equals(confirmNewPassword)) {
-            req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.PASSWORDS_DO_NOT_MATCH);
-            return resp;
-        }
-        try {
-            userService.updatePassword(Integer.parseInt(userIdStr), newPassword.toCharArray());
-            req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.PASSWORD_UPDATED);
-        } catch (ServiceException e) {
-            req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            return resp;
-        }
-        resp.setDestination(ServletDestination.SIGN_IN);
         return resp;
     }
 }

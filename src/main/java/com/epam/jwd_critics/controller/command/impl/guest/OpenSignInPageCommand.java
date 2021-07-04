@@ -5,9 +5,8 @@ import com.epam.jwd_critics.controller.command.Command;
 import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
+import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.controller.command.TransferType;
-
-import static com.epam.jwd_critics.controller.command.ServletDestination.SIGN_IN;
 
 public class OpenSignInPageCommand implements Command {
     @Override
@@ -16,6 +15,6 @@ public class OpenSignInPageCommand implements Command {
         if (previousPage != null) {
             req.setSessionAttribute(Attribute.PREVIOUS_PAGE, previousPage);
         }
-        return new CommandResponse(SIGN_IN, TransferType.REDIRECT);
+        return new CommandResponse(ServletDestination.SIGN_IN, TransferType.REDIRECT);
     }
 }

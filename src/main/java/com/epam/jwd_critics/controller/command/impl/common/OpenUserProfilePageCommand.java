@@ -33,7 +33,6 @@ public class OpenUserProfilePageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
-        CommandResponse resp = new CommandResponse(ServletDestination.USER_PROFILE, TransferType.FORWARD);
         int userId;
         String userIdStr = req.getParameter(Parameter.USER_ID);
         if (userIdStr == null) {
@@ -45,6 +44,7 @@ public class OpenUserProfilePageCommand implements Command {
         } else {
             userId = Integer.parseInt(userIdStr);
         }
+        CommandResponse resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         try {
             Optional<User> user = userService.getEntityById(userId);
             if (user.isPresent()) {
@@ -58,13 +58,12 @@ public class OpenUserProfilePageCommand implements Command {
                 UserDTO userDTO = new UserDTO(user.get());
                 req.setSessionAttribute(Attribute.USER_PROFILE, userDTO);
                 req.setSessionAttribute(Attribute.REVIEWS_ON_USER_PROFILE_PAGE, reviewDTOS);
+                resp = new CommandResponse(ServletDestination.USER_PROFILE, TransferType.FORWARD);
             } else {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.USER_DOES_NOT_EXIST);
-                resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
             }
         } catch (ServiceException e) {
             req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
-            resp = CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
         }
         return resp;
     }

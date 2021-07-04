@@ -27,12 +27,13 @@ public class CreateCelebrityCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
         new UploadPictureCommand().execute(req);
+        CommandResponse resp = new CommandResponse(ServletDestination.UPDATE_CELEBRITY, TransferType.REDIRECT);
         String newPicture = (String) req.getAttribute(Attribute.NEW_IMAGE);
         String firstName = req.getParameter(Parameter.FIRST_NAME);
         String lastName = req.getParameter(Parameter.LAST_NAME);
         if (firstName == null || lastName == null) {
             req.setSessionAttribute(Attribute.VALIDATION_WARNINGS, ErrorMessage.EMPTY_FIELDS);
-            return new CommandResponse(ServletDestination.UPDATE_USER, TransferType.REDIRECT);
+            return resp;
         }
 
         CelebrityValidator celebrityValidator = new CelebrityValidator();
@@ -49,6 +50,7 @@ public class CreateCelebrityCommand implements Command {
 
                 req.setSessionAttribute(Attribute.CELEBRITY, celebrity);
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.CELEBRITY_CREATED);
+                resp.setDestination(ServletDestination.CELEBRITY_PROFILE);
             } catch (ServiceException e) {
                 req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, e.getMessage());
             }
@@ -57,6 +59,6 @@ public class CreateCelebrityCommand implements Command {
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList()));
         }
-        return new CommandResponse(ServletDestination.CELEBRITY_PROFILE, TransferType.REDIRECT);
+        return resp;
     }
 }

@@ -6,6 +6,7 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
+import com.epam.jwd_critics.controller.command.TransferType;
 import com.epam.jwd_critics.controller.command.impl.common.OpenMoviePageCommand;
 import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.exception.CommandException;
@@ -45,6 +46,7 @@ public class UpdateMovieReviewCommand implements Command {
                         reviewToUpdate.get().setText(reviewText);
                         reviewService.update(reviewToUpdate.get());
                         req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_REVIEW_UPDATED);
+                        new OpenMoviePageCommand().execute(req);
                     } else {
                         req.setSessionAttribute(Attribute.FATAL_NOTIFICATION, ErrorMessage.MOVIE_REVIEW_DOES_NOT_EXIST);
                     }
@@ -57,7 +59,6 @@ public class UpdateMovieReviewCommand implements Command {
                         .collect(Collectors.toList()));
             }
         }
-        new OpenMoviePageCommand().execute(req);
-        return CommandResponse.redirectToPreviousPageOr(ServletDestination.MOVIE, req);
+        return new CommandResponse(ServletDestination.MOVIE, TransferType.REDIRECT);
     }
 }
