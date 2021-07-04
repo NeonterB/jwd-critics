@@ -30,7 +30,6 @@
             <h4>${userProfile.firstName} ${userProfile.lastName}</h4>
             <strong><fmt:message key="user.role"/>:</strong> ${userProfile.role}<br>
             <strong><fmt:message key="user.status"/>:</strong> ${userProfile.status}<br>
-            <%--            <strong><fmt:message key="user.reviewCount"/>:</strong> ${reviewsOnUserProfilePage.size}<br>--%>
             <p class="mt-4">
                 <c:choose>
                     <c:when test="${userProfile.id eq user.id}">

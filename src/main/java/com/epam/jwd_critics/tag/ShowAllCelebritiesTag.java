@@ -7,6 +7,7 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.CelebrityDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
+import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -15,6 +16,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
+
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
 
 public class ShowAllCelebritiesTag extends SimpleTagSupport {
     public static final int CELEBRITIES_PER_PAGE = 12;
@@ -37,9 +40,10 @@ public class ShowAllCelebritiesTag extends SimpleTagSupport {
 
             UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
             if (user != null && user.getRole().equals(Role.ADMIN)) {
+                String createButton = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.CREATE);
                 writer.write("<p class=\"mt-4\"><a class=\"btnRef mt-2\"" +
                         " href=\"" + pageContext.getRequest().getServletContext().getContextPath() + "/controller?command=open_create_celebrity\">" +
-                        "Create" +
+                        createButton +
                         "</a></p>");
             }
         } catch (IOException e) {

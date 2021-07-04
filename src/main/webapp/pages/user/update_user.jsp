@@ -41,7 +41,7 @@
                        value="${user.firstName}"
                        name="firstName"
                        maxLength="14"
-                       pattern="^[A-Z][a-z]"
+                       pattern="^[A-Z][a-z]{1,14}"
                        title="<fmt:message key="validation.firstName"/>"
                        required/>
                 <label for="lastNameInput" class="form-label mt-2"><fmt:message key="label.lastName"/></label>
@@ -51,7 +51,7 @@
                        value="${user.lastName}"
                        name="lastName"
                        maxLength="14"
-                       pattern="^[A-Z][a-z]"
+                       pattern="^[A-Z][a-z]{1,14}"
                        title="<fmt:message key="validation.lastName"/>"
                        required/>
                 <label for="input-file" class="form-label mt-2"><fmt:message key="label.profilePicture"/></label>

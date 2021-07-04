@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<c:set var="currentPage" value="/pages/common/main.jsp" scope="request"/>
+<c:set var="currentPage" value="/pages/guest/forgot_password.jsp" scope="request"/>
 <c:choose>
     <c:when test="${not empty sessionScope.lang}">
         <fmt:setLocale value="${sessionScope.lang}" scope="session"/>

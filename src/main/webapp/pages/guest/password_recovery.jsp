@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<c:set var="currentPage" value="/pages/common/main.jsp" scope="request"/>
+<c:set var="currentPage" value="/pages/guest/password_recovery.jsp" scope="request"/>
 <c:choose>
     <c:when test="${not empty sessionScope.lang}">
         <fmt:setLocale value="${sessionScope.lang}" scope="session"/>
@@ -30,7 +30,7 @@
                        name="newPassword"
                        minLength="8"
                        maxLength="20"
-                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$"
                        required placeholder="<fmt:message key="label.newPassword"/>"/>
                 <input type="password"
                        id="confirm_password"

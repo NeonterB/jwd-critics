@@ -130,8 +130,9 @@
     <c:if test="${not empty movie}">
         <div class="row mt-4">
             <div class="col-6">
+                <p><fmt:message key="label.removeCelebrity"/></p>
                 <c:forEach var="position" items="${movie.staff}">
-                    <strong>${position.key}: </strong>
+                    <strong>${position.key}S: </strong>
                     <c:forEach var="celebrity" items="${position.value}">
                         <a class="dark-link"
                            href="${pageContext.request.contextPath}/controller?command=remove_celebrity_from_position&movieId=${movie.id}&celebrityId=${celebrity.id}&positionId=${position.key.id}">
@@ -141,28 +142,41 @@
                 </c:forEach>
             </div>
             <div class="col-6">
+                <p><fmt:message key="label.assignCelebrity"/></p>
                 <form method="post" action="<c:url value="/controller?command=assign_celebrity_on_position"/>">
-                    <input type="hidden" name="movieId" value="${movie.id}"/>
-                    <label for="celebrityFirstNameInput" class="form-label mt-2"><fmt:message
-                            key="label.firstName"/></label>
-                    <input type="text"
-                           class="form-control"
-                           id="celebrityFirstNameInput"
-                           pattern="^[A-Z][a-z]{1,14}"
-                           title="<fmt:message key="validation.firstName"/>"
-                           name="firstName"
-                           required/>
-                    <label for="celebrityLastNameInput" class="form-label mt-2"><fmt:message
-                            key="label.lastName"/></label>
-                    <input type="text"
-                           class="form-control"
-                           id="celebrityLastNameInput"
-                           pattern="^([A-Z][a-z ,.'-]+)+$"
-                           title="<fmt:message key="validation.lastName"/>"
-                           name="lastName"
-                           required/>
-                    <ctg:positions/>
-                    <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
+                    <div class="row">
+                        <div class="col-4">
+                            <input type="hidden" name="movieId" value="${movie.id}"/>
+                            <label for="celebrityFirstNameInput" class="form-label mt-2"><fmt:message
+                                    key="label.firstName"/></label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="celebrityFirstNameInput"
+                                   pattern="^[A-Z][a-z]{1,14}"
+                                   title="<fmt:message key="validation.firstName"/>"
+                                   name="firstName"
+                                   required/>
+                        </div>
+                        <div class="col-4">
+                            <label for="celebrityLastNameInput" class="form-label mt-2"><fmt:message
+                                    key="label.lastName"/></label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="celebrityLastNameInput"
+                                   pattern="^([A-Z][a-z ,.'-]+)+$"
+                                   title="<fmt:message key="validation.lastName"/>"
+                                   name="lastName"
+                                   required/>
+                        </div>
+                        <div class="col-4">
+                            <label for="positionInput" class="form-label mt-2"><fmt:message
+                                    key="label.position"/></label>
+                            <div id="positionInput">
+                                <ctg:positions/>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit mt-2"><fmt:message key="button.submit"/></button>
+                    </div>
                 </form>
             </div>
         </div>

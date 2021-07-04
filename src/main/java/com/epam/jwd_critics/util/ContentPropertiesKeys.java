@@ -6,6 +6,7 @@ public class ContentPropertiesKeys {
     public static final String USER_ROLE = "user.role";
     public static final String USER_STATUS = "user.status";
     public static final String DELETE = "button.delete";
+    public static final String CREATE = "button.create";
     public static final String REVIEW_SCORE = "review.score";
     public static final String MOVIE_RATING = "movie.rating";
     public static final String MOVIE_RELEASE_DATE = "movie.releaseDate";

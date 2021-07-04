@@ -59,7 +59,7 @@ public class MailSender {
         mailSession.setDebug(true);
         message = new MimeMessage(mailSession);
         message.setSubject(mailSubject);
-        message.setContent(mailText, "text/plain");
+        message.setContent(mailText, "text/plain; charset=UTF-8");
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
     }
 }

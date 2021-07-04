@@ -39,9 +39,10 @@ public class ShowAllMoviesTag extends SimpleTagSupport {
 
             UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
             if (user != null && user.getRole().equals(Role.ADMIN)) {
+                String createButton = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.CREATE);
                 writer.write("<p class=\"mt-4\"><a class=\"btnRef mt-2\"" +
                         " href=\"" + pageContext.getRequest().getServletContext().getContextPath() + "/controller?command=open_create_movie\">" +
-                        "Create" +
+                        createButton +
                         "</a></p>");
             }
         } catch (IOException e) {

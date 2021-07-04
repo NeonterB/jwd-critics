@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="row mt-4">
-        <h1>Known For</h1>
+        <h1><fmt:message key="text.knownFor"/></h1>
         <c:if test="${not empty celebrity.jobs}">
             <c:forEach var="job" items="${celebrity.jobs}">
                 <c:set var="movie" value="${job.key}" scope="page"/>
