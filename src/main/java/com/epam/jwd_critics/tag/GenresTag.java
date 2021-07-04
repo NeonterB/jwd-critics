@@ -29,9 +29,9 @@ public class GenresTag extends SimpleTagSupport {
             try {
                 writer.write("<div class=\"form-check\">");
                 if (movie != null && movie.getGenres().contains(genre)) {
-                    writer.write("<input class=\"form-check-input\" id=\"" + genre.name() + "\" type=\"checkbox\" name=\"movieGenres\" checked=\"checked\" value=\"" + genre.getId() + "\"/>");
+                    writer.write("<input class=\"form-check-input\" id=\"" + genre.name() + "\" type=\"checkbox\" name=\"movieGenreId\" checked=\"checked\" value=\"" + genre.getId() + "\"/>");
                 } else {
-                    writer.write("<input class=\"form-check-input\" id=\"" + genre.name() + "\" type=\"checkbox\" name=\"movieGenres\" value=\"" + genre.getId() + "\"/>");
+                    writer.write("<input class=\"form-check-input\" id=\"" + genre.name() + "\" type=\"checkbox\" name=\"movieGenreId\" value=\"" + genre.getId() + "\"/>");
                 }
                 writer.write("<label for=\"" + genre.name() + "\">" + genre.name() + "</label><br>");
                 writer.write("</div>");

@@ -32,10 +32,10 @@ public enum Parameter {
     MOVIE_NAME("movieName"),
     MOVIE_RELEASE_DATE("movieReleaseDate"),
     MOVIE_RUNTIME("movieRuntime"),
-    MOVIE_COUNTRY("movieCountry"),
-    MOVIE_AGE_RESTRICTION("movieAgeRestriction"),
+    MOVIE_COUNTRY("movieCountryId"),
+    MOVIE_AGE_RESTRICTION("movieAgeRestrictionId"),
     MOVIE_SUMMARY("movieSummary"),
-    MOVIE_GENRES("movieGenres"),
+    MOVIE_GENRES("movieGenreId"),
 
     ACTIVATION_KEY("activationKey"),
     RECOVERY_KEY("recoveryKey"),

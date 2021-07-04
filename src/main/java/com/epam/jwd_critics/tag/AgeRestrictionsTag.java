@@ -29,9 +29,9 @@ public class AgeRestrictionsTag extends SimpleTagSupport {
             try {
                 writer.write("<div class=\"form-check\">");
                 if (movie != null && movie.getAgeRestriction().equals(ageRestriction)) {
-                    writer.write("<input class=\"form-check-input\" id=\"" + ageRestriction.name() + "\" type=\"radio\" name=\"movieAgeRestriction\" checked value=\"" + ageRestriction.getId() + "\"/>");
+                    writer.write("<input class=\"form-check-input\" id=\"" + ageRestriction.name() + "\" type=\"radio\" name=\"movieAgeRestrictionId\" checked value=\"" + ageRestriction.getId() + "\"/>");
                 } else {
-                    writer.write("<input class=\"form-check-input\" id=\"" + ageRestriction.name() + "\" type=\"radio\" name=\"movieAgeRestriction\" value=\"" + ageRestriction.getId() + "\"/>");
+                    writer.write("<input class=\"form-check-input\" id=\"" + ageRestriction.name() + "\" type=\"radio\" name=\"movieAgeRestrictionId\" value=\"" + ageRestriction.getId() + "\"/>");
                 }
                 writer.write("<label for=\"" + ageRestriction.name() + "\">" + ageRestriction.name().replace("_", "-") + "</label><br>");
                 writer.write("</div>");
@@ -40,5 +40,4 @@ public class AgeRestrictionsTag extends SimpleTagSupport {
             }
         }
     }
-
 }
