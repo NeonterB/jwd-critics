@@ -64,4 +64,14 @@ public class MovieDTO {
     public int hashCode() {
         return Objects.hash(id, name, rating);
     }
+
+    @Override
+    public String toString() {
+        return "MovieDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", rating=" + rating +
+                ", imagePath='" + imagePath + '\'' +
+                '}';
+    }
 }

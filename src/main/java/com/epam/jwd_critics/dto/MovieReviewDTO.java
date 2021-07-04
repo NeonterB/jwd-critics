@@ -103,4 +103,17 @@ public class MovieReviewDTO {
     public int hashCode() {
         return Objects.hash(score, text, title, userId, movieId, id);
     }
+
+    @Override
+    public String toString() {
+        return "MovieReviewDTO{" +
+                "score=" + score +
+                ", text='" + text + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", title='" + title + '\'' +
+                ", userId=" + userId +
+                ", movieId=" + movieId +
+                ", id=" + id +
+                '}';
+    }
 }

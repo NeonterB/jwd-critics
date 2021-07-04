@@ -65,4 +65,14 @@ public class CelebrityDTO {
         CelebrityDTO that = (CelebrityDTO) o;
         return id == that.id && firstName.equals(that.firstName) && lastName.equals(that.lastName);
     }
+
+    @Override
+    public String toString() {
+        return "CelebrityDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                '}';
+    }
 }
