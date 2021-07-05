@@ -186,35 +186,35 @@ public class MovieDao extends AbstractMovieDao {
     }
 
     @Override
-    public boolean addGenre(Integer movieId, Genre genre) throws DaoException {
+    public void addGenre(Integer movieId, Genre genre) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(ADD_GENRE)) {
             ps.setInt(1, movieId);
             ps.setInt(2, genre.getId());
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
     @Override
-    public boolean removeGenre(Integer movieId, Genre genre) throws DaoException {
+    public void removeGenre(Integer movieId, Genre genre) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(DELETE_GENRE)) {
             ps.setInt(1, movieId);
             ps.setInt(2, genre.getId());
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
     @Override
-    public boolean assignCelebrityOnPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
-        return celebrityAndPositionAction(movieId, celebrityId, position, ADD_STAFF);
+    public void assignCelebrityOnPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
+        celebrityAndPositionAction(movieId, celebrityId, position, ADD_STAFF);
     }
 
     @Override
-    public boolean removeCelebrityFromPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
-        return celebrityAndPositionAction(movieId, celebrityId, position, DELETE_STAFF);
+    public void removeCelebrityFromPosition(Integer movieId, Integer celebrityId, Position position) throws DaoException {
+        celebrityAndPositionAction(movieId, celebrityId, position, DELETE_STAFF);
     }
 
     @Override
@@ -236,12 +236,12 @@ public class MovieDao extends AbstractMovieDao {
         return list;
     }
 
-    private boolean celebrityAndPositionAction(Integer movieId, Integer celebrityId, Position position, String query) throws DaoException {
+    private void celebrityAndPositionAction(Integer movieId, Integer celebrityId, Position position, String query) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(query)) {
             ps.setInt(1, movieId);
             ps.setInt(2, celebrityId);
             ps.setInt(3, position.getId());
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }

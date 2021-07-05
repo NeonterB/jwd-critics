@@ -83,28 +83,20 @@ class MovieDaoTest {
 
     @Test
     public void testGenres() {
-        try {
-            Assertions.assertTrue(movieDao.addGenre(movie.getId(), Genre.ACTION));
-            Assertions.assertTrue(movieDao.addGenre(movie.getId(), Genre.HORROR));
-            Assertions.assertFalse(movieDao.addGenre(movie.getId(), Genre.HORROR));
-            Assertions.assertTrue(movieDao.removeGenre(movie.getId(), Genre.ACTION));
-            Assertions.assertFalse(movieDao.removeGenre(movie.getId(), Genre.ACTION));
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+        Assertions.assertDoesNotThrow(() -> movieDao.addGenre(movie.getId(), Genre.ACTION));
+        Assertions.assertDoesNotThrow(() -> movieDao.addGenre(movie.getId(), Genre.HORROR));
+        Assertions.assertThrows(DaoException.class, () -> movieDao.addGenre(movie.getId(), Genre.HORROR));
+        Assertions.assertDoesNotThrow(() -> movieDao.removeGenre(movie.getId(), Genre.ACTION));
+        Assertions.assertDoesNotThrow(() -> movieDao.removeGenre(movie.getId(), Genre.ACTION));
     }
 
     @Test
     public void testStaff() {
-        try {
-            Assertions.assertTrue(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertTrue(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.DIRECTOR));
-            Assertions.assertFalse(movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertTrue(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
-            Assertions.assertFalse(movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
-        } catch (DaoException e) {
-            logger.error(e.getMessage(), e);
-        }
+        Assertions.assertDoesNotThrow(() -> movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+        Assertions.assertDoesNotThrow(() -> movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.DIRECTOR));
+        Assertions.assertThrows(DaoException.class, () -> movieDao.assignCelebrityOnPosition(movie.getId(), 1, Position.ACTOR));
+        Assertions.assertDoesNotThrow(() -> movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
+        Assertions.assertDoesNotThrow(() -> movieDao.removeCelebrityFromPosition(movie.getId(), 1, Position.ACTOR));
     }
 
     @Test

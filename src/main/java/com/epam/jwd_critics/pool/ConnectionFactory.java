@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Abstract Factory pattern implementation. Provides with new connections.
+ */
 public class ConnectionFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionFactory.class);
 
@@ -20,6 +23,11 @@ public class ConnectionFactory {
         }
     }
 
+    /**
+     * Creates brand new db connection
+     *
+     * @return a connection to the database
+     */
     Connection createConnection() {
         ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
         try {

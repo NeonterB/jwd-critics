@@ -146,7 +146,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void assignCelebrityOnPosition(int movieId, int celebrityId, Position position) throws ServiceException {
-        EntityTransaction transaction = new EntityTransaction(movieDao);
+        EntityTransaction transaction = new EntityTransaction(movieDao, celebrityDao);
         try {
             if (!movieDao.idExists(movieId))
                 throw new ServiceException(MovieServiceCode.MOVIE_DOES_NOT_EXIST);

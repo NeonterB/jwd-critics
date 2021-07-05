@@ -173,9 +173,10 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(int id, char[] password) throws ServiceException {
         EntityTransaction transaction = new EntityTransaction(userDao);
         try {
-            if (!userDao.updatePassword(id, passwordAuthenticator.hash(password))) {
+            if (!userDao.idExists(id)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
+            userDao.updatePassword(id, passwordAuthenticator.hash(password));
             transaction.commit();
             logger.info("User with id {} updated password", id);
         } catch (DaoException e) {
@@ -226,9 +227,10 @@ public class UserServiceImpl implements UserService {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.insertActivationKey(userId, key)) {
+            if (userDao.selectActivationKey(userId).isPresent()) {
                 throw new ServiceException(UserServiceCode.ACTIVATION_KEY_EXISTS);
             }
+            userDao.insertActivationKey(userId, key);
             transaction.commit();
             logger.info("Activation key created for user with id {}", userId);
         } catch (DaoException e) {
@@ -289,9 +291,10 @@ public class UserServiceImpl implements UserService {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.insertRecoveryKey(userId, key)) {
+            if (!userDao.selectRecoveryKey(userId).isPresent()) {
                 throw new ServiceException(UserServiceCode.RECOVERY_KEY_EXISTS);
             }
+            userDao.insertRecoveryKey(userId, key);
             transaction.commit();
             logger.info("Recovery key created for user with id {}", userId);
         } catch (DaoException e) {

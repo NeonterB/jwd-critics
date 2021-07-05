@@ -12,51 +12,76 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Abstract Base Dao, from witch all other AbstractDaos are being inherited.
+ *
+ * @param <K> Key type.
+ * @param <T> Entity type.
+ */
 public abstract class AbstractBaseDao<K, T extends BaseEntity> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractBaseDao.class);
     private Connection connection;
 
+    /**
+     * Gets all entity records with limit from database.
+     *
+     * @param begin from.
+     * @param end   to.
+     * @return {@link List} of entities.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     public abstract List<T> getAllBetween(int begin, int end) throws DaoException;
 
+    /**
+     * Gets count of entity records in database.
+     *
+     * @return count of entity records.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     public abstract int getCount() throws DaoException;
 
+    /**
+     * Finds entity record with given key in database.
+     *
+     * @param id entity record id.
+     * @return Optional of entity.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     public abstract Optional<T> getEntityById(K id) throws DaoException;
 
+    /**
+     * Finds and deletes entity record with given key form database.
+     *
+     * @param id entity record id.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     public abstract void delete(K id) throws DaoException;
 
-    public abstract T create(T t) throws DaoException;
+    /**
+     * Creates entity record from given entity in database.
+     *
+     * @param entity entity to create.
+     * @return entity with generated key.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
+    public abstract T create(T entity) throws DaoException;
 
-    public abstract void update(T t) throws DaoException;
+    /**
+     * Finds and updates entity record from given entity in database.
+     *
+     * @param entity entity to update
+     * @throws DaoException if {@link SQLException} was caught.
+     */
+    public abstract void update(T entity) throws DaoException;
 
+    /**
+     * Checks if entity record with given key is present in database.
+     *
+     * @param id key to find.
+     * @return true, if key is present. false - if not.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     public abstract boolean idExists(K id) throws DaoException;
-
-    protected int getCount(String query) throws DaoException{
-        int count = 0;
-        try (PreparedStatement ps = getPreparedStatement(query)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                count = rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return count;
-    }
-
-    protected boolean existsQuery(String query, int key) throws DaoException {
-        boolean result = false;
-        try (PreparedStatement ps = getPreparedStatement(query)) {
-            ps.setInt(1, key);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    result = rs.getInt(1) != 0;
-                }
-            }
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-        return result;
-    }
 
     public void setConnection(Connection connection) {
         if (this.connection == null) {
@@ -84,6 +109,13 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
         return ps;
     }
 
+    /**
+     * Executes "INSERT INTO ..." query and returns generated key.
+     *
+     * @param ps ready prepared statement.
+     * @return generated key.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
     protected int executeQueryAndGetGeneratesKeys(PreparedStatement ps) throws DaoException {
         int generatedKey = 0;
         try {
@@ -100,5 +132,48 @@ public abstract class AbstractBaseDao<K, T extends BaseEntity> {
             throw new DaoException(e.getMessage());
         }
         return generatedKey;
+    }
+
+    /**
+     * Executes "SELECT COUNT(*) .." queries.
+     *
+     * @param query to execute.
+     * @return query result.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
+    protected int getCount(String query) throws DaoException {
+        int count = 0;
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return count;
+    }
+
+    /**
+     * Executes "SELECT EXISTS(... where key = ?)" queries.
+     *
+     * @param query to execute.
+     * @param key   key to insert inq query.
+     * @return query result.
+     * @throws DaoException if {@link SQLException} was caught.
+     */
+    protected boolean existsQuery(String query, int key) throws DaoException {
+        boolean result = false;
+        try (PreparedStatement ps = getPreparedStatement(query)) {
+            ps.setInt(1, key);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt(1) != 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
     }
 }

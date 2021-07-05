@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Proxy wrap on {@link Connection}. Delegates all it's methods except for Connection.close()
+ */
 public class ConnectionProxy implements Connection {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionProxy.class);
     private final Connection connection;
@@ -58,6 +61,11 @@ public class ConnectionProxy implements Connection {
         connection.rollback();
     }
 
+    /**
+     * returns connection to the pool
+     *
+     * @throws SQLException
+     */
     @Override
     public void close() throws SQLException {
         try {
@@ -67,6 +75,11 @@ public class ConnectionProxy implements Connection {
         }
     }
 
+    /**
+     * Closes connection
+     *
+     * @throws SQLException if error occurred while closing connetion
+     */
     public void hardClose() throws SQLException {
         connection.close();
         logger.debug("Connection closed");

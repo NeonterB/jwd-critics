@@ -176,11 +176,11 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean updatePassword(Integer id, String password) throws DaoException {
+    public void updatePassword(Integer id, String password) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(UPDATE_PASSWORD)) {
             ps.setString(1, password);
             ps.setInt(2, id);
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -197,11 +197,11 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean insertActivationKey(Integer userId, String key) throws DaoException {
+    public void insertActivationKey(Integer userId, String key) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(INSERT_ACTIVATION_KEY)) {
             ps.setInt(1, userId);
             ps.setString(2, key);
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -223,11 +223,11 @@ public class UserDao extends AbstractUserDao {
     }
 
     @Override
-    public boolean insertRecoveryKey(Integer userId, String key) throws DaoException {
+    public void insertRecoveryKey(Integer userId, String key) throws DaoException {
         try (PreparedStatement ps = getPreparedStatement(INSERT_RECOVERY_KEY)) {
             ps.setInt(1, userId);
             ps.setString(2, key);
-            return ps.executeUpdate() != 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
