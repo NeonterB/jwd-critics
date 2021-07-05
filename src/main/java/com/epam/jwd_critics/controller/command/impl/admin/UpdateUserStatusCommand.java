@@ -36,7 +36,7 @@ public class UpdateUserStatusCommand implements Command {
             if (userToUpdate.isPresent()) {
                 if (userToUpdate.get().getStatus().equals(Status.INACTIVE)) {
                     req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.INACTIVE_USER);
-                    return CommandResponse.redirectToPreviousPageOr(ServletDestination.MAIN, req);
+                    return resp;
                 }
                 Status newStatus = Status.valueOf(newStatusStr.toUpperCase());
                 userToUpdate.get().setStatus(newStatus);
