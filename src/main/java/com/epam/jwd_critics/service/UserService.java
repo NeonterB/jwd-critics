@@ -163,7 +163,7 @@ public interface UserService {
      *
      * @param userId id of a user
      * @param key    recovery key
-     * @throws ServiceException if given user does not exist, or if user does not have an recovery key,
+     * @throws ServiceException if given user does not exist, or if user does not have a recovery key,
      *                          or if recovery key id wrong, or if {@link DaoException} was caught.
      */
     void deleteRecoveryKey(int userId, String key) throws ServiceException;
