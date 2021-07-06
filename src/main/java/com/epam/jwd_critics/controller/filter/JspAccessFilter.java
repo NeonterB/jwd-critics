@@ -19,7 +19,7 @@ import java.io.IOException;
 @WebFilter("/pages/*")
 public class JspAccessFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
         HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = httpRequest.getSession();
@@ -34,18 +34,13 @@ public class JspAccessFilter implements Filter {
             userRole = user.getRole();
         }
         String uri = httpRequest.getRequestURI();
-        try {
-            if ((uri.contains(ServletDestination.ADMIN_URL) && (userRole != Role.ADMIN)) ||
-                    (uri.contains(ServletDestination.USER_URL) && (userRole == Role.GUEST)) ||
-                    (uri.contains(ServletDestination.GUEST_URL) && (userRole != Role.GUEST)) ||
-                    uri.contains(ServletDestination.ERROR_URL) ||
-                    uri.contains(ServletDestination.COMPONENT_URL)) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + page);
-                return;
-            }
-            chain.doFilter(req, resp);
-        } catch (IOException | ServletException e) {
-            //todo
+        if ((uri.contains(ServletDestination.ADMIN_URL) && (userRole != Role.ADMIN)) ||
+                (uri.contains(ServletDestination.USER_URL) && (userRole == Role.GUEST)) ||
+                (uri.contains(ServletDestination.GUEST_URL) && (userRole != Role.GUEST)) ||
+                uri.contains(ServletDestination.ERROR_URL) ||
+                uri.contains(ServletDestination.COMPONENT_URL)) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + page);
         }
+        chain.doFilter(req, resp);
     }
 }

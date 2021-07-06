@@ -80,9 +80,9 @@ public class MovieTag extends SimpleTagSupport {
                 for (Map.Entry<Position, List<Celebrity>> entry : movie.getStaff().entrySet()) {
                     writer.write("<div class=\"row\">");
                     writer.write("<div class=\"col\">");
-                    writer.write("<strong>" + entry.getKey() + "</strong>:");
+                    writer.write("<strong>" + entry.getKey() + "S</strong>:");
                     for (Celebrity celebrity : entry.getValue()) {
-                        writer.write("<a class=\"link-dark\"");
+                        writer.write("<a class=\"dark-link\"");
                         writer.write("href=\"" + contextPath + "/controller?command=open_celebrity_profile&celebrityId=" + celebrity.getId() + "\">");
                         writer.write(celebrity.getFullName() + ",</a>");
                     }

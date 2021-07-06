@@ -7,8 +7,6 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.exception.CommandException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,16 +24,16 @@ import java.io.IOException;
 )
 public class Controller extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         processRequest(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         processRequest(req, resp);
     }
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) {
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final String commandName = req.getParameter(Parameter.COMMAND.getName());
         Command command = Command.of(commandName);
         try {
@@ -54,13 +52,7 @@ public class Controller extends HttpServlet {
 
         } catch (CommandException e) {
             req.getSession().setAttribute(Attribute.COMMAND_ERROR.getName(), e.getMessage());
-            try {
                 resp.sendRedirect(ServletDestination.ERROR_500.getPath());
-            } catch (IOException ioException) {
-                //todo
-            }
-        } catch (IOException | ServletException e) {
-            //todo
         }
     }
 
