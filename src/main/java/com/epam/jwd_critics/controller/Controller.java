@@ -52,7 +52,7 @@ public class Controller extends HttpServlet {
 
         } catch (CommandException e) {
             req.getSession().setAttribute(Attribute.COMMAND_ERROR.getName(), e.getMessage());
-                resp.sendRedirect(ServletDestination.ERROR_500.getPath());
+            resp.sendRedirect(ServletDestination.ERROR_500.getPath());
         }
     }
 
