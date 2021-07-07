@@ -2,7 +2,6 @@ package com.epam.jwd_critics.tag;
 
 import com.epam.jwd_critics.entity.Position;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -13,7 +12,6 @@ public class PositionsTag extends SimpleTagSupport {
     @Override
     public void doTag() throws JspException {
         PageContext pageContext = (PageContext) getJspContext();
-        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         JspWriter writer = pageContext.getOut();
         writePositions(writer);
     }

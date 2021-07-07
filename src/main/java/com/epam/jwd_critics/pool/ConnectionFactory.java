@@ -1,6 +1,6 @@
 package com.epam.jwd_critics.pool;
 
-import com.epam.jwd_critics.util.ApplicationProperties;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
 import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +29,12 @@ public class ConnectionFactory {
      * @return a connection to the database
      */
     Connection createConnection() {
-        ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
+        String url = ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_URL);
+        String name = ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_NAME);
+        String user = ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_USER);
+        String password = ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_PASSWORD);
         try {
-            return DriverManager.getConnection(properties.getUrl() + "/" + properties.getDatabaseName(),
-                    properties.getUser(), properties.getPassword());
+            return DriverManager.getConnection(url + "/" + name, user, password);
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
         }

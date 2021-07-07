@@ -19,7 +19,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
-import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessage;
 
 public class MovieTag extends SimpleTagSupport {
     private PageContext pageContext;
@@ -35,14 +35,15 @@ public class MovieTag extends SimpleTagSupport {
 
     private void writeMovie(JspWriter writer, CommandRequest req) throws JspException {
         Movie movie = (Movie) req.getSessionAttribute(Attribute.MOVIE);
-        String ratingLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RATING);
-        String releaseDateLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RELEASE_DATE);
-        String runtimeLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_RUNTIME);
-        String countryLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_COUNTRY);
-        String genresLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_GENRES);
-        String ageRestrictionLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_AGE_RESTRICTION);
-        String reviewCountLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_REVIEW_COUNT);
-        String summaryLabel = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.MOVIE_SUMMARY);
+        String language = (String) req.getSessionAttribute(Attribute.LANG);
+        String ratingLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_RATING);
+        String releaseDateLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_RELEASE_DATE);
+        String runtimeLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_RUNTIME);
+        String countryLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_COUNTRY);
+        String genresLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_GENRES);
+        String ageRestrictionLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_AGE_RESTRICTION);
+        String reviewCountLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_REVIEW_COUNT);
+        String summaryLabel = getLocalizedMessage(language, ContentPropertiesKeys.MOVIE_SUMMARY);
 
         String releaseDate = movie.getReleaseDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
         String ageRestriction = movie.getAgeRestriction().name().replace("_", "-");
@@ -76,7 +77,7 @@ public class MovieTag extends SimpleTagSupport {
             writer.write("<strong>" + ratingLabel + ":</strong> " + movie.getRating() + "<br>");
             writer.write("<strong>" + reviewCountLabel + ":</strong> " + movie.getReviewCount());
             writer.write("<hr/>");
-            if (!movie.getStaff().isEmpty()) {
+            if (movie.getStaff() != null && !movie.getStaff().isEmpty()) {
                 for (Map.Entry<Position, List<Celebrity>> entry : movie.getStaff().entrySet()) {
                     writer.write("<div class=\"row\">");
                     writer.write("<div class=\"col\">");

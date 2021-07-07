@@ -27,19 +27,23 @@ public class OpenAllCelebritiesPageCommand implements Command {
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_CELEBRITIES_CURRENT_PAGE);
         String newPageStr = req.getParameter(Parameter.NEW_CELEBRITIES_PAGE);
-        if (newPageStr != null) {
-            currentPage = Integer.valueOf(newPageStr);
-        } else if (currentPage == null) {
-            currentPage = 1;
-        }
-        req.setSessionAttribute(Attribute.ALL_CELEBRITIES_CURRENT_PAGE, currentPage);
-        int begin = (currentPage - 1) * ShowAllCelebritiesTag.CELEBRITIES_PER_PAGE;
-        int end = ShowAllCelebritiesTag.CELEBRITIES_PER_PAGE + begin;
         try {
+
+            int celebrityCount = celebrityService.getCount();
+            if (newPageStr != null) {
+                currentPage = Integer.valueOf(newPageStr);
+            } else if (currentPage == null) {
+                currentPage = 1;
+            }
+            while (currentPage > 1 && (currentPage - 1) * ShowAllCelebritiesTag.getCelebritiesPerPage() >= celebrityCount) {
+                currentPage--;
+            }
+            req.setSessionAttribute(Attribute.ALL_CELEBRITIES_CURRENT_PAGE, currentPage);
+            int begin = (currentPage - 1) * ShowAllCelebritiesTag.getCelebritiesPerPage();
+            int end = ShowAllCelebritiesTag.getCelebritiesPerPage() + begin;
             List<Celebrity> celebrities = celebrityService.getAllBetween(begin, end);
             List<CelebrityDTO> celebrityDTOS = celebrities.stream().map(CelebrityDTO::new).collect(Collectors.toList());
             req.setSessionAttribute(Attribute.CELEBRITIES_TO_DISPLAY, celebrityDTOS);
-            int celebrityCount = celebrityService.getCount();
             req.setSessionAttribute(Attribute.CELEBRITY_COUNT, celebrityCount);
             if (celebrityDTOS.size() == 0) {
                 req.setSessionAttribute(Attribute.INFO_MESSAGE, "No celebrities here yet");

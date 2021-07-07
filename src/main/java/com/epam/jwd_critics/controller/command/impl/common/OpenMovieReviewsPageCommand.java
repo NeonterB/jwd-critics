@@ -51,12 +51,13 @@ public class OpenMovieReviewsPageCommand implements Command {
                 currentPage = Integer.parseInt(newPageStr);
             } else if (currentPage == null) {
                 currentPage = 1;
-            } else if (currentPage > 1 && (currentPage - 1) * ShowReviewsTag.REVIEWS_PER_PAGE >= reviewCount) {
+            }
+            while (currentPage > 1 && (currentPage - 1) * ShowReviewsTag.getReviewsPerPage() >= reviewCount) {
                 currentPage--;
             }
             req.setSessionAttribute(Attribute.REVIEWS_CURRENT_PAGE, currentPage);
-            int begin = (currentPage - 1) * ShowReviewsTag.REVIEWS_PER_PAGE;
-            int end = ShowReviewsTag.REVIEWS_PER_PAGE + begin;
+            int begin = (currentPage - 1) * ShowReviewsTag.getReviewsPerPage();
+            int end = ShowReviewsTag.getReviewsPerPage() + begin;
 
             List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, begin, end);
             List<MovieReviewDTO> reviewDTOS = new LinkedList<>();

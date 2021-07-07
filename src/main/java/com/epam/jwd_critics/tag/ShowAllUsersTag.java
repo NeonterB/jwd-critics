@@ -6,6 +6,8 @@ import com.epam.jwd_critics.controller.command.CommandRequest;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Status;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +18,20 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
-import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessage;
 
 public class ShowAllUsersTag extends SimpleTagSupport {
-    public static final int USERS_PER_PAGE = 12;
-    private static final int USERS_PER_ROW = 6;
+    private static final int userPerPage = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_USERS_PER_PAGE));
+    private static final int usersPerRow = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_USERS_PER_ROW));
     private PageContext pageContext;
+
+    public static int getUserPerPage() {
+        return userPerPage;
+    }
+
+    public static int getUsersPerRow() {
+        return usersPerRow;
+    }
 
     @Override
     public void doTag() throws JspException {
@@ -31,24 +41,25 @@ public class ShowAllUsersTag extends SimpleTagSupport {
         JspWriter writer = pageContext.getOut();
         writeUsers(writer, req);
         int userCount = (int) req.getSessionAttribute(Attribute.USER_COUNT);
-        int pageCount = userCount % USERS_PER_PAGE == 0 ? (userCount / USERS_PER_PAGE) : (userCount / USERS_PER_PAGE + 1);
+        int pageCount = userCount % userPerPage == 0 ? (userCount / userPerPage) : (userCount / userPerPage + 1);
         String commandName = CommandInstance.OPEN_ALL_USERS.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_USERS_PAGE);
     }
 
     private void writeUsers(JspWriter writer, CommandRequest req) throws JspException {
         List<UserDTO> users = (List<UserDTO>) req.getSessionAttribute(Attribute.USERS_TO_DISPLAY);
-        String roleStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.USER_ROLE);
-        String statusStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.USER_STATUS);
-        String banStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.BAN);
-        String unbanStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.UNBAN);
+        String language = (String) req.getSessionAttribute(Attribute.LANG);
+        String roleStr = getLocalizedMessage(language, ContentPropertiesKeys.USER_ROLE);
+        String statusStr = getLocalizedMessage(language, ContentPropertiesKeys.USER_STATUS);
+        String banStr = getLocalizedMessage(language, ContentPropertiesKeys.BAN);
+        String unbanStr = getLocalizedMessage(language, ContentPropertiesKeys.UNBAN);
 
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         if (users != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                for (int i = 0, j = 0; i < users.size() && i < USERS_PER_PAGE; i++) {
+                for (int i = 0, j = 0; i < users.size() && i < userPerPage; i++) {
                     UserDTO userDTO = users.get(i);
                     if (j == 0) {
                         writer.write("<div class=\"row\">");
@@ -70,7 +81,7 @@ public class ShowAllUsersTag extends SimpleTagSupport {
                     }
                     writer.write("</p>");
                     writer.write("</div>");
-                    if (j == USERS_PER_ROW - 1 || j == users.size() - 1) {
+                    if (j == usersPerRow - 1 || j == users.size() - 1) {
                         writer.write("</div>");
                         j = 0;
                     } else {

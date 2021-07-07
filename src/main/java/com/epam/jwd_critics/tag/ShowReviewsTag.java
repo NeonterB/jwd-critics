@@ -7,6 +7,8 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.MovieReviewDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,15 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
-import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessage;
 
 public class ShowReviewsTag extends SimpleTagSupport {
-    public static final int REVIEWS_PER_PAGE = 5;
+    private static final int reviewsPerPage = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_REVIEWS_PER_PAGE));
     PageContext pageContext;
+
+    public static int getReviewsPerPage() {
+        return reviewsPerPage;
+    }
 
     @Override
     public void doTag() throws JspException {
@@ -31,15 +37,16 @@ public class ShowReviewsTag extends SimpleTagSupport {
         JspWriter writer = pageContext.getOut();
         writeReviews(writer, req);
         int reviewCount = (int) req.getSessionAttribute(Attribute.REVIEW_COUNT);
-        int pageCount = reviewCount % REVIEWS_PER_PAGE == 0 ? (reviewCount / REVIEWS_PER_PAGE) : (reviewCount / REVIEWS_PER_PAGE + 1);
+        int pageCount = reviewCount % reviewsPerPage == 0 ? (reviewCount / reviewsPerPage) : (reviewCount / reviewsPerPage + 1);
         String commandName = CommandInstance.OPEN_MOVIE_REVIEWS.toString().toLowerCase();
         TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_REVIEWS_PAGE);
     }
 
     private void writeReviews(JspWriter writer, CommandRequest req) throws JspException {
         List<MovieReviewDTO> reviews = (List<MovieReviewDTO>) req.getSessionAttribute(Attribute.REVIEWS_TO_DISPLAY);
-        String scoreStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.REVIEW_SCORE);
-        String deleteStr = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.DELETE);
+        String language = (String) req.getSessionAttribute(Attribute.LANG);
+        String scoreStr = getLocalizedMessage(language, ContentPropertiesKeys.REVIEW_SCORE);
+        String deleteStr = getLocalizedMessage(language, ContentPropertiesKeys.DELETE);
         String currentPage = (String) req.getAttribute(Attribute.CURRENT_PAGE);
         UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
         Role userRole = Role.GUEST;
@@ -49,7 +56,7 @@ public class ShowReviewsTag extends SimpleTagSupport {
         if (reviews != null) {
             String contextPath = pageContext.getServletContext().getContextPath();
             try {
-                for (int i = 0; i < reviews.size() && i < REVIEWS_PER_PAGE; i++) {
+                for (int i = 0; i < reviews.size() && i < reviewsPerPage; i++) {
                     MovieReviewDTO review = reviews.get(i);
                     writer.write("<div class=\"row mt-4\">");
 

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public final class ApplicationPropertiesLoader {
@@ -13,27 +15,32 @@ public final class ApplicationPropertiesLoader {
 
     private final Properties properties = new Properties();
 
-    private ApplicationProperties appProperties;
+    private final Map<String, String> appProperties = new HashMap<>();
 
     private ApplicationPropertiesLoader() {
         loadProperties();
     }
 
-    public static ApplicationProperties getApplicationProperties() {
-        return PropertiesLoaderUtilSingleton.INSTANCE.appProperties;
+    public static String get(String key) {
+        String value = PropertiesLoaderUtilSingleton.INSTANCE.appProperties.get(key);
+        if (value == null) {
+            try (InputStream input = ApplicationPropertiesLoader.class.getClassLoader().getResourceAsStream("properties/application.properties")) {
+                PropertiesLoaderUtilSingleton.INSTANCE.properties.load(input);
+                value = PropertiesLoaderUtilSingleton.INSTANCE.properties.getProperty(key);
+            } catch (IOException e) {
+                PropertiesLoaderUtilSingleton.INSTANCE.logger.error(e.getMessage(), e);
+            }
+        }
+        return value;
     }
 
     private void loadProperties() {
         try (InputStream input = ApplicationPropertiesLoader.class.getClassLoader().getResourceAsStream("properties/application.properties")) {
             properties.load(input);
-            appProperties = new ApplicationProperties(
-                    properties.getProperty("url"),
-                    properties.getProperty("databaseName"),
-                    properties.getProperty("user"),
-                    properties.getProperty("password"),
-                    Integer.parseInt(properties.getProperty("minPoolSize")),
-                    Integer.parseInt(properties.getProperty("maxPoolSize")),
-                    properties.getProperty("assetsDir"));
+            for (String key : properties.stringPropertyNames()) {
+                String value = properties.getProperty(key);
+                appProperties.put(key, value);
+            }
             logger.debug("Application properties loaded");
         } catch (IOException e) {
             logger.error(e.getMessage(), e);

@@ -28,19 +28,23 @@ public class OpenAllMoviesPageCommand implements Command {
 
         Integer currentPage = (Integer) req.getSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE);
         String newPageStr = req.getParameter(Parameter.NEW_MOVIES_PAGE);
-        if (newPageStr != null) {
-            currentPage = Integer.valueOf(newPageStr);
-        } else if (currentPage == null) {
-            currentPage = 1;
-        }
-        req.setSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE, currentPage);
-        int begin = (currentPage - 1) * ShowAllMoviesTag.MOVIES_PER_PAGE;
-        int end = ShowAllMoviesTag.MOVIES_PER_PAGE + begin;
         try {
+            int movieCount = movieService.getCount();
+            if (newPageStr != null) {
+                currentPage = Integer.valueOf(newPageStr);
+            } else if (currentPage == null) {
+                currentPage = 1;
+            }
+            while (currentPage > 1 && (currentPage - 1) * ShowAllMoviesTag.getMoviesPerPage() >= movieCount) {
+                currentPage--;
+            }
+            req.setSessionAttribute(Attribute.ALL_MOVIES_CURRENT_PAGE, currentPage);
+            int begin = (currentPage - 1) * ShowAllMoviesTag.getMoviesPerPage();
+            int end = ShowAllMoviesTag.getMoviesPerPage() + begin;
+
             List<Movie> moviesToDisplay = movieService.getAllBetween(begin, end);
             List<MovieDTO> movieDTOS = moviesToDisplay.stream().map(MovieDTO::new).collect(Collectors.toList());
             req.setSessionAttribute(Attribute.MOVIES_TO_DISPLAY, movieDTOS);
-            int movieCount = movieService.getCount();
             req.setSessionAttribute(Attribute.MOVIE_COUNT, movieCount);
             if (moviesToDisplay.size() == 0) {
                 req.setSessionAttribute(Attribute.INFO_MESSAGE, InfoMessage.NO_MOVIES);

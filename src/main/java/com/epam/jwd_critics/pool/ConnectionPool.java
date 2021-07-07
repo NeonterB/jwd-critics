@@ -1,7 +1,7 @@
 package com.epam.jwd_critics.pool;
 
 import com.epam.jwd_critics.exception.ConnectionException;
-import com.epam.jwd_critics.util.ApplicationProperties;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
 import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +28,18 @@ public class ConnectionPool {
 
     private final ConnectionFactory factory = new ConnectionFactory();
 
+    private final int minPoolSize;
+    private final int maxPoolSize;
+
     private final AtomicInteger poolSize = new AtomicInteger();
     private final Lock lock = new ReentrantLock();
     private final Condition lockCondition = lock.newCondition();
 
     private ConnectionPool() {
-        availableConnections = new LinkedBlockingQueue<>(ApplicationPropertiesLoader.getApplicationProperties().getMaxPoolSize());
-        unavailableConnections = new ArrayDeque<>(ApplicationPropertiesLoader.getApplicationProperties().getMaxPoolSize());
+        minPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MAX_POOL_SIZE));
+        maxPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MIN_POOL_SIZE));
+        availableConnections = new LinkedBlockingQueue<>(minPoolSize);
+        unavailableConnections = new ArrayDeque<>(maxPoolSize);
         initPool();
     }
 
@@ -42,16 +47,11 @@ public class ConnectionPool {
         return ConnectionPoolSingleton.INSTANCE;
     }
 
-    private static class ConnectionPoolSingleton {
-        private static final ConnectionPool INSTANCE = new ConnectionPool();
-    }
-
     /**
      * Initiates pool. Populates availableConnections with new connections
      */
     private void initPool() {
-        ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
-        for (int i = 0; i < properties.getMinPoolSize(); i++) {
+        for (int i = 0; i < maxPoolSize; i++) {
             ConnectionProxy connection = new ConnectionProxy(factory.createConnection());
             availableConnections.add(connection);
             poolSize.incrementAndGet();
@@ -68,14 +68,13 @@ public class ConnectionPool {
     public Connection getConnection() {
         lock.lock();
         ConnectionProxy connection = null;
-        ApplicationProperties properties = ApplicationPropertiesLoader.getApplicationProperties();
         try {
             if (!availableConnections.isEmpty()) {
                 connection = availableConnections.take();
-            } else if (poolSize.get() < properties.getMaxPoolSize()) {
+            } else if (poolSize.get() < minPoolSize) {
                 connection = new ConnectionProxy(factory.createConnection());
             } else {
-                while (availableConnections.isEmpty() && poolSize.get() < properties.getMaxPoolSize()) {
+                while (availableConnections.isEmpty() && poolSize.get() < minPoolSize) {
                     lockCondition.await();
                 }
             }
@@ -130,5 +129,9 @@ public class ConnectionPool {
             }
         }
         logger.debug("Connection pool destroyed");
+    }
+
+    private static class ConnectionPoolSingleton {
+        private static final ConnectionPool INSTANCE = new ConnectionPool();
     }
 }

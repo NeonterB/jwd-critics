@@ -33,8 +33,8 @@ public class OpenAllUsersPageCommand implements Command {
             currentPage = 1;
         }
         req.setSessionAttribute(Attribute.ALL_USERS_CURRENT_PAGE, currentPage);
-        int begin = (currentPage - 1) * ShowAllUsersTag.USERS_PER_PAGE;
-        int end = ShowAllUsersTag.USERS_PER_PAGE + begin;
+        int begin = (currentPage - 1) * ShowAllUsersTag.getUserPerPage();
+        int end = ShowAllUsersTag.getUserPerPage() + begin;
         try {
             List<User> users = userService.getAllBetween(begin, end);
             List<UserDTO> userDTOS = users.stream().map(UserDTO::new).collect(Collectors.toList());

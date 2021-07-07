@@ -21,6 +21,8 @@ import com.epam.jwd_critics.service.UserService;
 import com.epam.jwd_critics.service.impl.MovieReviewServiceImpl;
 import com.epam.jwd_critics.service.impl.MovieServiceImpl;
 import com.epam.jwd_critics.service.impl.UserServiceImpl;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +33,7 @@ public class OpenMoviePageCommand implements Command {
     private final MovieReviewService reviewService = MovieReviewServiceImpl.getInstance();
     private final UserService userService = UserServiceImpl.getInstance();
 
-    private final Integer AMOUNT_OF_REVIEWS_ON_PAGE = 2;
+    private final int amountOfReviewsOnPage = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_AMOUNT_OF_REVIEWS_ON_PAGE));
 
     @Override
     public CommandResponse execute(CommandRequest req) throws CommandException {
@@ -51,7 +53,7 @@ public class OpenMoviePageCommand implements Command {
             Optional<Movie> movie = movieService.getEntityById(movieId);
             if (movie.isPresent()) {
                 UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
-                List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, 0, AMOUNT_OF_REVIEWS_ON_PAGE);
+                List<MovieReview> reviews = reviewService.getMovieReviewsByMovieId(movieId, 0, amountOfReviewsOnPage);
                 List<MovieReviewDTO> reviewDTOS = new LinkedList<>();
                 for (MovieReview review : reviews) {
                     Optional<User> userOfReview = userService.getEntityById(review.getUserId());

@@ -7,6 +7,8 @@ import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.dto.CelebrityDTO;
 import com.epam.jwd_critics.dto.UserDTO;
 import com.epam.jwd_critics.entity.Role;
+import com.epam.jwd_critics.util.ApplicationPropertiesKeys;
+import com.epam.jwd_critics.util.ApplicationPropertiesLoader;
 import com.epam.jwd_critics.util.ContentPropertiesKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +19,20 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.List;
 
-import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessageFromResources;
+import static com.epam.jwd_critics.util.LocalizationUtil.getLocalizedMessage;
 
 public class ShowAllCelebritiesTag extends SimpleTagSupport {
-    public static final int CELEBRITIES_PER_PAGE = 12;
-    private static final int CELEBRITIES_PER_ROW = 6;
+    private static final int celebritiesPerPage = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_CELEBRITIES_PER_PAGE));
+    private static final int celebritiesPerRow = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.WEBAPP_CELEBRITIES_PER_ROW));
     private PageContext pageContext;
 
+    public static int getCelebritiesPerPage() {
+        return celebritiesPerPage;
+    }
+
+    public static int getCelebritiesPerRow() {
+        return celebritiesPerRow;
+    }
 
     @Override
     public void doTag() throws JspException {
@@ -34,13 +43,13 @@ public class ShowAllCelebritiesTag extends SimpleTagSupport {
         writeCelebrities(writer, req);
         try {
             int celebrityCount = (int) req.getSessionAttribute(Attribute.CELEBRITY_COUNT);
-            int pageCount = celebrityCount % CELEBRITIES_PER_PAGE == 0 ? (celebrityCount / CELEBRITIES_PER_PAGE) : (celebrityCount / CELEBRITIES_PER_PAGE + 1);
+            int pageCount = celebrityCount % celebritiesPerPage == 0 ? (celebrityCount / celebritiesPerPage) : (celebrityCount / celebritiesPerPage + 1);
             String commandName = CommandInstance.OPEN_ALL_CELEBRITIES.toString().toLowerCase();
             TagUtil.paginate(pageContext, pageCount, commandName, Parameter.NEW_CELEBRITIES_PAGE);
 
             UserDTO user = (UserDTO) req.getSessionAttribute(Attribute.USER);
             if (user != null && user.getRole().equals(Role.ADMIN)) {
-                String createButton = getLocalizedMessageFromResources((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.CREATE);
+                String createButton = getLocalizedMessage((String) req.getSessionAttribute(Attribute.LANG), ContentPropertiesKeys.CREATE);
                 writer.write("<p class=\"mt-4\"><a class=\"btnRef mt-2\"" +
                         " href=\"" + pageContext.getRequest().getServletContext().getContextPath() + "/controller?command=open_create_celebrity\">" +
                         createButton +
@@ -56,7 +65,7 @@ public class ShowAllCelebritiesTag extends SimpleTagSupport {
 
         String contextPath = pageContext.getServletContext().getContextPath();
         try {
-            for (int i = 0, j = 0; i < celebrities.size() && i < CELEBRITIES_PER_PAGE; i++) {
+            for (int i = 0, j = 0; i < celebrities.size() && i < celebritiesPerPage; i++) {
                 CelebrityDTO celebrityDTO = celebrities.get(i);
                 if (j == 0) {
                     writer.write("<div class=\"row\">");
@@ -67,7 +76,7 @@ public class ShowAllCelebritiesTag extends SimpleTagSupport {
                 writer.write("</a>");
                 writer.write("<p class=\"text-center\">" + celebrityDTO.getName() + "</p>");
                 writer.write("</div>");
-                if (j == CELEBRITIES_PER_ROW - 1 || j == celebrities.size() - 1) {
+                if (j == celebritiesPerRow - 1 || j == celebrities.size() - 1) {
                     writer.write("</div>");
                     j = 0;
                 } else {
