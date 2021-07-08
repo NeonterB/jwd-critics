@@ -1,9 +1,9 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.ServiceException;
-import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.ServiceException;
+import com.epam.jwd_critics.exception.codes.UserServiceCode;
 import com.epam.jwd_critics.service.UserService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -58,12 +58,6 @@ class UserServiceImplTest {
             logger.error(e.getMessage());
             Assertions.assertEquals(e.getCode(), UserServiceCode.INCORRECT_PASSWORD);
         }
-    }
-
-    @Test
-    public void buildAndSendActivationMail() throws ServiceException {
-        User user = userService.login("neonter", "75315962mM*");
-        userService.buildAndSendActivationMail(user, "key", "en");
     }
 
     @AfterAll

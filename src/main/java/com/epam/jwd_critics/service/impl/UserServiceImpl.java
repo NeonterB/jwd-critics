@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             } else if (user.getStatus().equals(Status.BANNED)) {
                 throw new ServiceException(UserServiceCode.USER_IS_BANNED);
             }
-            logger.info("{}, id = {} logged in", user.getFirstName() + " " + user.getLastName(), user.getId());
+            logger.info("{}, id = {}, logged in", user.getFirstName() + " " + user.getLastName(), user.getId());
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
             userToRegister.setPassword(passwordAuthenticator.hash(password));
             setDefaultFields(userToRegister);
             userToRegister = userDao.create(userToRegister);
-            logger.info("{}, id = {} registered in", userToRegister.getFirstName() + " " + userToRegister.getLastName(), userToRegister.getId());
+            logger.info("{}, id = {}, registered", userToRegister.getFirstName() + " " + userToRegister.getLastName(), userToRegister.getId());
             transaction.commit();
         } catch (DaoException e) {
             transaction.rollback();
