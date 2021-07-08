@@ -7,6 +7,10 @@ import com.epam.jwd_critics.controller.command.CommandResponse;
 import com.epam.jwd_critics.controller.command.Parameter;
 import com.epam.jwd_critics.controller.command.ServletDestination;
 import com.epam.jwd_critics.exception.CommandException;
+import com.epam.jwd_critics.exception.ConnectionException;
+import com.epam.jwd_critics.pool.ConnectionPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -23,6 +27,8 @@ import java.io.IOException;
         maxRequestSize = 1024 * 1024 * 100   // 100 MB
 )
 public class Controller extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         processRequest(req, resp);
@@ -56,4 +62,13 @@ public class Controller extends HttpServlet {
         }
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        try {
+            ConnectionPool.getInstance().closePool();
+        } catch (ConnectionException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 }

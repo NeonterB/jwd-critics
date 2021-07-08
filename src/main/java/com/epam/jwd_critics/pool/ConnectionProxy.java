@@ -4,7 +4,21 @@ import com.epam.jwd_critics.exception.ConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
@@ -41,15 +55,36 @@ public class ConnectionProxy implements Connection {
         return connection.nativeSQL(sql);
     }
 
+    /**
+     * Closes connection
+     *
+     * @throws SQLException if error occurred while closing connetion
+     */
+    public void hardClose() throws SQLException {
+        connection.close();
+        logger.debug("Connection closed");
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return connection.unwrap(iface);
+    }
+
     @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
         connection.setAutoCommit(autoCommit);
     }
 
     @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return connection.isWrapperFor(iface);
+    }
+
+    @Override
     public boolean getAutoCommit() throws SQLException {
         return connection.getAutoCommit();
     }
+
 
     @Override
     public void commit() throws SQLException {
@@ -75,15 +110,6 @@ public class ConnectionProxy implements Connection {
         }
     }
 
-    /**
-     * Closes connection
-     *
-     * @throws SQLException if error occurred while closing connetion
-     */
-    public void hardClose() throws SQLException {
-        connection.close();
-        logger.debug("Connection closed");
-    }
 
     @Override
     public boolean isClosed() throws SQLException {
@@ -300,13 +326,5 @@ public class ConnectionProxy implements Connection {
         return connection.getNetworkTimeout();
     }
 
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return connection.unwrap(iface);
-    }
 
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return connection.isWrapperFor(iface);
-    }
 }

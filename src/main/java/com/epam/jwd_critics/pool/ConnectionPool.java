@@ -116,7 +116,7 @@ public class ConnectionPool {
      *
      * @throws ConnectionException if error occurred while closing connection
      */
-    void destroyPool() throws ConnectionException {
+    public void closePool() throws ConnectionException {
         for (int i = 0; i < poolSize.get(); i++) {
             try {
                 availableConnections.take().hardClose();
@@ -128,7 +128,7 @@ public class ConnectionPool {
                 Thread.currentThread().interrupt();
             }
         }
-        logger.debug("Connection pool destroyed");
+        logger.debug("Connection pool closed");
     }
 
     private static class ConnectionPoolSingleton {
