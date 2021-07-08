@@ -57,7 +57,9 @@ public class UpdateUserCommand implements Command {
                         userToUpdate.get().setImagePath(newPicture);
                     }
                     userService.update(userToUpdate.get());
-                    req.setSessionAttribute(Attribute.USER, new UserDTO(userToUpdate.get()));
+                    UserDTO userDTO = new UserDTO(userToUpdate.get());
+                    req.setSessionAttribute(Attribute.USER, userDTO);
+                    req.setSessionAttribute(Attribute.USER_PROFILE, userDTO);
                     req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.USER_UPDATED);
                     resp.setDestination(ServletDestination.USER_PROFILE);
                 } else {

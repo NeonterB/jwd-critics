@@ -31,7 +31,7 @@ public class MovieDao extends AbstractMovieDao {
     private static final Logger logger = LoggerFactory.getLogger(MovieDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id order by M.name limit ?, ?";
+    private static final String SELECT_ALL_MOVIES_BETWEEN = "SELECT M.id, M.image_path, M.name, M.summary, M.runtime, AG.restriction, C.country, M.rating, M.review_count, M.release_date FROM jwd_critics.movie M inner join jwd_critics.age_restriction AG on M.age_restriction_id = AG.id inner join jwd_critics.country C on M.country_id = C.id limit ?, ?";
     @Language("SQL")
     private static final String COUNT_MOVIES = "SELECT COUNT(*) FROM movie;";
     @Language("SQL")

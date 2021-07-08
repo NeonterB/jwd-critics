@@ -72,6 +72,8 @@ public class CreateMovieCommand implements Command {
                 movie = movieService.create(movie);
 
                 req.setSessionAttribute(Attribute.MOVIE, movie);
+                req.removeSessionAttribute(Attribute.USER_REVIEW);
+                req.removeSessionAttribute(Attribute.REVIEWS_ON_MOVIE_PAGE);
                 req.setSessionAttribute(Attribute.SUCCESS_NOTIFICATION, SuccessMessage.MOVIE_CREATED);
                 resp.setDestination(ServletDestination.MOVIE);
             } catch (ServiceException e) {

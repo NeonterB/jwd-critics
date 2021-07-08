@@ -30,7 +30,6 @@ class UserDaoTest {
                 .setEmail("test@email.com")
                 .setLogin("test")
                 .setPassword("test")
-                .setRating(0)
                 .setStatus(Status.ACTIVE)
                 .setRole(Role.ADMIN)
                 .build();

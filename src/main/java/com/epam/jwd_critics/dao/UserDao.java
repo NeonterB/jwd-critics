@@ -26,21 +26,21 @@ public class UserDao extends AbstractUserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_USERS_BETWEEN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id order by UR.id, U.last_name, U.first_name limit ?, ?";
+    private static final String SELECT_ALL_USERS_BETWEEN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id order by UR.id, U.last_name, U.first_name limit ?, ?";
     @Language("SQL")
     private static final String COUNT_USERS = "SELECT COUNT(*) FROM user";
     @Language("SQL")
-    private static final String SELECT_USER_BY_ID = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.id = ?";
+    private static final String SELECT_USER_BY_ID = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.id = ?";
     @Language("SQL")
-    private static final String SELECT_USER_BY_LOGIN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.login = ?";
+    private static final String SELECT_USER_BY_LOGIN = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.login = ?";
     @Language("SQL")
-    private static final String SELECT_USER_BY_EMAIL = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, U.rating, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.email = ?";
+    private static final String SELECT_USER_BY_EMAIL = "SELECT U.id, U.first_name, U.last_name, U.email, U.image_path, U.login, U.password, UR.role, US.status FROM jwd_critics.user U inner join jwd_critics.user_role UR on U.role_id = UR.id inner join jwd_critics.user_status US on U.status_id = US.id WHERE U.email = ?";
     @Language("SQL")
     private static final String DELETE_USER_BY_ID = "DELETE FROM jwd_critics.user U WHERE U.id = ?";
     @Language("SQL")
-    private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, rating, image_path, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_USER = "INSERT INTO jwd_critics.user (first_name, last_name, email, login, password, image_path, role_id, status_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     @Language("SQL")
-    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.rating = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
+    private static final String UPDATE_USER = "UPDATE jwd_critics.user U SET U.first_name = ?, U.last_name = ?, U.email = ?, U.login = ?, U.role_id = ?, U.status_id = ?, U.image_path = ? WHERE U.id = ?";
     @Language("SQL")
     private static final String UPDATE_PASSWORD = "UPDATE jwd_critics.user U SET U.password = ? WHERE U.id = ?";
     @Language("SQL")
@@ -117,10 +117,9 @@ public class UserDao extends AbstractUserDao {
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getLogin());
             ps.setString(5, user.getPassword());
-            ps.setInt(6, user.getRating());
-            ps.setString(7, user.getImagePath());
-            ps.setInt(8, user.getRole().getId());
-            ps.setInt(9, user.getStatus().getId());
+            ps.setString(6, user.getImagePath());
+            ps.setInt(7, user.getRole().getId());
+            ps.setInt(8, user.getStatus().getId());
             user.setId(executeQueryAndGetGeneratesKeys(ps));
             return user;
         } catch (SQLException e) {
@@ -135,11 +134,10 @@ public class UserDao extends AbstractUserDao {
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getLogin());
-            ps.setInt(5, user.getRating());
-            ps.setInt(6, user.getRole().getId());
-            ps.setInt(7, user.getStatus().getId());
-            ps.setString(8, user.getImagePath());
-            ps.setInt(9, user.getId());
+            ps.setInt(5, user.getRole().getId());
+            ps.setInt(6, user.getStatus().getId());
+            ps.setString(7, user.getImagePath());
+            ps.setInt(8, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -299,7 +297,6 @@ public class UserDao extends AbstractUserDao {
                 .setLogin(rs.getString(columnNames.get("login")))
                 .setPassword(rs.getString(columnNames.get("password")))
                 .setEmail(rs.getString(columnNames.get("email")))
-                .setRating(rs.getInt(columnNames.get("rating")))
                 .setStatus(Status.valueOf(rs.getString(columnNames.get("status")).toUpperCase()))
                 .setRole(Role.valueOf(rs.getString(columnNames.get("role")).toUpperCase()))
                 .setImagePath(rs.getString(columnNames.get("imagePath")))

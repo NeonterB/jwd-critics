@@ -25,11 +25,11 @@ public class CelebrityDao extends AbstractCelebrityDao {
     private static final Logger logger = LoggerFactory.getLogger(CelebrityDao.class);
 
     @Language("SQL")
-    private static final String SELECT_ALL_CELEBRITIES_BETWEEN = "SELECT * FROM jwd_critics.celebrity order by celebrity.last_name, celebrity.first_name limit ?, ?";
+    private static final String SELECT_ALL_CELEBRITIES_BETWEEN = "SELECT * FROM jwd_critics.celebrity limit ?, ?";
     @Language("SQL")
     private static final String COUNT_CELEBRITIES = "SELECT COUNT(*) FROM celebrity";
     @Language("SQL")
-    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, P.position from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.position P on MS.position_id = P.id where movie_id = ? order by P.id";
+    private static final String SELECT_CELEBRITIES_BY_MOVIE_ID = "select C.*, P.position from jwd_critics.celebrity C inner join jwd_critics.movie_staff MS on C.id = MS.celebrity_id inner join jwd_critics.position P on MS.position_id = P.id where movie_id = ?";
     @Language("SQL")
     private static final String SELECT_CELEBRITY_BY_ID = "SELECT * FROM jwd_critics.celebrity WHERE id = ?";
     @Language("SQL")

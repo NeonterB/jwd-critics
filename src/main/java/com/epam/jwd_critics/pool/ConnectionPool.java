@@ -28,18 +28,18 @@ public class ConnectionPool {
 
     private final ConnectionFactory factory = new ConnectionFactory();
 
-    private final int minPoolSize;
     private final int maxPoolSize;
+    private final int minPoolSize;
 
     private final AtomicInteger poolSize = new AtomicInteger();
     private final Lock lock = new ReentrantLock();
-    private final Condition lockCondition = lock.newCondition();
+    private final Condition emptyCondition = lock.newCondition();
 
     private ConnectionPool() {
-        minPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MAX_POOL_SIZE));
-        maxPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MIN_POOL_SIZE));
-        availableConnections = new LinkedBlockingQueue<>(minPoolSize);
-        unavailableConnections = new ArrayDeque<>(maxPoolSize);
+        maxPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MAX_POOL_SIZE));
+        minPoolSize = Integer.parseInt(ApplicationPropertiesLoader.get(ApplicationPropertiesKeys.DB_MIN_POOL_SIZE));
+        availableConnections = new LinkedBlockingQueue<>(maxPoolSize);
+        unavailableConnections = new ArrayDeque<>(minPoolSize);
         initPool();
     }
 
@@ -51,7 +51,7 @@ public class ConnectionPool {
      * Initiates pool. Populates availableConnections with new connections
      */
     private void initPool() {
-        for (int i = 0; i < maxPoolSize; i++) {
+        for (int i = 0; i < minPoolSize; i++) {
             ConnectionProxy connection = new ConnectionProxy(factory.createConnection());
             availableConnections.add(connection);
             poolSize.incrementAndGet();
@@ -71,11 +71,11 @@ public class ConnectionPool {
         try {
             if (!availableConnections.isEmpty()) {
                 connection = availableConnections.take();
-            } else if (poolSize.get() < minPoolSize) {
+            } else if (poolSize.get() < maxPoolSize) {
                 connection = new ConnectionProxy(factory.createConnection());
             } else {
-                while (availableConnections.isEmpty() && poolSize.get() < minPoolSize) {
-                    lockCondition.await();
+                while (availableConnections.isEmpty() && poolSize.get() < maxPoolSize) {
+                    emptyCondition.await();
                 }
             }
             unavailableConnections.offer(connection);
@@ -101,7 +101,7 @@ public class ConnectionPool {
             if (unavailableConnections.contains(connection)) {
                 availableConnections.offer((ConnectionProxy) connection);
                 unavailableConnections.remove(connection);
-                lockCondition.signalAll();
+                emptyCondition.signalAll();
                 logger.debug("Connection returned");
             } else {
                 throw new ConnectionException();

@@ -66,7 +66,6 @@ class MovieReviewDaoTest {
                 .setEmail("test@email.com")
                 .setLogin("test1")
                 .setPassword("test")
-                .setRating(0)
                 .setStatus(Status.ACTIVE)
                 .setRole(Role.ADMIN)
                 .build();
@@ -76,7 +75,6 @@ class MovieReviewDaoTest {
                 .setEmail("test@email.com")
                 .setLogin("test2")
                 .setPassword("test")
-                .setRating(0)
                 .setStatus(Status.ACTIVE)
                 .setRole(Role.ADMIN)
                 .build();

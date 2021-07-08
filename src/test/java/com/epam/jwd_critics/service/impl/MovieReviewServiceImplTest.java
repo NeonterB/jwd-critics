@@ -1,6 +1,5 @@
 package com.epam.jwd_critics.service.impl;
 
-import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.entity.AgeRestriction;
 import com.epam.jwd_critics.entity.Country;
 import com.epam.jwd_critics.entity.Movie;
@@ -8,6 +7,7 @@ import com.epam.jwd_critics.entity.MovieReview;
 import com.epam.jwd_critics.entity.Role;
 import com.epam.jwd_critics.entity.Status;
 import com.epam.jwd_critics.entity.User;
+import com.epam.jwd_critics.exception.ServiceException;
 import com.epam.jwd_critics.service.MovieReviewService;
 import com.epam.jwd_critics.service.MovieService;
 import com.epam.jwd_critics.service.UserService;
@@ -62,7 +62,6 @@ class MovieReviewServiceImplTest {
                 .setEmail("test@email.com")
                 .setLogin("test1")
                 .setPassword("test")
-                .setRating(0)
                 .setStatus(Status.ACTIVE)
                 .setRole(Role.ADMIN)
                 .build();
@@ -72,7 +71,6 @@ class MovieReviewServiceImplTest {
                 .setEmail("test@email.com")
                 .setLogin("test2")
                 .setPassword("test")
-                .setRating(0)
                 .setStatus(Status.ACTIVE)
                 .setRole(Role.ADMIN)
                 .build();

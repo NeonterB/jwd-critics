@@ -55,7 +55,6 @@ public class MovieTag extends SimpleTagSupport {
         String contextPath = pageContext.getServletContext().getContextPath();
         try {
             writer.write("<div class=\"row mt-4\">");
-
             writer.write("<div class=\"col-4\">");
             writer.write("<img src=\"" + contextPath + "/picture?currentPicture=" + movie.getImagePath() + "\" alt=\"" + movie.getName() + "\"" + "class=\"img-thumbnail\">");
             writer.write("</div>");

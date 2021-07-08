@@ -357,7 +357,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private void setDefaultFields(User user) {
-        user.setRating(0);
         user.setRole(Role.USER);
         user.setStatus(Status.INACTIVE);
     }

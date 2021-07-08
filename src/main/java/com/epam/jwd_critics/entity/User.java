@@ -20,9 +20,6 @@ public class User extends AbstractBaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "rating")
-    private int rating;
-
     @Column(name = "status")
     private Status status;
 
@@ -88,14 +85,6 @@ public class User extends AbstractBaseEntity {
         this.status = status;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -114,7 +103,7 @@ public class User extends AbstractBaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email, login, password, rating, status, role);
+        return Objects.hash(firstName, lastName, email, login, password, status, role);
     }
 
     @Override
@@ -122,7 +111,7 @@ public class User extends AbstractBaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return rating == user.rating && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && login.equals(user.login) && password.equals(user.password) && status == user.status && role == user.role;
+        return firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && login.equals(user.login) && password.equals(user.password) && status == user.status && role == user.role;
     }
 
     @Override
@@ -134,7 +123,6 @@ public class User extends AbstractBaseEntity {
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", rating=" + rating +
                 ", status=" + status +
                 ", role=" + role +
                 '}';
@@ -177,11 +165,6 @@ public class User extends AbstractBaseEntity {
             return this;
         }
 
-        public UserBuilder setRating(int rating) {
-            User.this.rating = rating;
-            return this;
-        }
-
         public UserBuilder setRole(Role role) {
             User.this.role = role;
             return this;
@@ -205,7 +188,6 @@ public class User extends AbstractBaseEntity {
             user.email = User.this.email;
             user.login = User.this.login;
             user.password = User.this.password;
-            user.rating = User.this.rating;
             user.status = User.this.status;
             user.role = User.this.role;
             user.imagePath = (User.this.imagePath == null || User.this.imagePath.equals("")) ? (DEFAULT_PROFILE_IMAGE) : (User.this.imagePath);
