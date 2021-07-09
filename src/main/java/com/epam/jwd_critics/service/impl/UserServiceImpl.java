@@ -291,7 +291,7 @@ public class UserServiceImpl implements UserService {
             if (!userDao.idExists(userId)) {
                 throw new ServiceException(UserServiceCode.USER_DOES_NOT_EXIST);
             }
-            if (!userDao.selectRecoveryKey(userId).isPresent()) {
+            if (userDao.selectRecoveryKey(userId).isPresent()) {
                 throw new ServiceException(UserServiceCode.RECOVERY_KEY_EXISTS);
             }
             userDao.insertRecoveryKey(userId, key);
