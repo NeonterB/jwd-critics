@@ -13,7 +13,7 @@
 <fmt:setBundle basename="properties/content"/>
 <html>
 <head>
-    <title>Log in</title>
+    <title>Sign in</title>
     <link rel="stylesheet" href="../../css/sign-in.css">
 
 </head>

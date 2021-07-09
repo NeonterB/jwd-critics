@@ -19,7 +19,7 @@ public class MovieValidator {
     private static final String COUNTRY_REGEX = "^[A-Za-z]{3,56}$";
 
     private static final String NAME_MESSAGE = "Movie name must be 1-150 characters. Can contain letters, numbers and special characters .,?!@'#$:;*+-=%";
-    private static final String RELEASE_DATE_MESSAGE = "Movie release date must be of pattern mm-dd-yyyy";
+    private static final String RELEASE_DATE_MESSAGE = "Movie release date must be of pattern mm-dd-yyyy and your must be in range 1900-2999";
     private static final String RUNTIME_MESSAGE = "Movie runtime must be of pattern hh:mm";
     private static final String COUNTRY_DOES_NOT_EXIST_MESSAGE = "Country with id %s does no exist";
     private static final String COUNTRY_MESSAGE = "CountryId must be and integer";

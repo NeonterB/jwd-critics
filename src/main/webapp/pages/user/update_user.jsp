@@ -14,7 +14,7 @@
 <fmt:setBundle basename="properties/content"/>
 <html>
 <head>
-    <title>Update</title>
+    <title>Update profile</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/update.css">
     <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
           rel="stylesheet" type="text/css"/>

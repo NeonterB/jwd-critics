@@ -19,9 +19,21 @@
 <body>
 <c:import url="/pages/componets/header.jsp"/>
 <c:import url="/pages/componets/message.jsp"/>
-<div class="container mt-2">
-    <h1>Welcome to the Epam Critics</h1>
+<div class="container" style="margin-top: 200px">
+    <div class="row">
+        <p class="text-center fs-1">
+            Welcome to the Epam Critics
+        </p>
+    </div>
+    <div class="row mt-4">
+        <p class="text-center fs-3">
+            If you love movies and want to share some thoughts on them, then our service is right up you alley!
+        </p>
+        <p class="fs-6 mt-5">
+            P.S. Start by using the navigation bar
+        </p>
+    </div>
+
 </div>
 </body>
 </html>
-<c:remove var="foundMovies" scope="session"/>

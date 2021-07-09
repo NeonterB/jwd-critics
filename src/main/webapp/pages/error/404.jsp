@@ -25,7 +25,8 @@
             ${commandError}
         </p>
         <p class="text-center text-white display-6">
-            Let's go <a href="${pageContext.request.contextPath}/controller" class="link-light"><i>home</i></a> and try from there.
+            Nothing found. Let's go <a href="${pageContext.request.contextPath}/controller"
+                                       class="link-light"><i>home</i></a> and try from there.
         </p>
     </div>
 </div>
